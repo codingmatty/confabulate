@@ -1,12 +1,19 @@
 const { Router } = require('express');
+const passport = require('passport');
 
 module.exports = function registerApi() {
   const router = new Router();
 
-  router.post('/login', passport.authenticate('local'), function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    res.redirect('/');
+  router.post(
+    '/login',
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/login'
+    })
+  );
+  router.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/login');
   });
 
   return router;
