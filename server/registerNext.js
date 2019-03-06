@@ -20,6 +20,10 @@ module.exports = async function registerNextApp({ dev }) {
   const requestHandler = nextApp.getRequestHandler();
 
   router.get('/login', (req, res) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
+      res.redirect('/');
+      return;
+    }
     const parsedUrl = parse(req.url, true);
     requestHandler(req, res, parsedUrl);
   });
