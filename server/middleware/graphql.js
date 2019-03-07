@@ -1,26 +1,13 @@
 const { Router } = require('express');
-const { ApolloServer, gql } = require('apollo-server-express');
-
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
-
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!'
-  }
-};
+const { ApolloServer } = require('apollo-server-express');
+const schema = require('../graphql');
 
 module.exports = function registerGraphQL(db) {
   const router = new Router();
+  const graphQLPath = '/graphql';
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
     context: { db },
     playground: process.env.NODE_ENV === 'development' && {
       settings: {
@@ -30,15 +17,19 @@ module.exports = function registerGraphQL(db) {
   });
 
   // Require authentication for the GraphQL endpoint(s)
-  router.use('/graphql', (req, res, next) => {
+  router.use(graphQLPath, (req, res, next) => {
     if (req.isAuthenticated && req.isAuthenticated()) {
       next();
       return;
     }
-    res.status(401).json({ message: 'Unauthenticated' });
+    if (req.method === 'POST') {
+      res.status(401).json({ message: 'Unauthenticated' });
+    } else {
+      res.status(401).redirect('/login');
+    }
   });
 
-  server.applyMiddleware({ app: router });
+  server.applyMiddleware({ app: router, path: graphQLPath });
 
   return router;
 };
