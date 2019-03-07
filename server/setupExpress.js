@@ -4,6 +4,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const registerApi = require('./middleware/api');
 const registerNext = require('./middleware/next');
+const registerGraphQL = require('./middleware/graphql');
 const registerPassport = require('./middleware/passport');
 const db = require('./db');
 
@@ -31,6 +32,8 @@ module.exports = async function setupExpress() {
 
   // Setup API routes
   app.use('/api', registerApi());
+
+  app.use(registerGraphQL(db));
 
   // Setup Next to handle client-side pages
   app.use(await registerNext({ dev }));
