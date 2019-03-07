@@ -2,9 +2,9 @@ const express = require('express');
 const morgan = require('morgan');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const registerApi = require('./registerApi');
-const registerNext = require('./registerNext');
-const registerPassport = require('./registerPassport');
+const registerApi = require('./middleware/api');
+const registerNext = require('./middleware/next');
+const registerPassport = require('./middleware/passport');
 const db = require('./db');
 
 const dev = process.env.NODE_ENV !== 'production';

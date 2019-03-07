@@ -7,7 +7,7 @@ module.exports = async function registerNextApp({ dev }) {
   const router = new Router();
   const nextApp = next({
     dev,
-    dir: path.resolve(__dirname, '..', 'client')
+    dir: path.resolve(__dirname, '..', '..', 'client')
   });
 
   try {
