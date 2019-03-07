@@ -13,6 +13,7 @@ module.exports = async function registerNextApp({ dev }) {
   try {
     await nextApp.prepare();
   } catch (ex) {
+    /* eslint-disable-next-line no-console */
     console.error('NEXT ERROR', ex.stack);
     process.exit(1);
   }
@@ -47,8 +48,9 @@ module.exports = async function registerNextApp({ dev }) {
     res.status(401).redirect('/login');
   });
 
-  // example of how to redirect /a to pages/a-template.js
+  // Example of how to redirect /a to pages/a-template.js
   router.get('/a', (req, res) => {
+    const parsedUrl = parse(req.url, true);
     const { query } = parsedUrl;
     nextApp.render(req, res, '/a-template', query);
   });
