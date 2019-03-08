@@ -53,7 +53,6 @@ exports.getContacts = (query) => {
     .get('contacts')
     .filter(query)
     .value();
-  console.log('contacts', contacts);
   return contacts;
 };
 
