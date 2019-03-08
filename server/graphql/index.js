@@ -1,22 +1,20 @@
 const { gql, makeExecutableSchema } = require('apollo-server-express');
 const Contacts = require('./contacts');
 
-// Construct a schema, using GraphQL schema language
 const Query = gql`
   type Query {
-    hello: String
+    _empty: String
+  }
+`;
+const Mutation = gql`
+  type Mutation {
+    _empty: String
   }
 `;
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!'
-  },
-  ...Contacts.resolvers
-};
-
 module.exports = makeExecutableSchema({
-  typeDefs: [Query, Contacts.typeDefs],
-  resolvers
+  typeDefs: [Query, Mutation, Contacts.typeDefs],
+  resolvers: {
+    ...Contacts.resolvers
+  }
 });

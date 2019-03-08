@@ -7,7 +7,8 @@ const db = low(adapter);
 
 db.defaults({
   users: [{ id: 1, username: 'test', password: 'test' }],
-  sessions: {}
+  sessions: {},
+  contacts: []
 }).write();
 
 exports.getUser = (id) => {
@@ -20,8 +21,40 @@ exports.getUser = (id) => {
 exports.findUser = (query) => {
   return db
     .get('users')
-    .find(query)
+    .filter(query)
     .value();
+};
+
+exports.addContact = (contact) => {
+  const contactsPtr = db.get('contacts');
+  const id = Date.now().toString(36);
+  contactsPtr.push({ friends: [], ...contact, id }).write();
+  return contactsPtr.find({ id }).value();
+};
+
+exports.addFriend = (id, friendId) => {
+  const contactsPtr = db.get('contacts');
+  const contact = contactsPtr.find({ id }).value();
+  const friend = contactsPtr.find({ id: friendId }).value();
+  contact.friends.push(friend.id);
+  contactsPtr.write();
+  return contactsPtr.find({ id }).value();
+};
+
+exports.getContact = (id) => {
+  return db
+    .get('contacts')
+    .find({ id })
+    .value();
+};
+
+exports.getContacts = (query) => {
+  const contacts = db
+    .get('contacts')
+    .filter(query)
+    .value();
+  console.log('contacts', contacts);
+  return contacts;
 };
 
 exports.store = function(session) {
