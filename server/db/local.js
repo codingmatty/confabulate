@@ -1,4 +1,5 @@
 const path = require('path');
+const uuidv4 = require('uuid/v4');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
@@ -27,18 +28,16 @@ exports.findUser = (query) => {
 
 exports.addContact = (contact) => {
   const contactsPtr = db.get('contacts');
-  const id = Date.now().toString(36);
+  const id = uuidv4();
   contactsPtr.push({ friends: [], ...contact, id }).write();
   return contactsPtr.find({ id }).value();
 };
 
-exports.addFriend = (id, friendId) => {
-  const contactsPtr = db.get('contacts');
-  const contact = contactsPtr.find({ id }).value();
-  const friend = contactsPtr.find({ id: friendId }).value();
-  contact.friends.push(friend.id);
-  contactsPtr.write();
-  return contactsPtr.find({ id }).value();
+exports.removeContact = (id) => {
+  return db
+    .get('contacts')
+    .remove({ id })
+    .write();
 };
 
 exports.getContact = (id) => {
@@ -49,11 +48,19 @@ exports.getContact = (id) => {
 };
 
 exports.getContacts = (query) => {
-  const contacts = db
+  return db
     .get('contacts')
     .filter(query)
     .value();
-  return contacts;
+};
+
+exports.addFriend = (id, friendId) => {
+  const contactsPtr = db.get('contacts');
+  const contact = contactsPtr.find({ id }).value();
+  const friend = contactsPtr.find({ id: friendId }).value();
+  contact.friends.push(friend.id);
+  contactsPtr.write();
+  return contactsPtr.find({ id }).value();
 };
 
 exports.store = function(session) {

@@ -11,10 +11,23 @@ const Mutation = gql`
     _empty: String
   }
 `;
+const Common = gql`
+  enum StatusEnum {
+    SUCCESS
+    ERROR
+  }
+  type Status {
+    status: StatusEnum!
+    message: String
+  }
+`;
+
+const typeDefs = [Query, Mutation, Common, Contacts.typeDefs];
+const resolvers = {
+  ...Contacts.resolvers
+};
 
 module.exports = makeExecutableSchema({
-  typeDefs: [Query, Mutation, Contacts.typeDefs],
-  resolvers: {
-    ...Contacts.resolvers
-  }
+  typeDefs,
+  resolvers
 });
