@@ -22,7 +22,7 @@ exports.getUser = (id) => {
 exports.findUser = (query) => {
   return db
     .get('users')
-    .filter(query)
+    .find(query)
     .value();
 };
 
