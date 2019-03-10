@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import Router from 'next/router';
+import Form from './Form';
+import Input from './Input';
 
 export default function LoginForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({ username: '', password: '' });
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     const response = await fetch('/api/login', {
       method: 'POST',
       headers: { ['Content-Type']: 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify(formData)
     });
     if (response.redirected) {
       Router.push(response.url);
@@ -18,36 +18,25 @@ export default function LoginForm() {
   };
 
   const onChange = ({ target: { value, name } }) => {
-    if (name === 'password') {
-      setPassword(value);
-    } else if (name === 'username') {
-      setUsername(value);
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <div>
-        <label>Username:</label>
-        <input
-          type="text"
-          name="username"
-          value={username}
-          onChange={onChange}
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={onChange}
-        />
-      </div>
-      <div>
-        <button type="submit">Log In</button>
-      </div>
-    </form>
+    <Form onSubmit={onSubmit} submitLabel="Login">
+      <Input
+        label="Username"
+        type="text"
+        name="username"
+        value={formData.username}
+        onChange={onChange}
+      />
+      <Input
+        label="Password"
+        type="password"
+        name="password"
+        value={formData.password}
+        onChange={onChange}
+      />
+    </Form>
   );
 }

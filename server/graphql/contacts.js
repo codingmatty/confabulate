@@ -11,17 +11,22 @@ exports.typeDefs = gql`
   }
   type Contact {
     id: ID!
-    firstName: String!
+    firstName: String
     lastName: String
-    friends: [Contact]
+    email: String
+    phoneNumber: String
   }
   input ContactInputData {
-    firstName: String!
+    firstName: String
     lastName: String
+    email: String
+    phoneNumber: String
   }
   input ContactQueryData {
     firstName: String
     lastName: String
+    email: String
+    phoneNumber: String
   }
 `;
 
@@ -40,8 +45,5 @@ exports.resolvers = {
       };
     }
   },
-  Contact: {
-    friends: (contact, args, { db }) =>
-      contact.friends.map((friendId) => db.getContact(friendId))
-  }
+  Contact: {}
 };
