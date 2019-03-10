@@ -44,35 +44,32 @@ export default function ContactForm() {
   };
 
   return (
-    <>
-      <h1>Create Contact</h1>
-      <Form onSubmit={onSubmit} loading={loading} submitLabel="Submit">
-        <Input
-          label="First Name"
-          name="firstName"
-          value={formData.firstName}
-          onChange={onChange}
-        />
-        <Input
-          label="Last Name"
-          name="lastName"
-          value={formData.lastName}
-          onChange={onChange}
-        />
-        <Input
-          label="Email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={onChange}
-        />
-        <Input
-          label="Phone Number"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          onChange={onChange}
-        />
-      </Form>
-    </>
+    <Form onSubmit={onSubmit} loading={loading} submitLabel="Submit">
+      <Input
+        label="First Name"
+        name="firstName"
+        value={formData.firstName}
+        onChange={onChange}
+      />
+      <Input
+        label="Last Name"
+        name="lastName"
+        value={formData.lastName}
+        onChange={onChange}
+      />
+      <Input
+        label="Email"
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={onChange}
+      />
+      <Input
+        label="Phone Number"
+        name="phoneNumber"
+        value={formData.phoneNumber}
+        onChange={onChange}
+      />
+    </Form>
   );
 }
