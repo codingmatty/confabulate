@@ -6,6 +6,7 @@ const FormWrapper = styled.form`
 `;
 const Fieldset = styled.fieldset`
   border: none;
+  padding: 0;
 
   &[disabled] {
     opacity: 0.5;
