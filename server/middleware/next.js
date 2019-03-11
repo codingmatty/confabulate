@@ -49,10 +49,15 @@ module.exports = async function registerNextApp({ dev }) {
   });
 
   // Example of how to redirect /a to pages/a-template.js
-  router.get('/a', (req, res) => {
+  router.get('/contacts/:id', (req, res, next) => {
+    if (req.params.id === 'create') {
+      // Let next default handler deal with /contacts/create
+      next();
+      return;
+    }
     const parsedUrl = parse(req.url, true);
     const { query } = parsedUrl;
-    nextApp.render(req, res, '/a-template', query);
+    nextApp.render(req, res, '/contacts/info', { id: req.params.id, ...query });
   });
 
   router.get('*', (req, res) => {

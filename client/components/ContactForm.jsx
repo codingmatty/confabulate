@@ -1,14 +1,29 @@
 import { useState } from 'react';
 import { gql } from 'apollo-boost';
+import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
 import Form from './Form';
 import Input from './Input';
 
 const CREATE_CONTACT = gql`
   mutation CREATE_CONTACT($data: ContactInputData) {
-    addContact(data: $data) {
+    contact: addContact(data: $data) {
       id
       firstName
+      lastName
+      email
+      phoneNumber
+    }
+  }
+`;
+const UPDATE_CONTACT = gql`
+  mutation UPDATE_CONTACT($id: ID!, $data: ContactInputData) {
+    contact: updateContact(id: $id, data: $data) {
+      id
+      firstName
+      lastName
+      email
+      phoneNumber
     }
   }
 `;
@@ -20,22 +35,25 @@ const DEFAULT_FORM_FIELDS = {
   phoneNumber: ''
 };
 
-export default function ContactForm() {
+export default function ContactForm({
+  contact: { id, __typename, ...contact },
+  onSubmit
+}) {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState(DEFAULT_FORM_FIELDS);
-  const createContact = useMutation(CREATE_CONTACT, {
-    variables: { data: formData }
+  const [formData, setFormData] = useState(contact || DEFAULT_FORM_FIELDS);
+  const mutateContact = useMutation(id ? UPDATE_CONTACT : CREATE_CONTACT, {
+    variables: { id, data: formData }
   });
 
-  const onSubmit = async () => {
+  const onFormSubmit = async () => {
     setLoading(true);
-    createContact()
-      .then((result) => {
-        console.log({ result });
+    mutateContact()
+      .then(({ data }) => {
         setFormData(DEFAULT_FORM_FIELDS);
+        onSubmit(data.contact);
       })
       .catch((reason) => {
-        console.log({ reason });
+        console.error({ reason });
       });
   };
 
@@ -44,7 +62,7 @@ export default function ContactForm() {
   };
 
   return (
-    <Form onSubmit={onSubmit} loading={loading} submitLabel="Submit">
+    <Form onSubmit={onFormSubmit} loading={loading} submitLabel="Submit">
       <Input
         label="First Name"
         name="firstName"
@@ -73,3 +91,17 @@ export default function ContactForm() {
     </Form>
   );
 }
+ContactForm.propTypes = {
+  contact: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string
+  }),
+  onSubmit: PropTypes.func
+};
+ContactForm.defaultProps = {
+  contact: {},
+  onSubmit: () => {}
+};

@@ -33,6 +33,14 @@ exports.addContact = (contact) => {
   return contactsPtr.find({ id }).value();
 };
 
+exports.updateContact = (id, contact) => {
+  return db
+    .get('contacts')
+    .find({ id })
+    .assign(contact)
+    .write();
+};
+
 exports.removeContact = (id) => {
   return db
     .get('contacts')

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Swipeable } from 'react-swipeable';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 const OFFSET_SIZE = 80;
 const MIN_LEFT = -OFFSET_SIZE;
@@ -70,15 +71,20 @@ export default function ContactListItem({ contact, onChildSwiped }) {
         <br />
         Phone Number: {contact.phoneNumber}
       </ItemContent>
-      <Action
-        right
-        onClick={(e) => {
-          e.preventDefault();
-          console.log('Edit Contact');
-        }}
+      <Link
+        as={`/contacts/${contact.id}`}
+        href={{ pathname: '/contacts/info', query: { id: contact.id } }}
       >
-        Edit
-      </Action>
+        <Action
+          right
+          // onClick={(e) => {
+          //   e.preventDefault();
+          //   console.log('Edit Contact');
+          // }}
+        >
+          Edit
+        </Action>
+      </Link>
     </StyledContact>
   );
 }
