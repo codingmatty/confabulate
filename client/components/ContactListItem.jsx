@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Swipeable } from 'react-swipeable';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Avatar from './Avatar';
 
 const OFFSET_SIZE = 80;
 const MIN_LEFT = -OFFSET_SIZE;
@@ -24,6 +25,8 @@ const ItemContent = styled.div`
   position: absolute;
   transition: left 300ms;
   width: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 const StyledContact = styled(Swipeable)`
@@ -65,11 +68,14 @@ export default function ContactListItem({ contact, onChildSwiped }) {
           setHeight(window.getComputedStyle(itemContentRef).height)
         }
       >
-        Name: {contact.firstName} {contact.lastName}
-        <br />
-        Email: {contact.email}
-        <br />
-        Phone Number: {contact.phoneNumber}
+        <Avatar email={contact.email || ''} />
+        <div style={{ marginLeft: '1rem' }}>
+          Name: {contact.firstName} {contact.lastName}
+          <br />
+          Email: {contact.email}
+          <br />
+          Phone Number: {contact.phoneNumber}
+        </div>
       </ItemContent>
       <Link
         as={`/contacts/${contact.id}`}
