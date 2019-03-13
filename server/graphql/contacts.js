@@ -9,7 +9,7 @@ exports.typeDefs = gql`
   extend type Mutation {
     addContact(data: ContactInputData): Contact
     updateContact(id: ID!, data: ContactInputData): Contact
-    removeContact(id: String!): Status
+    removeContact(id: ID!): Status
   }
   type Contact {
     id: ID!
@@ -17,18 +17,21 @@ exports.typeDefs = gql`
     lastName: String
     email: String
     phoneNumber: String
+    favorite: Boolean
   }
   input ContactInputData {
     firstName: String
     lastName: String
     email: String
     phoneNumber: String
+    favorite: Boolean
   }
   input ContactQueryData {
     firstName: String
     lastName: String
     email: String
     phoneNumber: String
+    favorite: Boolean
   }
 `;
 

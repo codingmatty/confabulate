@@ -12,6 +12,7 @@ const QUERY_CONTACT = gql`
       lastName
       email
       phoneNumber
+      favorite
     }
   }
 `;
