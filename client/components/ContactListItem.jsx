@@ -4,7 +4,7 @@ import Link from './Link';
 import Avatar from './Avatar';
 
 const ItemContent = styled(Link)`
-  padding: 1rem 2rem;
+  padding: 1rem 0;
   display: flex;
   align-items: center;
   cursor: pointer;
