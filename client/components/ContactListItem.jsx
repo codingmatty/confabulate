@@ -2,43 +2,28 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Swipeable } from 'react-swipeable';
 import styled from 'styled-components';
-import Link from 'next/link';
+import Link from './Link';
 import Avatar from './Avatar';
 
 const OFFSET_SIZE = 80;
 const MIN_LEFT = -OFFSET_SIZE;
 const MAX_LEFT = 0;
 
-const Action = styled.a`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  margin-left: auto;
-  width: ${OFFSET_SIZE}px;
-`;
-
 const ItemHeight = '60px';
-const ItemContent = styled.div`
+const ItemContent = styled(Link)`
   left: 0;
-  padding: 1rem;
+  padding: 1rem 2rem;
   position: absolute;
   transition: left 300ms;
   width: 100%;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const StyledContact = styled(Swipeable)`
   height: calc(${ItemHeight} + 2rem);
   position: relative;
-
-  &:nth-child(even) ${ItemContent} {
-    background-color: #e0e0e0;
-  }
-  &:nth-child(odd) ${ItemContent} {
-    background-color: #f0f0f0;
-  }
 `;
 
 export default function ContactListItem({ contact, onChildSwiped }) {
@@ -62,35 +47,25 @@ export default function ContactListItem({ contact, onChildSwiped }) {
       style={{ height }}
     >
       <ItemContent
+        asUrl={`/contacts/${contact.id}`}
+        href={{ pathname: '/contacts/info', query: { id: contact.id } }}
         style={{ left }}
-        ref={(itemContentRef) =>
+        innerRef={(itemContentRef) =>
           itemContentRef &&
           setHeight(window.getComputedStyle(itemContentRef).height)
         }
       >
         <Avatar email={contact.email || ''} />
         <div style={{ marginLeft: '1rem' }}>
-          Name: {contact.firstName} {contact.lastName}
+          <b>
+            {contact.firstName} {contact.lastName}
+          </b>
           <br />
-          Email: {contact.email}
+          <small>{contact.email}</small>
           <br />
-          Phone Number: {contact.phoneNumber}
+          <small>{contact.phoneNumber}</small>
         </div>
       </ItemContent>
-      <Link
-        as={`/contacts/${contact.id}`}
-        href={{ pathname: '/contacts/info', query: { id: contact.id } }}
-      >
-        <Action
-          right
-          // onClick={(e) => {
-          //   e.preventDefault();
-          //   console.log('Edit Contact');
-          // }}
-        >
-          Edit
-        </Action>
-      </Link>
     </StyledContact>
   );
 }
