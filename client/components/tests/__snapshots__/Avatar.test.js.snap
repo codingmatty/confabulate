@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Avatar matches default snapshot 1`] = `
+<div>
+  <img
+    class="Avatar__StyledAvatar-sc-1vqwap1-0 LDrOJ"
+    src="https://s.gravatar.com/avatar/93942e96f5acd83e2e047ad8fe03114d?s=80&d=mp"
+  />
+</div>
+`;
