@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { gql } from 'apollo-boost';
 import { useMutation } from 'react-apollo-hooks';
+import Icon from './Icon';
 import Link from './Link';
 import Avatar from './Avatar';
 
@@ -13,7 +14,12 @@ const FAVORITE_CONTACT = gql`
     }
   }
 `;
-
+const FavoriteButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: goldenrod;
+`;
 const ContactInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -60,7 +66,7 @@ export default function ContactListItem({ contact }) {
           <small>{contact.phoneNumber}</small>
         </ContactInfo>
         <Actions>
-          <button
+          <FavoriteButton
             onClick={(e) => {
               e.preventDefault();
               toggleFavorite().then(({ data: { contact } }) =>
@@ -68,8 +74,8 @@ export default function ContactListItem({ contact }) {
               );
             }}
           >
-            {favorite ? 'unFav' : 'Fav'}
-          </button>
+            <Icon type={favorite ? 'star' : 'star_border'} size="1.5rem" />
+          </FavoriteButton>
         </Actions>
       </ItemContent>
     </li>
