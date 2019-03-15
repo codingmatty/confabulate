@@ -9,7 +9,7 @@ const InputWrapper = styled.div`
 const Label = styled.label`
   display: block;
   font-weight: bold;
-  font-size: 0.5rem;
+  font-size: 0.75rem;
   margin-bottom: 0.25rem;
   text-transform: uppercase;
 `;
@@ -17,7 +17,7 @@ const InputControl = styled.input`
   border: 1px solid gray;
   box-sizing: border-box;
   display: block;
-  height: 2rem;
+  font-size: 1.25rem;
   padding: 0.5rem;
   width: 100%;
 `;

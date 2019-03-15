@@ -17,7 +17,7 @@ const SubmitButton = styled.button`
   border: none;
   display: block;
   margin-top: 2rem;
-  height: 2rem;
+  height: 2.5rem;
   width: 100%;
 `;
 
