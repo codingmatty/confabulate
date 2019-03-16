@@ -32,6 +32,12 @@ npm install
 npm run dev
 ```
 
+4. Open app in browser
+
+```
+open http://localhost:8080
+```
+
 ### Stack
 
 This app is built primarily with the following libraries:
