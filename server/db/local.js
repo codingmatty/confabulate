@@ -9,7 +9,8 @@ const db = low(adapter);
 db.defaults({
   users: [{ id: 1, username: 'test', password: 'test' }],
   sessions: {},
-  contacts: []
+  contacts: [],
+  meetings: []
 }).write();
 
 exports.getUser = (id) => {
@@ -27,10 +28,10 @@ exports.findUser = (query) => {
 };
 
 exports.addContact = (contact) => {
-  const contactsPtr = db.get('contacts');
+  const contactsRef = db.get('contacts');
   const id = uuidv4();
-  contactsPtr.push({ friends: [], ...contact, id }).write();
-  return contactsPtr.find({ id }).value();
+  contactsRef.push({ ...contact, id }).write();
+  return contactsRef.find({ id }).value();
 };
 
 exports.updateContact = (id, contact) => {
@@ -49,10 +50,11 @@ exports.removeContact = (id) => {
 };
 
 exports.getContact = (id) => {
-  return db
+  const contact = db
     .get('contacts')
     .find({ id })
     .value();
+  return contact;
 };
 
 exports.getContacts = (query) => {
@@ -62,13 +64,40 @@ exports.getContacts = (query) => {
     .value();
 };
 
-exports.addFriend = (id, friendId) => {
-  const contactsPtr = db.get('contacts');
-  const contact = contactsPtr.find({ id }).value();
-  const friend = contactsPtr.find({ id: friendId }).value();
-  contact.friends.push(friend.id);
-  contactsPtr.write();
-  return contactsPtr.find({ id }).value();
+exports.addMeeting = (meeting) => {
+  const meetingsRef = db.get('meetings');
+  const id = uuidv4();
+  meetingsRef.push({ ...meeting, id }).write();
+  return meetingsRef.find({ id }).value();
+};
+
+exports.updateMeeting = (id, meeting) => {
+  return db
+    .get('meetings')
+    .find({ id })
+    .assign(meeting)
+    .write();
+};
+
+exports.removeMeeting = (id) => {
+  return db
+    .get('meetings')
+    .remove({ id })
+    .write();
+};
+
+exports.getMeeting = (id) => {
+  return db
+    .get('meetings')
+    .find({ id })
+    .value();
+};
+
+exports.getMeetings = (query) => {
+  return db
+    .get('meetings')
+    .filter(query)
+    .value();
 };
 
 exports.store = function(session) {

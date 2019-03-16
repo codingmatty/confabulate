@@ -4,7 +4,7 @@ const { gql } = require('apollo-server-express');
 exports.typeDefs = gql`
   extend type Query {
     contact(id: ID!): Contact
-    contacts(query: ContactQueryData = {}): [Contact]
+    contacts(query: ContactQueryData = {}): [Contact]!
   }
   extend type Mutation {
     addContact(data: ContactInputData): Contact
@@ -18,6 +18,7 @@ exports.typeDefs = gql`
     email: String
     phoneNumber: String
     favorite: Boolean
+    meetings: [Meeting]!
   }
   input ContactInputData {
     firstName: String
@@ -27,6 +28,7 @@ exports.typeDefs = gql`
     favorite: Boolean
   }
   input ContactQueryData {
+    id: ID
     firstName: String
     lastName: String
     email: String
@@ -52,5 +54,13 @@ exports.resolvers = {
       };
     }
   },
-  Contact: {}
+  Contact: {
+    meetings: (contact, args, { db }) => {
+      return db
+        .getMeetings()
+        .filter(({ involvedContacts }) =>
+          involvedContacts.includes(contact.id)
+        );
+    }
+  }
 };
