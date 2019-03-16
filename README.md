@@ -1,8 +1,8 @@
 # Confabulate
 
-```
-| verb | kənˈfabyəˌlāt | engage in conversation; talk
-```
+<small>| kənˈfabyəˌlāt |</small>
+_verb_
+**engage in conversation; talk**
 
 ---
 
