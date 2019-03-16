@@ -15,8 +15,10 @@ const Fieldset = styled.fieldset`
 const SubmitButton = styled.button`
   background-color: lightblue;
   border: none;
+  cursor: pointer;
   display: block;
   margin-top: 2rem;
+  font-size: 1rem;
   height: 2.5rem;
   width: 100%;
 `;
