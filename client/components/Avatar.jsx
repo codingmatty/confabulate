@@ -4,16 +4,19 @@ import styled from 'styled-components';
 
 const StyledAvatar = styled.img`
   border-radius: 50%;
-  height: 3rem;
-  width: 3rem;
+  height: ${({ size }) => size}px;
+  width: ${({ size }) => size}px;
 `;
 
-export default function Avatar({ email }) {
+export default function Avatar({ className, email, size = 50 }) {
   const hash = md5(email);
-  const gravatarUrl = `https://s.gravatar.com/avatar/${hash}?s=80&d=mp`;
+  const gravatarUrl = `https://s.gravatar.com/avatar/${hash}?s=${size *
+    2}&d=mp`;
 
-  return <StyledAvatar src={gravatarUrl} />;
+  return <StyledAvatar src={gravatarUrl} size={size} className={className} />;
 }
 Avatar.propTypes = {
-  email: PropTypes.string.isRequired
+  className: PropTypes.string,
+  email: PropTypes.string.isRequired,
+  size: PropTypes.number
 };
