@@ -29,6 +29,7 @@ const StyledPage = styled.div`
 const Inner = styled.div`
   max-width: ${({ theme }) => theme.maxWidth};
   margin: 0 auto;
+  padding: 2rem 1.5rem;
 `;
 
 const GlobalStyle = createGlobalStyle`
