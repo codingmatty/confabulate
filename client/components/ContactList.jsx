@@ -44,7 +44,6 @@ export default function ContactList() {
     error,
     loading
   } = useQuery(QUERY_CONTACTS);
-  const [unswipeChild, setUnswipeChild] = useState();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -57,16 +56,7 @@ export default function ContactList() {
     <>
       <StyledContactList>
         {contacts.map((contact) => (
-          <ContactListItem
-            key={contact.id}
-            contact={contact}
-            onChildSwiped={(unswipeChildCallback) => {
-              if (unswipeChild) {
-                unswipeChild();
-              }
-              setUnswipeChild(() => unswipeChildCallback);
-            }}
-          />
+          <ContactListItem key={contact.id} contact={contact} />
         ))}
       </StyledContactList>
       <CreateContactLink href="/contacts/create">
