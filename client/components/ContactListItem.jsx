@@ -1,25 +1,9 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { gql } from 'apollo-boost';
-import { useMutation } from 'react-apollo-hooks';
-import Icon from './Icon';
 import Link from './Link';
 import Avatar from './Avatar';
+import FavoriteContact from './FavoriteContact';
 
-const FAVORITE_CONTACT = gql`
-  mutation FAVORITE_CONTACT($id: ID!, $data: ContactInputData) {
-    contact: updateContact(id: $id, data: $data) {
-      favorite
-    }
-  }
-`;
-const FavoriteButton = styled.button`
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: goldenrod;
-`;
 const ContactInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,16 +25,6 @@ const ItemContent = styled(Link)`
 `;
 
 export default function ContactListItem({ contact }) {
-  const [favorite, setFavorite] = useState(contact.favorite);
-  const toggleFavorite = useMutation(FAVORITE_CONTACT, {
-    variables: {
-      id: contact.id,
-      data: {
-        favorite: !favorite
-      }
-    }
-  });
-
   return (
     <li>
       <ItemContent
@@ -66,16 +40,10 @@ export default function ContactListItem({ contact }) {
           <small>{contact.phoneNumber}</small>
         </ContactInfo>
         <Actions>
-          <FavoriteButton
-            onClick={(e) => {
-              e.preventDefault();
-              toggleFavorite().then(({ data: { contact } }) =>
-                setFavorite(contact.favorite)
-              );
-            }}
-          >
-            <Icon type={favorite ? 'star' : 'star_border'} size="1.5rem" />
-          </FavoriteButton>
+          <FavoriteContact
+            contactId={contact.id}
+            isFavorite={contact.favorite}
+          />
         </Actions>
       </ItemContent>
     </li>
