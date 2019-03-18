@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { gql } from 'apollo-boost';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
+import pick from 'lodash/pick';
 import Form from './Form';
 import Input from './Input';
 
@@ -35,12 +36,20 @@ const DEFAULT_FORM_FIELDS = {
   phoneNumber: ''
 };
 
-export default function ContactForm({
-  contact: { id, __typename, ...contact },
-  onSubmit
-}) {
+export default function ContactForm({ contact: { id, ...contact }, onSubmit }) {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState(contact || DEFAULT_FORM_FIELDS);
+  const [formData, setFormData] = useState(
+    pick(
+      {
+        ...DEFAULT_FORM_FIELDS,
+        ...contact
+      },
+      'firstName',
+      'lastName',
+      'email',
+      'phoneNumber'
+    )
+  );
   const mutateContact = useMutation(id ? UPDATE_CONTACT : CREATE_CONTACT, {
     variables: { id, data: formData }
   });
