@@ -18,7 +18,7 @@ exports.typeDefs = gql`
     email: String
     phoneNumber: String
     favorite: Boolean
-    meetings: [Meeting]!
+    events: [Event]!
   }
   input ContactInputData {
     firstName: String
@@ -55,9 +55,9 @@ exports.resolvers = {
     }
   },
   Contact: {
-    meetings: (contact, args, { db }) => {
+    events: (contact, args, { db }) => {
       return db
-        .getMeetings()
+        .getEvents()
         .filter(({ involvedContacts }) =>
           involvedContacts.includes(contact.id)
         );

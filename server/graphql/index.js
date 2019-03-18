@@ -1,6 +1,6 @@
 const { gql, makeExecutableSchema } = require('apollo-server-express');
 const Contacts = require('./contacts');
-const Meetings = require('./meetings');
+const Events = require('./events');
 
 const Query = gql`
   type Query {
@@ -24,23 +24,17 @@ const Common = gql`
   }
 `;
 
-const typeDefs = [
-  Query,
-  Mutation,
-  Common,
-  Contacts.typeDefs,
-  Meetings.typeDefs
-];
+const typeDefs = [Query, Mutation, Common, Contacts.typeDefs, Events.typeDefs];
 const resolvers = {
   ...Contacts.resolvers,
-  ...Meetings.resolvers,
+  ...Events.resolvers,
   Query: {
     ...Contacts.resolvers.Query,
-    ...Meetings.resolvers.Query
+    ...Events.resolvers.Query
   },
   Mutation: {
     ...Contacts.resolvers.Mutation,
-    ...Meetings.resolvers.Mutation
+    ...Events.resolvers.Mutation
   }
 };
 

@@ -10,7 +10,7 @@ db.defaults({
   users: [{ id: 1, username: 'test', password: 'test' }],
   sessions: {},
   contacts: [],
-  meetings: []
+  events: []
 }).write();
 
 exports.getUser = (id) => {
@@ -64,38 +64,38 @@ exports.getContacts = (query) => {
     .value();
 };
 
-exports.addMeeting = (meeting) => {
-  const meetingsRef = db.get('meetings');
+exports.addEvent = (event) => {
+  const eventsRef = db.get('events');
   const id = uuidv4();
-  meetingsRef.push({ ...meeting, id }).write();
-  return meetingsRef.find({ id }).value();
+  eventsRef.push({ ...event, id }).write();
+  return eventsRef.find({ id }).value();
 };
 
-exports.updateMeeting = (id, meeting) => {
+exports.updateEvent = (id, event) => {
   return db
-    .get('meetings')
+    .get('events')
     .find({ id })
-    .assign(meeting)
+    .assign(event)
     .write();
 };
 
-exports.removeMeeting = (id) => {
+exports.removeEvent = (id) => {
   return db
-    .get('meetings')
+    .get('events')
     .remove({ id })
     .write();
 };
 
-exports.getMeeting = (id) => {
+exports.getEvent = (id) => {
   return db
-    .get('meetings')
+    .get('events')
     .find({ id })
     .value();
 };
 
-exports.getMeetings = (query) => {
+exports.getEvents = (query) => {
   return db
-    .get('meetings')
+    .get('events')
     .filter(query)
     .value();
 };
