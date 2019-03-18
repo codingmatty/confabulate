@@ -15,6 +15,7 @@ exports.typeDefs = gql`
     id: ID!
     firstName: String
     lastName: String
+    fullName: String
     email: String
     phoneNumber: String
     favorite: Boolean
@@ -40,12 +41,15 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    contact: (obj, { id }, { db }) => db.getContact(id),
-    contacts: (obj, { query }, { db }) => db.getContacts(query)
+    contact: (obj, { id }, { db }) => normalizeContact(db.getContact(id)),
+    contacts: (obj, { query }, { db }) =>
+      db.getContacts(query).map(normalizeContact)
   },
   Mutation: {
-    addContact: (obj, { data }, { db }) => db.addContact(data),
-    updateContact: (obj, { id, data }, { db }) => db.updateContact(id, data),
+    addContact: (obj, { data }, { db }) =>
+      normalizeContact(db.addContact(data)),
+    updateContact: (obj, { id, data }, { db }) =>
+      normalizeContact(db.updateContact(id, data)),
     removeContact: (obj, { id }, { db }) => {
       const removedContacts = db.removeContact(id);
       return {
@@ -64,3 +68,10 @@ exports.resolvers = {
     }
   }
 };
+
+function normalizeContact(contact) {
+  return {
+    ...contact,
+    fullName: `${contact.firstName} ${contact.lastName}`
+  };
+}
