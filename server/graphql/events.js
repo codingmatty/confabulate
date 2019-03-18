@@ -13,26 +13,29 @@ exports.typeDefs = gql`
   }
   type Event {
     id: ID!
-    date: Date!
     title: String!
+    date: Date!
     type: String
     involvedContacts: [Contact]!
   }
   input EventInputData {
-    date: Date!
     title: String!
+    date: Date!
+    type: String
     involvedContacts: [ID!] # contactIds
   }
   input EventUpdateData {
-    date: Date
     title: String
+    date: Date
+    type: String
     involvedContacts: [ID!] # contactIds
   }
   input EventQueryData {
     id: ID
+    fuzzyTitle: String
     startDate: Date
     endDate: Date
-    fuzzyTitle: String
+    type: String
     involvedContact: ContactQueryData
   }
 `;
