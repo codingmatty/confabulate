@@ -1,5 +1,8 @@
 import App from 'next/app';
+import Modal from 'react-modal';
 import Page from '../components/Page';
+
+Modal.setAppElement('#__next');
 
 class ConfabulateApp extends App {
   static async getInitialProps({ Component, ctx }) {
