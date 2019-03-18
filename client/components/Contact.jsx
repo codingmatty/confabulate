@@ -3,10 +3,13 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
+import moment from 'moment';
+import Modal from 'react-modal';
 import ContactForm from './ContactForm';
 import Avatar from './Avatar';
 import FavoriteContact from './FavoriteContact';
 import Icon from './Icon';
+import EventForm from './EventForm';
 
 const QUERY_CONTACT = gql`
   query QUERY_CONTACT($id: ID!) {
@@ -14,9 +17,16 @@ const QUERY_CONTACT = gql`
       id
       firstName
       lastName
+      fullName
       email
       phoneNumber
       favorite
+      events {
+        id
+        title
+        date
+        type
+      }
     }
   }
 `;
@@ -60,11 +70,14 @@ export default function Contact({ id }) {
     variables: { id }
   });
   const [editing, setEditing] = useState(false);
+  const [addingEvent, setAddingEvent] = useState(false);
   const [contact, setContact] = useState(null);
+  const [events, setEvents] = useState([]);
 
   if (!loading && !contact) {
     // sync the contact to state once it's queried
     setContact(data.contact);
+    setEvents(data.contact.events);
   }
   if (loading || !contact) {
     return <div>Loading...</div>;
@@ -86,23 +99,53 @@ export default function Contact({ id }) {
           />
         </>
       ) : (
-        <ContactCard>
-          <EditButton onClick={() => setEditing(true)}>
-            <Icon type="edit" />
-          </EditButton>
-          <StyledFavoriteContact
-            contactId={contact.id}
-            isFavorite={contact.favorite}
-          />
-          <StyledContactAvatar email={contact.email} size="120" />
-          <ContactName>
-            {contact.firstName} {contact.lastName}
-          </ContactName>
-          <div>
-            <small>{contact.email}</small>
-            <small>{contact.phoneNumber}</small>
-          </div>
-        </ContactCard>
+        <>
+          <ContactCard>
+            <EditButton onClick={() => setEditing(true)}>
+              <Icon type="edit" />
+            </EditButton>
+            <StyledFavoriteContact
+              contactId={contact.id}
+              isFavorite={contact.favorite}
+            />
+            <StyledContactAvatar email={contact.email} size={120} />
+            <ContactName>
+              {contact.firstName} {contact.lastName}
+            </ContactName>
+            <div>
+              <small>{contact.email}</small>
+              <small>{contact.phoneNumber}</small>
+            </div>
+          </ContactCard>
+          <button onClick={() => setAddingEvent(true)}>Add Event</button>
+          <ul>
+            {events
+              .sort(
+                ({ date: firstDate }, { date: secondDate }) =>
+                  moment(secondDate) - moment(firstDate)
+              )
+              .map((event) => (
+                <li key={event.id}>
+                  <div>{event.title}</div>
+                  <div>{moment(event.date).format('MMMM DD, YYYY')}</div>
+                  <div>{event.type}</div>
+                </li>
+              ))}
+          </ul>
+          <Modal
+            isOpen={addingEvent}
+            onRequestClose={() => setAddingEvent(false)}
+            contentLabel="Adding Event"
+          >
+            <EventForm
+              event={{ involvedContacts: [contact] }}
+              onSubmit={(event) => {
+                setAddingEvent(false);
+                setEvents(events.concat(event));
+              }}
+            />
+          </Modal>
+        </>
       )}
     </>
   );

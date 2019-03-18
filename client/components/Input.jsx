@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import moment from 'moment';
 
 const InputWrapper = styled.div`
   & + & {
@@ -33,6 +34,10 @@ export default function Input({
   type,
   value
 }) {
+  let normalizedValue = value;
+  if (type === 'date') {
+    normalizedValue = moment(value).format('YYYY-MM-DD');
+  }
   return (
     <InputWrapper>
       <Label htmlFor={id}>{label}</Label>
@@ -40,7 +45,7 @@ export default function Input({
         id={id}
         type={type}
         name={name}
-        value={value}
+        value={normalizedValue}
         onChange={onChange}
         required={required}
       />
