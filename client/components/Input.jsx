@@ -48,6 +48,7 @@ export default function Input({
         value={normalizedValue}
         onChange={onChange}
         required={required}
+        as={type === 'textarea' && 'textarea'}
       />
       {error && <Error>{error}</Error>}
     </InputWrapper>

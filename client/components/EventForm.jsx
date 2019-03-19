@@ -31,7 +31,8 @@ const DEFAULT_FORM_FIELDS = {
   title: '',
   date: moment().toISOString(),
   type: '',
-  involvedContacts: []
+  involvedContacts: [],
+  note: ''
 };
 
 export default function EventForm({
@@ -88,10 +89,17 @@ export default function EventForm({
         value={formData.type}
         onChange={onChange}
       />
-      <div>
+      {/* <div>
         Contacts:{' '}
         {event.involvedContacts.map(({ fullName }) => fullName).join(', ')}
-      </div>
+      </div> */}
+      <Input
+        label="Note"
+        name="note"
+        type="textarea"
+        value={formData.note}
+        onChange={onChange}
+      />
     </Form>
   );
 }

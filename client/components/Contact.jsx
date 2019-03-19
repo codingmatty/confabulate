@@ -26,6 +26,7 @@ const QUERY_CONTACT = gql`
         title
         date
         type
+        note
       }
     }
   }
@@ -98,6 +99,9 @@ const EventSubheaderLine = styled.div`
   justify-content: space-between;
   font-size: 0.75rem;
   line-height: 1.5;
+`;
+const EventNote = styled.p`
+  margin-bottom: 0;
 `;
 const EventCard = styled.li`
   padding: 1rem;
@@ -242,6 +246,7 @@ export default function Contact({ id }) {
                     </EventDate>
                     <EventType>{event.type}</EventType>
                   </EventSubheaderLine>
+                  {event.note && <EventNote>{event.note}</EventNote>}
                 </EventCard>
               ))}
           </EventList>
