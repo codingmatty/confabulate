@@ -18,6 +18,7 @@ const FavoriteButton = styled.button`
   background: none;
   cursor: pointer;
   color: goldenrod;
+  font-size: 1.5rem;
 `;
 
 export default function FavoriteContact({ contactId, isFavorite, className }) {
@@ -41,7 +42,7 @@ export default function FavoriteContact({ contactId, isFavorite, className }) {
         );
       }}
     >
-      <Icon type={favorite ? 'star' : 'star_border'} size="1.5rem" />
+      <Icon type={favorite ? 'star' : 'star_border'} />
     </FavoriteButton>
   );
 }

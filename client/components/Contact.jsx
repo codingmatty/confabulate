@@ -48,6 +48,20 @@ const StyledContactAvatar = styled(Avatar)`
   right: 0;
   box-shadow: 0 0 6px 1px #333;
 `;
+const ContactDetails = styled.ul`
+  list-style: none;
+  padding: 0;
+  width: fit-content;
+  margin: 1rem auto;
+`;
+const ContactDetail = styled.li`
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+`;
+const ContactIcon = styled(Icon)`
+  margin-right: 0.5rem;
+`;
 const ContactName = styled.h1`
   margin-top: 0;
   text-align: center;
@@ -63,6 +77,7 @@ const EditButton = styled.button`
   position: absolute;
   top: 0.5rem;
   left: 0.5rem;
+  font-size: 1.5rem;
 `;
 
 export default function Contact({ id }) {
@@ -112,10 +127,18 @@ export default function Contact({ id }) {
             <ContactName>
               {contact.firstName} {contact.lastName}
             </ContactName>
-            <div>
-              <small>{contact.email}</small>
-              <small>{contact.phoneNumber}</small>
-            </div>
+            <ContactDetails>
+              <ContactDetail>
+                <ContactIcon type="mail" /> {contact.email}
+              </ContactDetail>
+              <ContactDetail>
+                <ContactIcon type="phone" />{' '}
+                {contact.phoneNumber.replace(
+                  /(\d{3})(\d{3})(\d{4})/,
+                  '($1) $2-$3'
+                )}
+              </ContactDetail>
+            </ContactDetails>
           </ContactCard>
           <button onClick={() => setAddingEvent(true)}>Add Event</button>
           <ul>

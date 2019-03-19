@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledIcon = styled.i`
-  font-size: ${({ size }) => size};
+  font-size: inherit;
   font-weight: ${({ bold }) => bold && 'bold'};
 `;
 
-export default function Icon({ type, bold, size }) {
+export default function Icon({ type, bold, className = '' }) {
   return (
-    <StyledIcon className="material-icons" size={size} bold={bold}>
+    <StyledIcon className={`material-icons ${className}`} bold={bold}>
       {type}
     </StyledIcon>
   );
@@ -16,5 +16,5 @@ export default function Icon({ type, bold, size }) {
 Icon.propTypes = {
   type: PropTypes.string,
   bold: PropTypes.bool,
-  size: PropTypes.string
+  className: PropTypes.string
 };

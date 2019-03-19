@@ -10,6 +10,7 @@ const CreateContactLink = styled(Link)`
   bottom: 1.5rem;
   box-shadow: 0 0 0 0 black;
   color: teal;
+  font-size: 2rem;
   line-height: 0;
   padding: 0.5rem;
   position: fixed;
@@ -25,7 +26,7 @@ export default function Contacts() {
       <h1>Contacts</h1>
       <ContactList />
       <CreateContactLink href="/contacts/create">
-        <Icon type="add" size="2rem" />
+        <Icon type="add" />
       </CreateContactLink>
     </StyledContactsPage>
   );

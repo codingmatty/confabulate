@@ -9,13 +9,13 @@ describe('Icon', () => {
     expect(container).toMatchSnapshot();
   });
 
+  it('sets className', () => {
+    const { container } = render(<Icon type="test" className="test-class" />);
+    expect(container.firstChild).toHaveClass('test-class');
+  });
+
   it('adds bold font-weight', () => {
     const { container } = render(<Icon type="test" bold />);
     expect(container.firstChild).toHaveStyleRule('font-weight', 'bold');
-  });
-
-  it('sets font-size', () => {
-    const { container } = render(<Icon type="test" size="1rem" />);
-    expect(container.firstChild).toHaveStyleRule('font-size', '1rem');
   });
 });

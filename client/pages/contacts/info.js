@@ -8,12 +8,15 @@ const StyledLink = styled(Link)`
   flex-direction: column;
   align-items: center;
 `;
+const BackIcon = styled(Icon)`
+  font-size: 1.5rem;
+`;
 
 export default function ContactInfo({ id }) {
   return (
     <>
       <StyledLink href="/contacts">
-        <Icon type="arrow_back" />
+        <BackIcon type="arrow_back" />
         <small>Contacts</small>
       </StyledLink>
       <Contact id={id} />

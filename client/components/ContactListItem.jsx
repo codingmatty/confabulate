@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Link from './Link';
 import Avatar from './Avatar';
+import Icon from './Icon';
 import FavoriteContact from './FavoriteContact';
 
 const ContactInfo = styled.div`
@@ -20,8 +21,20 @@ const ItemContent = styled(Link)`
   grid-template-columns: 0fr auto 0fr;
   grid-gap: 1.5rem;
   align-items: flex-start;
-  justify-items: 
   cursor: pointer;
+`;
+const ContactDetails = styled.ul`
+  font-size: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+const ContactDetail = styled.li`
+  display: flex;
+  align-items: center;
+`;
+const ContactIcon = styled(Icon)`
+  margin-right: 0.25rem;
 `;
 
 export default function ContactListItem({ contact }) {
@@ -36,8 +49,14 @@ export default function ContactListItem({ contact }) {
           <b>
             {contact.firstName} {contact.lastName}
           </b>
-          <small>{contact.email}</small>
-          <small>{contact.phoneNumber}</small>
+          <ContactDetails>
+            <ContactDetail>
+              <ContactIcon type="mail" /> {contact.email}
+            </ContactDetail>
+            <ContactDetail>
+              <ContactIcon type="phone" /> {contact.phoneNumber}
+            </ContactDetail>
+          </ContactDetails>
         </ContactInfo>
         <Actions>
           <FavoriteContact
