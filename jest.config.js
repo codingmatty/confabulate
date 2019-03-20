@@ -12,5 +12,9 @@ module.exports = {
       setupFilesAfterEnv: ['./tests/setup']
     }
   ],
-  collectCoverageFrom: ['{client,server}/**/*.{js,jsx}', '!server/db/**/*']
+  collectCoverageFrom: [
+    '{client,server}/**/*.{js,jsx}',
+    '!{client,server}/**/*.test.{js,jsx}',
+    '!server/db/**/*'
+  ]
 };
