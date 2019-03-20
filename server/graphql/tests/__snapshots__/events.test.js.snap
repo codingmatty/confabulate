@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Events GraphQL query event renders all fields 1`] = `
+Object {
+  "date": "2019-03-01T00:00:00.000Z",
+  "id": "3",
+  "involvedContacts": Array [
+    Object {
+      "id": "2",
+    },
+  ],
+  "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
+      orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
+      lectus. Donec porta pellentesque rhoncus.",
+  "title": "Test Event 3",
+  "type": "meeting",
+}
+`;
+
+exports[`Events GraphQL query events renders all fields for all data 1`] = `
+Array [
+  Object {
+    "date": "2019-01-01T00:00:00.000Z",
+    "id": "1",
+    "involvedContacts": Array [
+      Object {
+        "id": "2",
+      },
+      Object {
+        "id": "3",
+      },
+    ],
+    "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
+      orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
+      lectus. Donec porta pellentesque rhoncus.",
+    "title": "Test Event 1",
+    "type": "meeting",
+  },
+  Object {
+    "date": "2019-02-01T00:00:00.000Z",
+    "id": "2",
+    "involvedContacts": Array [],
+    "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
+      orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
+      lectus. Donec porta pellentesque rhoncus.",
+    "title": "Test Event 2",
+    "type": "lunch",
+  },
+  Object {
+    "date": "2019-03-01T00:00:00.000Z",
+    "id": "3",
+    "involvedContacts": Array [
+      Object {
+        "id": "2",
+      },
+    ],
+    "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
+      orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
+      lectus. Donec porta pellentesque rhoncus.",
+    "title": "Test Event 3",
+    "type": "meeting",
+  },
+]
+`;

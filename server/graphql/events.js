@@ -58,11 +58,20 @@ exports.resolvers = {
       );
       return db.addEvent({ ...data, involvedContacts: filteredContacts });
     },
-    updateEvent: (obj, { id, data }, { db }) => db.updateEvent(id, data),
+    updateEvent: (obj, { id, data }, { db }) => {
+      const { involvedContacts = [] } = data;
+      const filteredContacts = involvedContacts.filter(
+        (contactId) => db.getContact(contactId) // Filter out non-existent contact ids
+      );
+      return db.updateEvent(id, {
+        ...data,
+        involvedContacts: filteredContacts
+      });
+    },
     removeEvent: (obj, { id }, { db }) => {
       const removedEvents = db.removeEvent(id);
       return {
-        status: 'SUCCESS',
+        status: removedEvents.length > 0 ? 'SUCCESS' : 'IGNORE',
         message: `${removedEvents.length} Event(s) Removed`
       };
     }
