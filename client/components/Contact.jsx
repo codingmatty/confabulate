@@ -108,9 +108,12 @@ const EventCard = styled.li`
   position: relative;
   border: 1px solid #888;
   border-radius: 4px;
-  box-shadow: 2px 2px 4px -2px #333;
   margin-left: 2.5rem;
   margin-right: 0.5rem;
+  box-shadow: ${({ isNew }) =>
+    isNew
+      ? '2px 2px 4px -2px #333, 0 0 4px 2px teal'
+      : '2px 2px 4px -2px #333'};
   &:not(:last-child) {
     margin-bottom: 0.5rem;
   }
@@ -235,7 +238,7 @@ export default function Contact({ id }) {
                   moment(secondDate) - moment(firstDate)
               )
               .map((event) => (
-                <EventCard key={event.id}>
+                <EventCard key={event.id} isNew={event.isNew}>
                   <EventHeaderLine>
                     <EventTitle>{event.title}</EventTitle>
                     <Icon type="edit" />
@@ -260,7 +263,7 @@ export default function Contact({ id }) {
               event={{ involvedContacts: [contact] }}
               onSubmit={(event) => {
                 setAddingEvent(false);
-                setEvents(events.concat(event));
+                setEvents(events.concat({ ...event, isNew: true }));
               }}
             />
           </Modal>
