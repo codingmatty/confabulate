@@ -1,17 +1,28 @@
+const _ = require('lodash');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
+const Memory = require('lowdb/adapters/Memory');
 
-const adapter = new FileSync(path.resolve(__dirname, '..', '..', 'db.json'));
+const adapter =
+  process.env.NODE_ENV === 'test'
+    ? new Memory()
+    : new FileSync(path.resolve(__dirname, '..', '..', 'db.json'));
 const db = low(adapter);
 
-db.defaults({
+const defaults = {
   users: [{ id: 1, username: 'test', password: 'test' }],
   sessions: {},
   contacts: [],
   events: []
-}).write();
+};
+
+db.defaults(defaults).write();
+
+exports.resetDb = (data) => {
+  db.setState({ ...defaults, ..._.cloneDeep(data) });
+};
 
 exports.getUser = (id) => {
   return db

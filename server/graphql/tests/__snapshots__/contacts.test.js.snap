@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contacts GraphQL query contact renders all fields 1`] = `
+Object {
+  "email": "ringostarr@beatles.com",
+  "events": Array [],
+  "favorite": true,
+  "firstName": "Ringo",
+  "fullName": "Ringo Starr",
+  "id": "3",
+  "lastName": "Starr",
+  "phoneNumber": "5553456789",
+}
+`;
+
+exports[`Contacts GraphQL query contacts renders all fields for all data 1`] = `
+Array [
+  Object {
+    "email": "johnlennon@beatles.com",
+    "events": Array [],
+    "favorite": true,
+    "firstName": "John",
+    "fullName": "John Lennon",
+    "id": "1",
+    "lastName": "Lennon",
+    "phoneNumber": "5551234567",
+  },
+  Object {
+    "email": "paulmccartney@beatles.com",
+    "events": Array [
+      Object {
+        "id": "1",
+      },
+    ],
+    "favorite": false,
+    "firstName": "Paul",
+    "fullName": "Paul McCartney",
+    "id": "2",
+    "lastName": "McCartney",
+    "phoneNumber": "5552345678",
+  },
+  Object {
+    "email": "ringostarr@beatles.com",
+    "events": Array [],
+    "favorite": true,
+    "firstName": "Ringo",
+    "fullName": "Ringo Starr",
+    "id": "3",
+    "lastName": "Starr",
+    "phoneNumber": "5553456789",
+  },
+]
+`;

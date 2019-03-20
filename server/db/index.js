@@ -1,2 +1,2 @@
 module.exports =
-  process.env.NODE_ENV === 'development' ? require('./local') : {};
+  process.env.NODE_ENV === 'production' ? {} : require('./local');

@@ -47,7 +47,7 @@ exports.resolvers = {
   },
   Mutation: {
     addContact: (obj, { data }, { db }) =>
-      normalizeContact(db.addContact(data)),
+      normalizeContact(db.addContact({ ...data, favorite: false })),
     updateContact: (obj, { id, data }, { db }) =>
       normalizeContact(db.updateContact(id, data)),
     removeContact: (obj, { id }, { db }) => {
