@@ -13,6 +13,7 @@ const CREATE_EVENT = gql`
       title
       date
       type
+      note
     }
   }
 `;
@@ -23,6 +24,7 @@ const UPDATE_EVENT = gql`
       title
       date
       type
+      note
     }
   }
 `;
