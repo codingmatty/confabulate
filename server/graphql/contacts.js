@@ -53,7 +53,7 @@ exports.resolvers = {
     removeContact: (obj, { id }, { db }) => {
       const removedContacts = db.removeContact(id);
       return {
-        status: 'SUCCESS',
+        status: removedContacts.length > 0 ? 'SUCCESS' : 'IGNORE',
         message: `${removedContacts.length} Contact(s) Removed`
       };
     }

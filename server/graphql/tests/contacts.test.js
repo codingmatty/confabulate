@@ -206,5 +206,17 @@ describe('Contacts GraphQL', () => {
       });
       expect(db.getContacts()).toHaveLength(2);
     });
+
+    it("avoids failure if contact to remove doesn't exist", async () => {
+      const { data } = await mutate({
+        mutation: REMOVE_CONTACT,
+        variables: { id: '100' }
+      });
+      expect(data.status).toEqual({
+        status: 'IGNORE',
+        message: '0 Contact(s) Removed'
+      });
+      expect(db.getContacts()).toHaveLength(3);
+    });
   });
 });
