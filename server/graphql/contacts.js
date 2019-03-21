@@ -41,17 +41,18 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    contact: (obj, { id }, { db }) => normalizeContact(db.getContact(id)),
-    contacts: (obj, { query }, { db }) =>
-      db.getContacts(query).map(normalizeContact)
+    contact: (obj, { id }, { db, user }) =>
+      normalizeContact(db.getContact(user.id, id)),
+    contacts: (obj, { query }, { db, user }) =>
+      db.getContacts(user.id, query).map(normalizeContact)
   },
   Mutation: {
-    addContact: (obj, { data }, { db }) =>
-      normalizeContact(db.addContact({ ...data, favorite: false })),
-    updateContact: (obj, { id, data }, { db }) =>
-      normalizeContact(db.updateContact(id, data)),
-    removeContact: (obj, { id }, { db }) => {
-      const removedContacts = db.removeContact(id);
+    addContact: (obj, { data }, { db, user }) =>
+      normalizeContact(db.addContact(user.id, { ...data, favorite: false })),
+    updateContact: (obj, { id, data }, { db, user }) =>
+      normalizeContact(db.updateContact(user.id, id, data)),
+    removeContact: (obj, { id }, { db, user }) => {
+      const removedContacts = db.removeContact(user.id, id);
       return {
         status: removedContacts.length > 0 ? 'SUCCESS' : 'IGNORE',
         message: `${removedContacts.length} Contact(s) Removed`
@@ -59,9 +60,9 @@ exports.resolvers = {
     }
   },
   Contact: {
-    events: (contact, args, { db }) => {
+    events: (contact, args, { db, user }) => {
       return db
-        .getEvents()
+        .getEvents(user.id)
         .filter(({ involvedContacts }) =>
           involvedContacts.includes(contact.id)
         );

@@ -3,7 +3,7 @@ const { createTestClient } = require('apollo-server-testing');
 const db = require('../../db');
 const schema = require('../index');
 
-const user = { id: 1 };
+const user = { id: '123' };
 const server = new ApolloServer({
   schema,
   context: () => ({ db, user })
@@ -68,9 +68,23 @@ const REMOVE_EVENT = gql`
 `;
 
 const seedData = {
-  contacts: [{ id: '1' }, { id: '2' }, { id: '3' }],
+  contacts: [
+    {
+      userId: '123',
+      id: '1'
+    },
+    {
+      userId: '123',
+      id: '2'
+    },
+    {
+      userId: '123',
+      id: '3'
+    }
+  ],
   events: [
     {
+      userId: '123',
       id: '1',
       title: 'Test Event 1',
       date: '2019-01-01T00:00:00.000Z',
@@ -81,6 +95,7 @@ const seedData = {
       involvedContacts: ['2', '3']
     },
     {
+      userId: '123',
       id: '2',
       title: 'Test Event 2',
       date: '2019-02-01T00:00:00.000Z',
@@ -91,6 +106,7 @@ const seedData = {
       involvedContacts: []
     },
     {
+      userId: '123',
       id: '3',
       title: 'Test Event 3',
       date: '2019-03-01T00:00:00.000Z',
@@ -99,6 +115,10 @@ const seedData = {
       orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
       lectus. Donec porta pellentesque rhoncus.`,
       involvedContacts: ['2']
+    },
+    {
+      userId: 'xyz',
+      id: '4'
     }
   ]
 };
@@ -241,7 +261,7 @@ describe('Events GraphQL', () => {
         status: 'SUCCESS',
         message: '1 Event(s) Removed'
       });
-      expect(db.getEvents()).toHaveLength(2);
+      expect(db.getEvents(user.id)).toHaveLength(2);
     });
 
     it("avoids failure if event to remove doesn't exist", async () => {
@@ -253,7 +273,7 @@ describe('Events GraphQL', () => {
         status: 'IGNORE',
         message: '0 Event(s) Removed'
       });
-      expect(db.getEvents()).toHaveLength(3);
+      expect(db.getEvents(user.id)).toHaveLength(3);
     });
   });
 });

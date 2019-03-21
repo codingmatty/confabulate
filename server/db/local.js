@@ -12,7 +12,10 @@ const adapter =
 const db = low(adapter);
 
 const defaults = {
-  users: [{ id: 1, username: 'test', password: 'test' }],
+  users: [
+    { id: '123', username: 'test-1', password: 'test' },
+    { id: '456', username: 'test-2', password: 'test' }
+  ],
   sessions: {},
   contacts: [],
   events: []
@@ -20,98 +23,98 @@ const defaults = {
 
 db.defaults(defaults).write();
 
-exports.resetDb = (data) => {
+function resetDb(data) {
   db.setState({ ...defaults, ..._.cloneDeep(data) });
-};
+}
 
-exports.getUser = (id) => {
+function getUser(id) {
   return db
     .get('users')
     .find({ id })
     .value();
-};
+}
 
-exports.findUser = (query) => {
+function findUser(query) {
   return db
     .get('users')
     .find(query)
     .value();
-};
+}
 
-exports.addContact = (contact) => {
+function addContact(userId, contact) {
   const contactsRef = db.get('contacts');
   const id = uuidv4();
-  contactsRef.push({ ...contact, id }).write();
+  contactsRef.push({ ...contact, userId, id }).write();
   return contactsRef.find({ id }).value();
-};
+}
 
-exports.updateContact = (id, contact) => {
+function updateContact(userId, id, contact) {
   return db
     .get('contacts')
-    .find({ id })
+    .find({ userId, id })
     .assign(contact)
     .write();
-};
+}
 
-exports.removeContact = (id) => {
+function removeContact(userId, id) {
   return db
     .get('contacts')
-    .remove({ id })
+    .remove({ userId, id })
     .write();
-};
+}
 
-exports.getContact = (id) => {
+function getContact(userId, id) {
   const contact = db
     .get('contacts')
-    .find({ id })
+    .find({ userId, id })
     .value();
   return contact;
-};
+}
 
-exports.getContacts = (query) => {
+function getContacts(userId, query) {
   return db
     .get('contacts')
-    .filter(query)
+    .filter({ ...query, userId })
     .value();
-};
+}
 
-exports.addEvent = (event) => {
+function addEvent(userId, event) {
   const eventsRef = db.get('events');
   const id = uuidv4();
-  eventsRef.push({ ...event, id }).write();
+  eventsRef.push({ ...event, userId, id }).write();
   return eventsRef.find({ id }).value();
-};
+}
 
-exports.updateEvent = (id, event) => {
+function updateEvent(userId, id, event) {
   return db
     .get('events')
-    .find({ id })
+    .find({ userId, id })
     .assign(event)
     .write();
-};
+}
 
-exports.removeEvent = (id) => {
+function removeEvent(userId, id) {
   return db
     .get('events')
-    .remove({ id })
+    .remove({ userId, id })
     .write();
-};
+}
 
-exports.getEvent = (id) => {
+function getEvent(userId, id) {
   return db
     .get('events')
-    .find({ id })
+    .find({ userId, id })
     .value();
-};
+}
 
-exports.getEvents = (query) => {
+function getEvents(userId, query) {
   return db
     .get('events')
-    .filter(query)
+    .filter({ ...query, userId })
     .value();
-};
+}
 
-exports.store = function(session) {
+function store(session) {
   class LowDBStore extends session.Store {
     all(done) {
       const sessions = db
@@ -162,4 +165,21 @@ exports.store = function(session) {
   }
 
   return LowDBStore;
+}
+
+module.exports = {
+  resetDb,
+  getUser,
+  findUser,
+  addContact,
+  updateContact,
+  removeContact,
+  getContact,
+  getContacts,
+  addEvent,
+  updateEvent,
+  removeEvent,
+  getEvent,
+  getEvents,
+  store
 };

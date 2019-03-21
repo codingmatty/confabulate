@@ -46,30 +46,33 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    event: (obj, { id }, { db }) => db.getEvent(id),
+    event: (obj, { id }, { db, user }) => db.getEvent(user.id, id),
     // TODO: Implement advanced search with EventQueryData fields
-    events: (obj, { query }, { db }) => db.getEvents(query)
+    events: (obj, { query }, { db, user }) => db.getEvents(user.id, query)
   },
   Mutation: {
-    addEvent: (obj, { data }, { db }) => {
+    addEvent: (obj, { data }, { db, user }) => {
       const { involvedContacts = [] } = data;
       const filteredContacts = involvedContacts.filter(
-        (contactId) => db.getContact(contactId) // Filter out non-existent contact ids
+        (contactId) => db.getContact(user.id, contactId) // Filter out non-existent contact ids
       );
-      return db.addEvent({ ...data, involvedContacts: filteredContacts });
-    },
-    updateEvent: (obj, { id, data }, { db }) => {
-      const { involvedContacts = [] } = data;
-      const filteredContacts = involvedContacts.filter(
-        (contactId) => db.getContact(contactId) // Filter out non-existent contact ids
-      );
-      return db.updateEvent(id, {
+      return db.addEvent(user.id, {
         ...data,
         involvedContacts: filteredContacts
       });
     },
-    removeEvent: (obj, { id }, { db }) => {
-      const removedEvents = db.removeEvent(id);
+    updateEvent: (obj, { id, data }, { db, user }) => {
+      const { involvedContacts = [] } = data;
+      const filteredContacts = involvedContacts.filter(
+        (contactId) => db.getContact(user.id, contactId) // Filter out non-existent contact ids
+      );
+      return db.updateEvent(user.id, id, {
+        ...data,
+        involvedContacts: filteredContacts
+      });
+    },
+    removeEvent: (obj, { id }, { db, user }) => {
+      const removedEvents = db.removeEvent(user.id, id);
       return {
         status: removedEvents.length > 0 ? 'SUCCESS' : 'IGNORE',
         message: `${removedEvents.length} Event(s) Removed`
@@ -77,9 +80,9 @@ exports.resolvers = {
     }
   },
   Event: {
-    involvedContacts: (event, args, { db }) => {
+    involvedContacts: (event, args, { db, user }) => {
       return event.involvedContacts.map((contactId) =>
-        db.getContact(contactId)
+        db.getContact(user.id, contactId)
       );
     }
   }

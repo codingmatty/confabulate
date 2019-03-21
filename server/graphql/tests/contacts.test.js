@@ -3,7 +3,7 @@ const { createTestClient } = require('apollo-server-testing');
 const db = require('../../db');
 const schema = require('../index');
 
-const user = { id: 1 };
+const user = { id: '123' };
 const server = new ApolloServer({
   schema,
   context: () => ({ db, user })
@@ -72,6 +72,7 @@ const REMOVE_CONTACT = gql`
 const seedData = {
   contacts: [
     {
+      userId: '123',
       id: '1',
       firstName: 'John',
       lastName: 'Lennon',
@@ -80,6 +81,7 @@ const seedData = {
       favorite: true
     },
     {
+      userId: '123',
       id: '2',
       firstName: 'Paul',
       lastName: 'McCartney',
@@ -88,16 +90,23 @@ const seedData = {
       favorite: false
     },
     {
+      userId: '123',
       id: '3',
       firstName: 'Ringo',
       lastName: 'Starr',
       email: 'ringostarr@beatles.com',
       phoneNumber: '5553456789',
       favorite: true
+    },
+    {
+      // This is a dummy for a different user
+      userId: 'xyz',
+      id: '4'
     }
   ],
   events: [
     {
+      userId: '123',
       id: '1',
       involvedContacts: ['2']
     }
@@ -204,7 +213,7 @@ describe('Contacts GraphQL', () => {
         status: 'SUCCESS',
         message: '1 Contact(s) Removed'
       });
-      expect(db.getContacts()).toHaveLength(2);
+      expect(db.getContacts(user.id)).toHaveLength(2);
     });
 
     it("avoids failure if contact to remove doesn't exist", async () => {
@@ -216,7 +225,7 @@ describe('Contacts GraphQL', () => {
         status: 'IGNORE',
         message: '0 Contact(s) Removed'
       });
-      expect(db.getContacts()).toHaveLength(3);
+      expect(db.getContacts(user.id)).toHaveLength(3);
     });
   });
 });
