@@ -10,9 +10,9 @@ module.exports = async function registerNextApp({ dev }) {
     dir: path.resolve(__dirname, '..', '..', 'client'),
     conf: {
       env: {
-        FIREBASE_CLIENT_APIKEY: process.env.FIREBASE_CLIENT_APIKEY,
-        FIREBASE_CLIENT_AUTHDOMAIN: process.env.FIREBASE_CLIENT_AUTHDOMAIN,
-        FIREBASE_CLIENT_PROJECTID: process.env.FIREBASE_CLIENT_PROJECTID
+        FIREBASE_PROJECTID: process.env.FIREBASE_PROJECTID,
+        FIREBASE_AUTHDOMAIN: process.env.FIREBASE_AUTHDOMAIN,
+        FIREBASE_CLIENT_APIKEY: process.env.FIREBASE_CLIENT_APIKEY
       }
     }
   });
