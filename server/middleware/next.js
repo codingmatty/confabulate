@@ -7,7 +7,14 @@ module.exports = async function registerNextApp({ dev }) {
   const router = new Router();
   const nextApp = next({
     dev,
-    dir: path.resolve(__dirname, '..', '..', 'client')
+    dir: path.resolve(__dirname, '..', '..', 'client'),
+    conf: {
+      env: {
+        FIREBASE_CLIENT_APIKEY: process.env.FIREBASE_CLIENT_APIKEY,
+        FIREBASE_CLIENT_AUTHDOMAIN: process.env.FIREBASE_CLIENT_AUTHDOMAIN,
+        FIREBASE_CLIENT_PROJECTID: process.env.FIREBASE_CLIENT_PROJECTID
+      }
+    }
   });
 
   try {

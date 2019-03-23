@@ -1,49 +1,39 @@
 const { Router } = require('express');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const CustomStrategy = require('passport-custom');
+const firebaseAdmin = require('../firebase-admin');
 
-module.exports = function registerPassport(db) {
+module.exports = function registerPassport() {
   const router = new Router();
 
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
+  passport.serializeUser((idToken, done) => {
+    done(null, idToken);
   });
 
-  passport.deserializeUser(async (id, done) => {
-    let user;
+  passport.deserializeUser(async (idToken, done) => {
     try {
-      user = await db.getUser(id);
-    } catch (err) {
-      done(err);
+      const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
+      done(null, decodedToken);
+    } catch (error) {
+      done(error);
     }
-    done(null, user);
   });
 
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
-      let user;
+    new CustomStrategy(async (req, done) => {
+      // Use a custom strategy to verify Firebase JWT and pass it to serializer
       try {
-        user = await db.findUser({ username });
-      } catch (err) {
-        return done(err);
+        const { idToken } = req.body;
+        await firebaseAdmin.auth().verifyIdToken(idToken);
+        done(null, idToken);
+      } catch (error) {
+        done(error);
       }
-
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-
-      if (user.password !== password) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-
-      return done(null, user);
     })
   );
 
   router.use(passport.initialize());
-  router.use((req, res, next) => {
-    passport.session()(req, res, next);
-  });
+  router.use(passport.session());
 
   return router;
 };

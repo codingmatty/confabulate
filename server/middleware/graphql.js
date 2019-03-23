@@ -8,7 +8,10 @@ module.exports = function registerGraphQL(db) {
 
   const server = new ApolloServer({
     schema,
-    context: ({ req }) => ({ db, user: req.user }),
+    context: ({ req }) => ({
+      db,
+      user: { ...req.user, id: req.user.uid }
+    }),
     playground: process.env.NODE_ENV === 'development' && {
       settings: {
         ['request.credentials']: 'include'
