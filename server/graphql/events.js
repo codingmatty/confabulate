@@ -46,43 +46,39 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    event: (obj, { id }, { db, user }) => db.getEvent(user.id, id),
-    // TODO: Implement advanced search with EventQueryData fields
-    events: (obj, { query }, { db, user }) => db.getEvents(user.id, query)
+    event: async (obj, { id }, { db, user }) => await db.getEvent(user.id, id),
+    events: async (obj, { query }, { db, user }) =>
+      await db.getEvents(user.id, query)
   },
   Mutation: {
-    addEvent: (obj, { data }, { db, user }) => {
+    addEvent: async (obj, { data }, { db, user }) => {
       const { involvedContacts = [] } = data;
-      const filteredContacts = involvedContacts.filter(
-        (contactId) => db.getContact(user.id, contactId) // Filter out non-existent contact ids
-      );
-      return db.addEvent(user.id, {
+      return await db.addEvent(user.id, {
         ...data,
-        involvedContacts: filteredContacts
+        involvedContacts
       });
     },
-    updateEvent: (obj, { id, data }, { db, user }) => {
+    updateEvent: async (obj, { id, data }, { db, user }) => {
       const { involvedContacts = [] } = data;
-      const filteredContacts = involvedContacts.filter(
-        (contactId) => db.getContact(user.id, contactId) // Filter out non-existent contact ids
-      );
-      return db.updateEvent(user.id, id, {
+      return await db.updateEvent(user.id, id, {
         ...data,
-        involvedContacts: filteredContacts
+        involvedContacts
       });
     },
-    removeEvent: (obj, { id }, { db, user }) => {
-      const removedEvents = db.removeEvent(user.id, id);
+    removeEvent: async (obj, { id }, { db, user }) => {
+      const removedEvent = await db.removeEvent(user.id, id);
       return {
-        status: removedEvents.length > 0 ? 'SUCCESS' : 'IGNORE',
-        message: `${removedEvents.length} Event(s) Removed`
+        status: removedEvent > 0 ? 'SUCCESS' : 'IGNORE',
+        message: `${removedEvent} Event(s) Removed`
       };
     }
   },
   Event: {
-    involvedContacts: (event, args, { db, user }) => {
-      return event.involvedContacts.map((contactId) =>
-        db.getContact(user.id, contactId)
+    involvedContacts: async (event, args, { db, user }) => {
+      return Promise.all(
+        event.involvedContacts.map(
+          async (contactId) => await db.getContact(user.id, contactId)
+        )
       );
     }
   }

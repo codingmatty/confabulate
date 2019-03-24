@@ -1,0 +1,206 @@
+const flatten = require('flat');
+const firebaseAdmin = require('../firebase-admin');
+
+const firestore = firebaseAdmin.firestore();
+
+async function decorateSnapshot(snapshot) {
+  const data = await snapshot.data();
+  return {
+    ...data,
+    id: snapshot.id,
+    createdAt: snapshot.createTime.toDate(),
+    updatedAt: snapshot.createTime.toDate()
+  };
+}
+
+async function getUser(id) {}
+
+async function findUser(query) {}
+
+async function addContact(userId, contact) {
+  const contacts = firestore.collection('contacts');
+  const document = await contacts.add({ ...contact, userId });
+  const snapshot = await document.get();
+  return await decorateSnapshot(snapshot);
+}
+
+async function getContacts(userId, query = {}) {
+  const contacts = firestore.collection('contacts');
+  let collectionQuery = contacts.where('userId', '==', userId);
+  for (let key in query) {
+    collectionQuery = collectionQuery.where(key, '==', query[key]);
+  }
+  const { docs } = await collectionQuery.get();
+  return Promise.all(docs.map(decorateSnapshot));
+}
+
+async function getContact(userId, id) {
+  const document = firestore.collection('contacts').doc(id);
+  const snapshot = await document.get();
+  if (!snapshot.exists || snapshot.get('userId') !== userId) {
+    return {};
+  }
+  return await decorateSnapshot(snapshot);
+}
+
+async function updateContact(userId, id, data) {
+  const document = firestore.collection('contacts').doc(id);
+  let snapshot = await document.get();
+  if (!snapshot.exists || snapshot.get('userId') !== userId) {
+    return {};
+  }
+  await document.update(data);
+  snapshot = await document.get();
+  return await decorateSnapshot(snapshot);
+}
+
+async function removeContact(userId, id) {
+  const document = firestore.collection('contacts').doc(id);
+  let snapshot = await document.get();
+  if (!snapshot.exists || snapshot.get('userId') !== userId) {
+    return {};
+  }
+  // fetch data before deleting
+  const data = await decorateSnapshot(snapshot);
+  await document.delete();
+  return data;
+}
+
+async function addEvent(userId, data) {
+  const events = firestore.collection('events');
+  const document = await events.add({ ...data, userId });
+  const snapshot = await document.get();
+  return await decorateSnapshot(snapshot);
+}
+
+async function getEvents(userId, query = {}) {
+  const events = firestore.collection('events');
+  let collectionQuery = events.where('userId', '==', userId);
+  for (let key in query) {
+    collectionQuery = collectionQuery.where(key, '==', query[key]);
+  }
+  const { docs } = await collectionQuery.get();
+  return Promise.all(docs.map(decorateSnapshot));
+}
+
+async function getEvent(userId, id) {
+  const document = firestore.collection('events').doc(id);
+  const snapshot = await document.get();
+  if (!snapshot.exists || snapshot.get('userId') !== userId) {
+    return {};
+  }
+  return await decorateSnapshot(snapshot);
+}
+
+async function updateEvent(userId, id, data) {
+  const document = firestore.collection('events').doc(id);
+  let snapshot = await document.get();
+  if (!snapshot.exists || snapshot.get('userId') !== userId) {
+    return {};
+  }
+  await document.update(data);
+  snapshot = await document.get();
+  return await decorateSnapshot(snapshot);
+}
+
+async function removeEvent(userId, id) {
+  const document = firestore.collection('events').doc(id);
+  let snapshot = await document.get();
+  if (!snapshot.exists || snapshot.get('userId') !== userId) {
+    return {};
+  }
+  // fetch data before deleting
+  const data = await decorateSnapshot(snapshot);
+  await document.delete();
+  return data;
+}
+
+function store(session) {
+  class FirestoreDBStore extends session.Store {
+    async all(done) {
+      try {
+        const documents = await firestore
+          .collection('sessions')
+          .listDocuments();
+        const snapshots = await firestore.getAll(documents);
+        const sessions = await Promise.all(
+          snapshots
+            .filter(({ exists }) => exists)
+            .map(async (snapshot) => snapshot.data())
+        );
+        done(null, sessions.map((session) => flatten.unflatten(session)));
+      } catch (error) {
+        done(error);
+      }
+    }
+    async destroy(sid, done) {
+      try {
+        const document = await firestore.collection('sessions').doc(sid);
+        await document.delete();
+        done(null);
+      } catch (error) {
+        done(error);
+      }
+    }
+    clear(done) {
+      // Don't do anything
+      done(null);
+    }
+    async length(done) {
+      try {
+        const documents = await firestore
+          .collection('sessions')
+          .listDocuments();
+        done(null, documents.length);
+      } catch (error) {
+        done(error);
+      }
+    }
+    async get(sid, done) {
+      try {
+        const document = await firestore.collection('sessions').doc(sid);
+        const snapshot = await document.get();
+        const session = await snapshot.data();
+        done(null, flatten.unflatten(session));
+      } catch (error) {
+        done(error);
+      }
+    }
+    async set(sid, session, done) {
+      try {
+        const document = await firestore.collection('sessions').doc(sid);
+        await document.set(flatten(session));
+        done(null);
+      } catch (error) {
+        done(error);
+      }
+    }
+    async touch(sid, session, done) {
+      try {
+        const document = await firestore.collection('sessions').doc(sid);
+        await document.set(flatten(session));
+        done(null);
+      } catch (error) {
+        done(error);
+      }
+    }
+  }
+
+  return FirestoreDBStore;
+}
+
+module.exports = {
+  getUser,
+  findUser,
+  addContact,
+  updateContact,
+  removeContact,
+  getContact,
+  getContacts,
+  addEvent,
+  updateEvent,
+  removeEvent,
+  getEvent,
+  getEvents,
+  store
+};

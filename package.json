@@ -19,6 +19,7 @@
     "express-session": "^1.15.6",
     "firebase": "^5.9.1",
     "firebase-admin": "^7.1.1",
+    "flat": "^4.1.0",
     "graphql": "^14.1.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.11",

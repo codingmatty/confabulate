@@ -41,36 +41,40 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    contact: (obj, { id }, { db, user }) =>
-      normalizeContact(db.getContact(user.id, id)),
-    contacts: (obj, { query }, { db, user }) =>
-      db.getContacts(user.id, query).map(normalizeContact)
+    contact: async (obj, { id }, { db, user }) =>
+      normalizeContact(await db.getContact(user.id, id)),
+    contacts: async (obj, { query }, { db, user }) => {
+      const contacts = await db.getContacts(user.id, query);
+      return contacts.map(normalizeContact);
+    }
   },
   Mutation: {
-    addContact: (obj, { data }, { db, user }) =>
-      normalizeContact(db.addContact(user.id, { ...data, favorite: false })),
-    updateContact: (obj, { id, data }, { db, user }) =>
-      normalizeContact(db.updateContact(user.id, id, data)),
-    removeContact: (obj, { id }, { db, user }) => {
-      const removedContacts = db.removeContact(user.id, id);
+    addContact: async (obj, { data }, { db, user }) =>
+      normalizeContact(
+        await db.addContact(user.id, { ...data, favorite: false })
+      ),
+    updateContact: async (obj, { id, data }, { db, user }) =>
+      normalizeContact(await db.updateContact(user.id, id, data)),
+    removeContact: async (obj, { id }, { db, user }) => {
+      const removedContact = await db.removeContact(user.id, id);
       return {
-        status: removedContacts.length > 0 ? 'SUCCESS' : 'IGNORE',
-        message: `${removedContacts.length} Contact(s) Removed`
+        status: removedContact ? 'SUCCESS' : 'IGNORE',
+        message: `${removedContact.length} Contact(s) Removed`
       };
     }
   },
   Contact: {
-    events: (contact, args, { db, user }) => {
-      return db
-        .getEvents(user.id)
-        .filter(({ involvedContacts }) =>
-          involvedContacts.includes(contact.id)
-        );
+    events: async (contact, args, { db, user }) => {
+      const events = await db.getEvents(user.id);
+      return events.filter(({ involvedContacts }) =>
+        involvedContacts.includes(contact.id)
+      );
     }
   }
 };
 
 function normalizeContact(contact) {
+  console.log('contact: ', contact);
   return {
     ...contact,
     fullName: `${contact.firstName} ${contact.lastName}`

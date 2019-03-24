@@ -12,7 +12,7 @@ const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = async function setupExpress() {
   const app = express();
-  const LowDBStore = db.store(session);
+  const dbStore = db.store(session);
 
   app.use(morgan('combined'));
 
@@ -23,7 +23,11 @@ module.exports = async function setupExpress() {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      store: new LowDBStore()
+      store: new dbStore(),
+      cookie: {
+        sameSite: true,
+        secure: !dev
+      }
     })
   );
 

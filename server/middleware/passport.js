@@ -35,5 +35,18 @@ module.exports = function registerPassport() {
   router.use(passport.initialize());
   router.use(passport.session());
 
+  router.use(function(err, req, res, next) {
+    if (err) {
+      // If an error has occured, then logout and redirect
+      if (req.user) {
+        firebaseAdmin.auth().revokeRefreshTokens(req.user.uid);
+      }
+      req.logout();
+      res.redirect('/login');
+    } else {
+      next();
+    }
+  });
+
   return router;
 };

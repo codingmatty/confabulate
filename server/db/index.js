@@ -1,2 +1,4 @@
 module.exports =
-  process.env.NODE_ENV === 'production' ? {} : require('./local');
+  process.env.DB_SOURCE === 'firestore'
+    ? require('./firestore')
+    : require('./local');
