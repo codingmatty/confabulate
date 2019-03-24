@@ -7,8 +7,8 @@ exports.typeDefs = gql`
     events(query: EventQueryData = {}): [Event]!
   }
   extend type Mutation {
-    addEvent(data: EventInputData): Event
-    updateEvent(id: ID!, data: EventUpdateData): Event
+    addEvent(data: EventInputData!): Event
+    updateEvent(id: ID!, data: EventUpdateData!): Event
     removeEvent(id: ID!): Status
   }
   type Event {

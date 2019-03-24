@@ -7,7 +7,7 @@ import Form from './Form';
 import Input from './Input';
 
 const CREATE_EVENT = gql`
-  mutation CREATE_EVENT($data: EventInputData) {
+  mutation CREATE_EVENT($data: EventInputData!) {
     event: addEvent(data: $data) {
       id
       title
@@ -18,7 +18,7 @@ const CREATE_EVENT = gql`
   }
 `;
 const UPDATE_EVENT = gql`
-  mutation UPDATE_EVENT($id: ID!, $data: EventInputData) {
+  mutation UPDATE_EVENT($id: ID!, $data: EventInputData!) {
     event: updateEvent(id: $id, data: $data) {
       id
       title

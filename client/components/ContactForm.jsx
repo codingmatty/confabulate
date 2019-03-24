@@ -7,7 +7,7 @@ import Form from './Form';
 import Input from './Input';
 
 const CREATE_CONTACT = gql`
-  mutation CREATE_CONTACT($data: ContactInputData) {
+  mutation CREATE_CONTACT($data: ContactInputData!) {
     contact: addContact(data: $data) {
       id
       firstName
@@ -18,7 +18,7 @@ const CREATE_CONTACT = gql`
   }
 `;
 const UPDATE_CONTACT = gql`
-  mutation UPDATE_CONTACT($id: ID!, $data: ContactInputData) {
+  mutation UPDATE_CONTACT($id: ID!, $data: ContactInputData!) {
     contact: updateContact(id: $id, data: $data) {
       id
       firstName

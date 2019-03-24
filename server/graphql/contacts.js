@@ -7,8 +7,8 @@ exports.typeDefs = gql`
     contacts(query: ContactQueryData = {}): [Contact]!
   }
   extend type Mutation {
-    addContact(data: ContactInputData): Contact
-    updateContact(id: ID!, data: ContactInputData): Contact
+    addContact(data: ContactInputData!): Contact
+    updateContact(id: ID!, data: ContactInputData!): Contact
     removeContact(id: ID!): Status
   }
   type Contact {

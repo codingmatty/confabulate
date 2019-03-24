@@ -6,7 +6,7 @@ import { useMutation } from 'react-apollo-hooks';
 import Icon from './Icon';
 
 const FAVORITE_CONTACT = gql`
-  mutation FAVORITE_CONTACT($id: ID!, $data: ContactInputData) {
+  mutation FAVORITE_CONTACT($id: ID!, $data: ContactInputData!) {
     contact: updateContact(id: $id, data: $data) {
       favorite
     }
