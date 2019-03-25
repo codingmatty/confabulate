@@ -13,6 +13,14 @@ async function decorateSnapshot(snapshot) {
   };
 }
 
+async function decorateContact(snapshot) {
+  const contact = await decorateSnapshot(snapshot);
+  return {
+    ...contact,
+    fullName: `${contact.firstName} ${contact.lastName}`
+  };
+}
+
 async function addUser(userId, data) {
   const document = firestore.collection('users').doc(userId);
   await document.set(data);
@@ -44,7 +52,7 @@ async function addContact(userId, data) {
   const contacts = firestore.collection('contacts');
   const document = await contacts.add({ ...data, userId });
   const snapshot = await document.get();
-  return await decorateSnapshot(snapshot);
+  return await decorateContact(snapshot);
 }
 
 async function getContacts(userId, query = {}) {
@@ -54,7 +62,7 @@ async function getContacts(userId, query = {}) {
     collectionQuery = collectionQuery.where(key, '==', query[key]);
   }
   const { docs } = await collectionQuery.get();
-  return Promise.all(docs.map(decorateSnapshot));
+  return Promise.all(docs.map(decorateContact));
 }
 
 async function getContact(userId, id) {
@@ -63,7 +71,7 @@ async function getContact(userId, id) {
   if (!snapshot.exists || snapshot.get('userId') !== userId) {
     return {};
   }
-  return await decorateSnapshot(snapshot);
+  return await decorateContact(snapshot);
 }
 
 async function updateContact(userId, id, data) {
@@ -74,7 +82,7 @@ async function updateContact(userId, id, data) {
   }
   await document.update(data);
   snapshot = await document.get();
-  return await decorateSnapshot(snapshot);
+  return await decorateContact(snapshot);
 }
 
 async function removeContact(userId, id) {
@@ -84,7 +92,7 @@ async function removeContact(userId, id) {
     return {};
   }
   // fetch data before deleting
-  const data = await decorateSnapshot(snapshot);
+  const data = await decorateContact(snapshot);
   await document.delete();
   return data;
 }

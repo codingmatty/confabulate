@@ -42,19 +42,17 @@ exports.typeDefs = gql`
 exports.resolvers = {
   Query: {
     contact: async (obj, { id }, { db, user }) =>
-      normalizeContact(await db.getContact(user.id, id)),
+      await db.getContact(user.id, id),
     contacts: async (obj, { query }, { db, user }) => {
       const contacts = await db.getContacts(user.id, query);
-      return contacts.map(normalizeContact);
+      return contacts;
     }
   },
   Mutation: {
     addContact: async (obj, { data }, { db, user }) =>
-      normalizeContact(
-        await db.addContact(user.id, { ...data, favorite: false })
-      ),
+      await db.addContact(user.id, { ...data, favorite: false }),
     updateContact: async (obj, { id, data }, { db, user }) =>
-      normalizeContact(await db.updateContact(user.id, id, data)),
+      await db.updateContact(user.id, id, data),
     removeContact: async (obj, { id }, { db, user }) => {
       const removedContact = await db.removeContact(user.id, id);
       return {
@@ -72,11 +70,3 @@ exports.resolvers = {
     }
   }
 };
-
-function normalizeContact(contact) {
-  console.log('contact: ', contact);
-  return {
-    ...contact,
-    fullName: `${contact.firstName} ${contact.lastName}`
-  };
-}
