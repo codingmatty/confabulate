@@ -5,13 +5,26 @@ const firebaseAdmin = require('../firebase-admin');
 module.exports = function registerApi() {
   const router = new Router();
 
-  router.post(
-    '/login',
-    passport.authenticate('custom', {
-      successRedirect: '/',
-      failureRedirect: '/login'
-    })
-  );
+  router.post('/login', (req, res, next) => {
+    passport.authenticate('custom', (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        if (info.code === 'no-account') {
+          return res.redirect('/signup');
+        }
+        return res.redirect('/login');
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.redirect('/');
+      });
+    })(req, res, next);
+  });
+
   router.get('/logout', (req, res) => {
     firebaseAdmin.auth().revokeRefreshTokens(req.user.uid);
     req.logout();

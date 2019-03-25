@@ -36,6 +36,15 @@ module.exports = async function registerNextApp({ dev }) {
     requestHandler(req, res, parsedUrl);
   });
 
+  router.get('/signup', (req, res) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
+      res.redirect('/');
+      return;
+    }
+    const parsedUrl = parse(req.url, true);
+    requestHandler(req, res, parsedUrl);
+  });
+
   router.get('/_next/*', (req, res) => {
     const parsedUrl = parse(req.url, true);
     requestHandler(req, res, parsedUrl);

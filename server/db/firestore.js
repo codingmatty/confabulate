@@ -13,13 +13,36 @@ async function decorateSnapshot(snapshot) {
   };
 }
 
-async function getUser(id) {}
+async function addUser(userId, data) {
+  const document = firestore.collection('users').doc(userId);
+  await document.set(data);
+  const snapshot = await document.get();
+  return await decorateSnapshot(snapshot);
+}
 
-async function findUser(query) {}
+async function getUser(userId) {
+  const document = firestore.collection('users').doc(userId);
+  const snapshot = await document.get();
+  if (!snapshot.exists) {
+    return null;
+  }
+  return await decorateSnapshot(snapshot);
+}
 
-async function addContact(userId, contact) {
+async function updateUser(userId, data) {
+  const document = firestore.collection('users').doc(userId);
+  let snapshot = await document.get();
+  if (!snapshot.exists) {
+    return {};
+  }
+  await document.update(data);
+  snapshot = await document.get();
+  return await decorateSnapshot(snapshot);
+}
+
+async function addContact(userId, data) {
   const contacts = firestore.collection('contacts');
-  const document = await contacts.add({ ...contact, userId });
+  const document = await contacts.add({ ...data, userId });
   const snapshot = await document.get();
   return await decorateSnapshot(snapshot);
 }
@@ -190,8 +213,9 @@ function store(session) {
 }
 
 module.exports = {
+  addUser,
   getUser,
-  findUser,
+  updateUser,
   addContact,
   updateContact,
   removeContact,
