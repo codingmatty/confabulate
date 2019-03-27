@@ -1,6 +1,7 @@
 import {
   useState,
   useRef,
+  useEffect,
   useLayoutEffect,
   cloneElement,
   Children
@@ -90,7 +91,12 @@ export default function Dropdown({ children, renderTrigger, onChange }) {
   const triggerRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
   const [triggerWidth, setTriggerWidth] = useState(0);
-  Router.events.on('routeChangeStart', () => setOpen(false));
+
+  useEffect(() => {
+    const closeDropdown = () => setOpen(false);
+    Router.events.on('routeChangeStart', closeDropdown);
+    return () => Router.events.off('routeChangeStart', closeDropdown);
+  });
 
   useLayoutEffect(() => {
     if (triggerRef.current) {

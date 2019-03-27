@@ -34,7 +34,10 @@ const StyledDrawer = styled.div`
 
 export default function Drawer({ isOpen, onClose }) {
   const drawerRef = useRef(null);
-  Router.events.on('routeChangeStart', () => onClose(false));
+  useEffect(() => {
+    Router.events.on('routeChangeStart', onClose);
+    return () => Router.events.off('routeChangeStart', onClose);
+  });
 
   const handleWindowClick = (e) => {
     if (isOpen && !drawerRef.current.contains(e.target)) {
