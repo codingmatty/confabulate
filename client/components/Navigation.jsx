@@ -4,8 +4,15 @@ import styled from 'styled-components';
 import Avatar from './Avatar';
 import Dropdown from './Dropdown';
 import Drawer from './Drawer';
+import Icon from './Icon';
 
-// const
+const MenuButton = styled.button`
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 2rem;
+  display: flex;
+`;
 
 const StyledNavigation = styled.nav`
   position: fixed;
@@ -28,7 +35,9 @@ export default function Navigation() {
   return (
     <>
       <StyledNavigation>
-        <button onClick={() => setDrawerOpen(!drawerOpen)}>Menu</button>
+        <MenuButton onClick={() => setDrawerOpen(!drawerOpen)}>
+          <Icon type="menu" />
+        </MenuButton>
         <Dropdown
           renderTrigger={() => (
             <Avatar image="http://placecorgi.com/200" size={2} />
