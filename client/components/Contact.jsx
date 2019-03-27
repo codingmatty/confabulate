@@ -209,7 +209,7 @@ export default function Contact({ id }) {
               contactId={contact.id}
               isFavorite={contact.favorite}
             />
-            <StyledContactAvatar email={contact.email} size={120} />
+            <StyledContactAvatar email={contact.email} size={7.5} />
             <ContactName>
               {contact.firstName} {contact.lastName}
             </ContactName>

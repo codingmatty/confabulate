@@ -13,14 +13,14 @@ describe('Avatar', () => {
   it('includes an img with gravatar src', () => {
     const { container } = render(<Avatar email="test@email.com" />);
     const hash = md5('test@email.com');
-    const expectedSrc = `https://s.gravatar.com/avatar/${hash}?s=100&d=mp`;
+    const expectedSrc = `https://s.gravatar.com/avatar/${hash}?s=96&d=mp`;
     expect(container.querySelector('img')).toHaveAttribute('src', expectedSrc);
   });
 
   it('takes size attribute', () => {
-    const { container } = render(<Avatar email="test@email.com" size={100} />);
+    const { container } = render(<Avatar email="test@email.com" size={4} />);
     const hash = md5('test@email.com');
-    const expectedSrc = `https://s.gravatar.com/avatar/${hash}?s=200&d=mp`;
+    const expectedSrc = `https://s.gravatar.com/avatar/${hash}?s=128&d=mp`;
     expect(container.querySelector('img')).toHaveAttribute('src', expectedSrc);
   });
 });
