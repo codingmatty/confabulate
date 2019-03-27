@@ -2,13 +2,25 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Router from 'next/router';
 import Link from './Link';
+import Icon from './Icon';
+
+const StyledLink = styled(Link)`
+  width: 100%;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+`;
+const StyledIcon = styled(Icon)`
+  margin-right: 0.5rem;
+`;
 
 const StyledDrawer = styled.div`
-  background-color: ${({ theme }) => theme.color.background};
+  background: ${({ theme }) => theme.color.neutrals[0]};
+  border-right: 3px solid ${({ theme }) => theme.color.primary[2]};
   bottom: 0;
   box-shadow: 0 0 10px -2px ${({ theme }) => theme.color.neutrals[5]};
   left: -100%;
-  padding: 5rem 1rem 1rem;
+  padding: 6rem 2rem 2rem;
   position: fixed;
   top: 0;
   transition: left 500ms;
@@ -44,7 +56,10 @@ export default function Drawer({ isOpen, onClose }) {
       className={`${isOpen ? 'open' : ''}`}
       ref={drawerRef}
     >
-      <Link href="/contacts">Contacts</Link>
+      <StyledLink href="/contacts">
+        <StyledIcon type="people" />
+        Contacts
+      </StyledLink>
     </StyledDrawer>
   );
 }
