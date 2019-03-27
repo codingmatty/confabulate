@@ -31,11 +31,13 @@ const QUERY_CONTACT = gql`
     }
   }
 `;
+const contactAvatarSize = 7.5;
+const contactAvatarHalfSize = contactAvatarSize / 2;
 
 const ContactCard = styled.div`
   position: relative;
-  padding: calc(60px + 1rem) 1rem 1rem 1rem;
-  margin-top: 60px;
+  padding: calc(${contactAvatarHalfSize}rem + 1rem) 1rem 1rem 1rem;
+  margin-top: ${contactAvatarHalfSize + 1}rem;
   border: 1px solid #888;
   border-radius: 4px;
   box-shadow: 2px 2px 4px -2px #333;
@@ -45,7 +47,7 @@ const ContactCard = styled.div`
 const StyledContactAvatar = styled(Avatar)`
   position: absolute;
   margin: 0 auto;
-  top: -60px;
+  top: -${contactAvatarHalfSize}rem;
   display: block;
   left: 0;
   right: 0;
@@ -186,89 +188,85 @@ export default function Contact({ id }) {
     return <div>Error! {error.message}</div>;
   }
 
+  if (editing) {
+    return (
+      <>
+        <h1>Editing Contact</h1>
+        <ContactForm
+          contact={contact}
+          onSubmit={(updatedContact) => {
+            setContact(updatedContact);
+            setEditing(false);
+          }}
+        />
+      </>
+    );
+  }
   return (
     <>
-      {editing ? (
-        <>
-          <h1>Editing Contact</h1>
-          <ContactForm
-            contact={contact}
-            onSubmit={(updatedContact) => {
-              setContact(updatedContact);
-              setEditing(false);
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <ContactCard>
-            <EditButton onClick={() => setEditing(true)}>
-              <Icon type="edit" />
-            </EditButton>
-            <StyledFavoriteContact
-              contactId={contact.id}
-              isFavorite={contact.favorite}
-            />
-            <StyledContactAvatar email={contact.email} size={7.5} />
-            <ContactName>
-              {contact.firstName} {contact.lastName}
-            </ContactName>
-            <ContactDetails>
-              <ContactDetail>
-                <ContactIcon type="mail" /> {contact.email}
-              </ContactDetail>
-              <ContactDetail>
-                <ContactIcon type="phone" />{' '}
-                {contact.phoneNumber.replace(
-                  /(\d{3})(\d{3})(\d{4})/,
-                  '($1) $2-$3'
-                )}
-              </ContactDetail>
-            </ContactDetails>
-          </ContactCard>
-          <EventList>
-            <CreateEventContainer>
-              <CreateEventButton onClick={() => setAddingEvent(true)}>
-                Add Event
-              </CreateEventButton>
-            </CreateEventContainer>
-            {events
-              .sort(
-                ({ date: firstDate }, { date: secondDate }) =>
-                  moment(secondDate) - moment(firstDate)
-              )
-              .map((event) => (
-                <EventCard key={event.id} isNew={event.isNew}>
-                  <EventHeaderLine>
-                    <EventTitle>{event.title}</EventTitle>
-                    <Icon type="edit" />
-                  </EventHeaderLine>
-                  <EventSubheaderLine>
-                    <EventDate>
-                      {moment(event.date).format('MMMM DD, YYYY')}
-                    </EventDate>
-                    <EventType>{event.type}</EventType>
-                  </EventSubheaderLine>
-                  {event.note && <EventNote>{event.note}</EventNote>}
-                </EventCard>
-              ))}
-          </EventList>
-          <Modal
-            isOpen={addingEvent}
-            onRequestClose={() => setAddingEvent(false)}
-            contentLabel="Adding Event"
-            style={{ overlay: { zIndex: 1000 } }}
-          >
-            <EventForm
-              event={{ involvedContacts: [contact] }}
-              onSubmit={(event) => {
-                setAddingEvent(false);
-                setEvents(events.concat({ ...event, isNew: true }));
-              }}
-            />
-          </Modal>
-        </>
-      )}
+      <ContactCard>
+        <EditButton onClick={() => setEditing(true)}>
+          <Icon type="edit" />
+        </EditButton>
+        <StyledFavoriteContact
+          contactId={contact.id}
+          isFavorite={contact.favorite}
+        />
+        <StyledContactAvatar email={contact.email} size={contactAvatarSize} />
+        <ContactName>
+          {contact.firstName} {contact.lastName}
+        </ContactName>
+        <ContactDetails>
+          <ContactDetail>
+            <ContactIcon type="mail" /> {contact.email}
+          </ContactDetail>
+          <ContactDetail>
+            <ContactIcon type="phone" />{' '}
+            {contact.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
+          </ContactDetail>
+        </ContactDetails>
+      </ContactCard>
+      <EventList>
+        <CreateEventContainer>
+          <CreateEventButton onClick={() => setAddingEvent(true)}>
+            Add Event
+          </CreateEventButton>
+        </CreateEventContainer>
+        {events
+          .sort(
+            ({ date: firstDate }, { date: secondDate }) =>
+              moment(secondDate) - moment(firstDate)
+          )
+          .map((event) => (
+            <EventCard key={event.id} isNew={event.isNew}>
+              <EventHeaderLine>
+                <EventTitle>{event.title}</EventTitle>
+                <Icon type="edit" />
+              </EventHeaderLine>
+              <EventSubheaderLine>
+                <EventDate>
+                  {moment(event.date).format('MMMM DD, YYYY')}
+                </EventDate>
+                <EventType>{event.type}</EventType>
+              </EventSubheaderLine>
+              {event.note && <EventNote>{event.note}</EventNote>}
+            </EventCard>
+          ))}
+      </EventList>
+      <Modal
+        isOpen={addingEvent}
+        onRequestClose={() => setAddingEvent(false)}
+        contentLabel="Adding Event"
+        style={{ overlay: { zIndex: 1000 } }}
+      >
+        <EventForm
+          event={{ involvedContacts: [contact] }}
+          onSubmit={(event) => {
+            setAddingEvent(false);
+            setEvents(events.concat({ ...event, isNew: true }));
+          }}
+        />
+      </Modal>
     </>
   );
 }
