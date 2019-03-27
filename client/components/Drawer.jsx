@@ -24,7 +24,7 @@ const StyledDrawer = styled.div`
   position: fixed;
   top: 0;
   transition: left 500ms;
-  width: 300px;
+  width: 200px;
   z-index: 10;
 
   &.open {
