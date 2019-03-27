@@ -157,7 +157,7 @@ const CreateEventContainer = styled.li`
   position: relative;
   padding: 1rem;
   &::before {
-    content: '';
+    ${({ showBorder }) => showBorder && `content: ''`};
     border: 2px solid #ccc;
     position: absolute;
     height: calc(100% + 1rem);
@@ -226,7 +226,7 @@ export default function Contact({ id }) {
         </ContactDetails>
       </ContactCard>
       <EventList>
-        <CreateEventContainer>
+        <CreateEventContainer showBorder={contact.events.length > 0}>
           <CreateEventButton onClick={() => setAddingEvent(true)}>
             Add Event
           </CreateEventButton>
