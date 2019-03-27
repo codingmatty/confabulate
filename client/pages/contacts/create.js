@@ -1,10 +1,11 @@
 import Router from 'next/router';
+import PageTitle from '../../components/PageTitle';
 import ContactForm from '../../components/ContactForm';
 
 export default function CreateContact() {
   return (
     <>
-      <h1>Create Contact</h1>
+      <PageTitle>Create Contact</PageTitle>
       <ContactForm
         onSubmit={({ id }) =>
           Router.push(

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import ContactList from '../../components/ContactList';
+import PageTitle from '../../components/PageTitle';
 import Icon from '../../components/Icon';
 import Link from '../../components/Link';
 
@@ -23,7 +24,7 @@ const StyledContactsPage = styled.div`
 export default function Contacts() {
   return (
     <StyledContactsPage>
-      <h1>Contacts</h1>
+      <PageTitle>Contacts</PageTitle>
       <ContactList />
       <CreateContactLink href="/contacts/create">
         <Icon type="add" />
