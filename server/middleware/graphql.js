@@ -10,7 +10,7 @@ module.exports = function registerGraphQL(db) {
     schema,
     context: ({ req }) => ({
       db,
-      user: { ...req.user, id: req.user.uid }
+      user: req.user
     }),
     playground: process.env.NODE_ENV === 'development' && {
       settings: {

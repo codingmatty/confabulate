@@ -28,7 +28,10 @@ module.exports = function registerApi() {
   router.get('/logout', (req, res) => {
     firebaseAdmin.auth().revokeRefreshTokens(req.user.uid);
     req.logout();
-    res.redirect('/login');
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid', { path: '/' });
+      res.redirect('/login');
+    });
   });
 
   return router;

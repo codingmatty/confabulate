@@ -6,14 +6,14 @@ const firebaseAdmin = require('../firebase-admin');
 module.exports = function registerPassport(db) {
   const router = new Router();
 
-  passport.serializeUser((idToken, done) => {
-    done(null, idToken);
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
   });
 
-  passport.deserializeUser(async (idToken, done) => {
+  passport.deserializeUser(async (userId, done) => {
     try {
-      const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
-      done(null, decodedToken);
+      const user = await db.getUser(userId);
+      done(null, user);
     } catch (error) {
       done(error);
     }
@@ -29,7 +29,7 @@ module.exports = function registerPassport(db) {
           .verifyIdToken(idToken);
         const user = await db.getUser(decodedIdToken.uid);
         if (user) {
-          done(null, idToken);
+          done(null, user);
         } else {
           done(null, false, { code: 'no-account' });
           // Sign up user
@@ -55,7 +55,10 @@ module.exports = function registerPassport(db) {
         firebaseAdmin.auth().revokeRefreshTokens(req.user.uid);
       }
       req.logout();
-      res.redirect('/login');
+      req.session.destroy(() => {
+        res.clearCookie('connect.sid', { path: '/' });
+        res.redirect('/login');
+      });
     } else {
       next();
     }
