@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const FormWrapper = styled.form`
+const StyledForm = styled.form`
   width: 100%;
 `;
 const Fieldset = styled.fieldset`
@@ -12,36 +12,58 @@ const Fieldset = styled.fieldset`
     opacity: 0.5;
   }
 `;
-const SubmitButton = styled.button`
-  background-color: lightblue;
-  border: none;
-  cursor: pointer;
-  display: block;
-  margin-top: 2rem;
-  font-size: 1rem;
-  height: 2.5rem;
-  width: 100%;
+const commonButtonStyles = `
+border: none;
+cursor: pointer;
+display: block;
+font-size: 1rem;
+height: 2.5rem;
+width: 100%;
 `;
 
-export default function Form({ children, disabled, onSubmit, submitLabel }) {
+const CancelButton = styled.button`
+  background-color: ${({ theme }) => theme.color.neutrals[3]};
+  margin-top: 1rem;
+  ${commonButtonStyles}
+`;
+const SubmitButton = styled.button`
+  background-color: ${({ theme }) => theme.color.greens[3]};
+  margin-top: 2rem;
+
+  ${commonButtonStyles}
+`;
+
+export default function Form({
+  children,
+  disabled,
+  onSubmit,
+  submitLabel,
+  onCancel
+}) {
   const onFormSubmit = (e) => {
     e.preventDefault();
     onSubmit(e);
   };
   return (
-    <FormWrapper onSubmit={onFormSubmit} autoComplete="off">
+    <StyledForm onSubmit={onFormSubmit} autoComplete="off">
       <Fieldset disabled={disabled}>
         {children}
         {submitLabel && (
           <SubmitButton type="submit">{submitLabel}</SubmitButton>
         )}
+        {onCancel && (
+          <CancelButton type="button" onClick={onCancel}>
+            Cancel
+          </CancelButton>
+        )}
       </Fieldset>
-    </FormWrapper>
+    </StyledForm>
   );
 }
 Form.propTypes = {
   children: PropTypes.node,
   disabled: PropTypes.bool,
   onSubmit: PropTypes.func,
+  onCancel: PropTypes.func,
   submitLabel: PropTypes.string
 };

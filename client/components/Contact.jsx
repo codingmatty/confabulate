@@ -10,6 +10,7 @@ import Avatar from './Avatar';
 import FavoriteContact from './FavoriteContact';
 import Icon from './Icon';
 import EventForm from './EventForm';
+import PageTitle from './PageTitle';
 
 const QUERY_CONTACT = gql`
   query QUERY_CONTACT($id: ID!) {
@@ -112,10 +113,12 @@ const EventCard = styled.li`
   border-radius: 4px;
   margin-left: 2.5rem;
   margin-right: 0.5rem;
-  box-shadow: ${({ isNew }) =>
+  box-shadow: ${({ isNew, theme }) =>
     isNew
-      ? '2px 2px 4px -2px #333, 0 0 4px 2px teal'
-      : '2px 2px 4px -2px #333'};
+      ? `2px 2px 4px -2px ${theme.color.neutrals[5]}, 0 0 4px 2px ${
+          theme.color.greens[5]
+        }`
+      : `2px 2px 4px -2px ${theme.color.neutrals[5]}`};
   &:not(:last-child) {
     margin-bottom: 0.5rem;
   }
@@ -169,20 +172,18 @@ const EventList = styled.ul`
 `;
 
 export default function Contact({ id }) {
-  const { data, loading, error } = useQuery(QUERY_CONTACT, {
+  const {
+    data: { contact },
+    loading,
+    error
+  } = useQuery(QUERY_CONTACT, {
     variables: { id }
   });
   const [editing, setEditing] = useState(false);
   const [addingEvent, setAddingEvent] = useState(false);
-  const [contact, setContact] = useState(null);
-  const [events, setEvents] = useState([]);
+  const [newEventId, setNewEventId] = useState('');
 
-  if (!loading && !contact) {
-    // sync the contact to state once it's queried
-    setContact(data.contact);
-    setEvents(data.contact.events);
-  }
-  if (loading || !contact) {
+  if (loading) {
     return <div>Loading...</div>;
   } else if (error) {
     return <div>Error! {error.message}</div>;
@@ -191,13 +192,11 @@ export default function Contact({ id }) {
   if (editing) {
     return (
       <>
-        <h1>Editing Contact</h1>
+        <PageTitle>Editing Contact</PageTitle>
         <ContactForm
           contact={contact}
-          onSubmit={(updatedContact) => {
-            setContact(updatedContact);
-            setEditing(false);
-          }}
+          refetchQuery={{ query: QUERY_CONTACT, variables: { id } }}
+          onSubmit={() => setEditing(false)}
         />
       </>
     );
@@ -232,13 +231,13 @@ export default function Contact({ id }) {
             Add Event
           </CreateEventButton>
         </CreateEventContainer>
-        {events
+        {contact.events
           .sort(
             ({ date: firstDate }, { date: secondDate }) =>
               moment(secondDate) - moment(firstDate)
           )
           .map((event) => (
-            <EventCard key={event.id} isNew={event.isNew}>
+            <EventCard key={event.id} isNew={event.id === newEventId}>
               <EventHeaderLine>
                 <EventTitle>{event.title}</EventTitle>
                 <Icon type="edit" />
@@ -261,9 +260,10 @@ export default function Contact({ id }) {
       >
         <EventForm
           event={{ involvedContacts: [contact] }}
-          onSubmit={(event) => {
+          refetchQuery={{ query: QUERY_CONTACT, variables: { id } }}
+          onSubmit={({ id }) => {
             setAddingEvent(false);
-            setEvents(events.concat({ ...event, isNew: true }));
+            setNewEventId(id);
           }}
         />
       </Modal>

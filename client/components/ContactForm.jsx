@@ -36,7 +36,12 @@ const DEFAULT_FORM_FIELDS = {
   phoneNumber: ''
 };
 
-export default function ContactForm({ contact: { id, ...contact }, onSubmit }) {
+export default function ContactForm({
+  contact: { id, ...contact },
+  onSubmit,
+  refetchQuery
+}) {
+  const isExistingContact = Boolean(id);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(
     pick(
@@ -50,16 +55,20 @@ export default function ContactForm({ contact: { id, ...contact }, onSubmit }) {
       'phoneNumber'
     )
   );
-  const mutateContact = useMutation(id ? UPDATE_CONTACT : CREATE_CONTACT, {
-    variables: { id, data: formData }
-  });
+  const mutateContact = useMutation(
+    isExistingContact ? UPDATE_CONTACT : CREATE_CONTACT,
+    {
+      variables: { id, data: formData },
+      refetchQueries: [refetchQuery].filter((x) => x)
+    }
+  );
 
   const onFormSubmit = async () => {
     setLoading(true);
     mutateContact()
       .then(({ data }) => {
-        setFormData(DEFAULT_FORM_FIELDS);
         onSubmit(data.contact);
+        setFormData(DEFAULT_FORM_FIELDS);
       })
       .catch((reason) => {
         console.error({ reason });
@@ -69,9 +78,17 @@ export default function ContactForm({ contact: { id, ...contact }, onSubmit }) {
   const onChange = ({ target: { value, name } }) => {
     setFormData({ ...formData, [name]: value });
   };
+  const onCancel = () => {
+    onSubmit({ id, ...contact });
+  };
 
   return (
-    <Form onSubmit={onFormSubmit} loading={loading} submitLabel="Submit">
+    <Form
+      onSubmit={onFormSubmit}
+      disabled={loading}
+      submitLabel={isExistingContact ? 'Save' : 'Submit'}
+      onCancel={isExistingContact && onCancel}
+    >
       <Input
         label="First Name"
         name="firstName"

@@ -39,7 +39,8 @@ const DEFAULT_FORM_FIELDS = {
 
 export default function EventForm({
   event: { id, __typename, ...event },
-  onSubmit
+  onSubmit,
+  refetchQuery
 }) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -48,7 +49,8 @@ export default function EventForm({
     involvedContacts: event.involvedContacts.map(({ id }) => id)
   });
   const mutateEvent = useMutation(id ? UPDATE_EVENT : CREATE_EVENT, {
-    variables: { id, data: formData }
+    variables: { id, data: formData },
+    refetchQueries: [refetchQuery]
   });
 
   const onFormSubmit = async () => {
