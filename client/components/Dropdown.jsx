@@ -6,6 +6,7 @@ import {
   Children
 } from 'react';
 import styled, { css } from 'styled-components';
+import Router from 'next/router';
 import Link from './Link';
 
 const optionStyles = css`
@@ -89,6 +90,7 @@ export default function Dropdown({ children, renderTrigger, onChange }) {
   const triggerRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
   const [triggerWidth, setTriggerWidth] = useState(0);
+  Router.events.on('routeChangeStart', () => setOpen(false));
 
   useLayoutEffect(() => {
     if (triggerRef.current) {

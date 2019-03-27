@@ -18,6 +18,7 @@ exports.typeDefs = gql`
     # settings: Settings!
   }
   type Profile {
+    image: String
     firstName: String
     lastName: String
     fullName: String

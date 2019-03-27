@@ -9,7 +9,7 @@ const StyledAvatar = styled.img`
   border: 1px solid ${({ theme }) => theme.color.neutrals[8]};
 `;
 
-export default function Avatar({ className, email, image, size = 3 }) {
+export default function Avatar({ className, email = '', image, size = 3 }) {
   if (image) {
     return <StyledAvatar src={image} size={size} className={className} />;
   }

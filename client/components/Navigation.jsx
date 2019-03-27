@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
+import { gql } from 'apollo-boost';
+import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Avatar from './Avatar';
 import Dropdown from './Dropdown';
 import Drawer from './Drawer';
 import Icon from './Icon';
+
+const QUERY_USER_IMAGE = gql`
+  query QUERY_USER_IMAGE {
+    user {
+      email
+      profile {
+        image
+      }
+    }
+  }
+`;
 
 const MenuButton = styled.button`
   padding: 0;
@@ -30,6 +43,9 @@ const StyledNavigation = styled.nav`
 `;
 
 export default function Navigation() {
+  const {
+    data: { user = { profile: {} } }
+  } = useQuery(QUERY_USER_IMAGE);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -40,7 +56,7 @@ export default function Navigation() {
         </MenuButton>
         <Dropdown
           renderTrigger={() => (
-            <Avatar image="http://placecorgi.com/200" size={2} />
+            <Avatar image={user.profile.image} email={user.email} size={2} />
           )}
         >
           <Dropdown.Option href="/user">Account</Dropdown.Option>
