@@ -27,10 +27,10 @@ class ConfabulateApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, router } = this.props;
 
     return (
-      <Page>
+      <Page router={router}>
         <Component {...pageProps} />
       </Page>
     );

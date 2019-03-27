@@ -17,7 +17,7 @@ const FavoriteButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
-  color: goldenrod;
+  color: ${({ theme }) => theme.color.primary[5]};
   font-size: 1.5rem;
 `;
 

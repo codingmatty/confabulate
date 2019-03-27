@@ -6,10 +6,10 @@ import Link from '../../components/Link';
 const CreateContactLink = styled(Link)`
   background-color: white;
   border-radius: 50%;
-  border: 2px solid teal;
+  border: 2px solid ${({ theme }) => theme.color.greens[4]};
   bottom: 1.5rem;
-  box-shadow: 0 0 0 0 black;
-  color: teal;
+  box-shadow: 3px 3px 15px -6px ${({ theme }) => theme.color.neutrals[7]};
+  color: ${({ theme }) => theme.color.greens[4]};
   font-size: 2rem;
   line-height: 0;
   padding: 0.5rem;

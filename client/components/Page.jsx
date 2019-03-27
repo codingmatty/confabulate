@@ -3,32 +3,21 @@ import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import theme from '../utils/theme';
 import Meta from './Meta';
+import Navigation from './Navigation';
 
 const apolloClient = new ApolloClient({ uri: '/graphql' });
 
-const colors = {
-  red: '#FF0000',
-  text: '#393939',
-  background: '#FFFFFF',
-  grey: '#3A3A3A',
-  lightgrey: '#E1E1E1',
-  offWhite: '#EDEDED'
-};
-const theme = {
-  ...colors,
-  maxWidth: '425px'
-};
-
 const StyledPage = styled.div`
-  background: ${({ theme }) => theme.background};
-  color: ${({ theme }) => theme.text};
-  min-height: 100vh;
+  background: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.text};
+  min-height: ${({ withNav }) => (withNav ? 'calc(100vh - 4rem)' : '100%')};
 `;
 
 const Inner = styled.div`
-  max-width: ${({ theme }) => theme.maxWidth};
-  margin: 0 auto;
+  max-width: ${({ theme }) => theme.layout.maxWidth};
+  margin: ${({ withNav }) => (withNav ? '4rem auto 0' : '0 auto')};
   padding: 2rem 1.5rem;
 `;
 
@@ -49,11 +38,12 @@ const GlobalStyle = createGlobalStyle`
   }
   a {
     text-decoration: none;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.color.text};
   }
 `;
 
-export default function Page({ children }) {
+export default function Page({ children, router }) {
+  const shouldRenderNav = !['/login', '/signup'].includes(router.pathname);
   return (
     <ApolloProvider client={apolloClient}>
       <ApolloHooksProvider client={apolloClient}>
@@ -61,7 +51,8 @@ export default function Page({ children }) {
           <StyledPage>
             <Meta />
             <GlobalStyle />
-            <Inner>{children}</Inner>
+            {shouldRenderNav && <Navigation />}
+            <Inner withNav={shouldRenderNav}>{children}</Inner>
           </StyledPage>
         </ThemeProvider>
       </ApolloHooksProvider>
@@ -69,5 +60,6 @@ export default function Page({ children }) {
   );
 }
 Page.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  router: PropTypes.object
 };
