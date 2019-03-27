@@ -76,6 +76,11 @@ module.exports = async function registerNextApp({ dev }) {
     nextApp.render(req, res, '/contacts/info', { id: req.params.id, ...query });
   });
 
+  router.get('/', (req, res) => {
+    // Since there is no real homepage, lets redirect user to contacts list
+    res.redirect('/contacts');
+  });
+
   router.get('*', (req, res) => {
     const parsedUrl = parse(req.url, true);
     requestHandler(req, res, parsedUrl);
