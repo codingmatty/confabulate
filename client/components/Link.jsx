@@ -14,6 +14,6 @@ Link.propTypes = {
   asUrl: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
-  href: PropTypes.string,
+  href: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   innerRef: PropTypes.func
 };
