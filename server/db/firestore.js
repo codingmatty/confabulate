@@ -13,6 +13,17 @@ async function decorateSnapshot(snapshot) {
   };
 }
 
+async function decorateUser(snapshot) {
+  const user = await decorateSnapshot(snapshot);
+  user.profile = user.profile || {};
+  user.profile.firstName = user.profile.firstName || '';
+  user.profile.lastName = user.profile.lastName || '';
+  user.profile.fullName = [user.profile.firstName, user.profile.lastName]
+    .filter((s) => s)
+    .join(' ');
+
+  return user;
+}
 async function decorateContact(snapshot) {
   const contact = await decorateSnapshot(snapshot);
   return {
@@ -25,7 +36,7 @@ async function addUser(userId, data) {
   const document = firestore.collection('users').doc(userId);
   await document.set(data);
   const snapshot = await document.get();
-  return await decorateSnapshot(snapshot);
+  return await decorateUser(snapshot);
 }
 
 async function getUser(userId) {
@@ -34,7 +45,7 @@ async function getUser(userId) {
   if (!snapshot.exists) {
     return null;
   }
-  return await decorateSnapshot(snapshot);
+  return await decorateUser(snapshot);
 }
 
 async function updateUser(userId, data) {

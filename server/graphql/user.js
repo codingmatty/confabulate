@@ -20,6 +20,7 @@ exports.typeDefs = gql`
   type Profile {
     firstName: String
     lastName: String
+    fullName: String
   }
   # type Settings {
   # }
