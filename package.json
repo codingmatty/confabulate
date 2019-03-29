@@ -4,11 +4,17 @@
   "description": "A contact manager to help you increase engagement with your friends",
   "license": "GPL-3.0",
   "scripts": {
+    "postinstall": "./scripts/init-gcloud.sh",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "dev": "nodemon --watch server server",
     "lint": "eslint client server",
-    "lint:fix": "eslint --fix client server"
+    "lint:fix": "eslint --fix client server",
+    "build": "next build client",
+    "predeploy": "NODE_ENV=production npm run build",
+    "deploy": "npm run deploy-skip-build",
+    "deploy-skip-build": "gcloud app deploy --configuration confabulate",
+    "start": "node server"
   },
   "dependencies": {
     "apollo-boost": "^0.3.1",

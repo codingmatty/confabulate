@@ -11,8 +11,15 @@ const db = require('./db');
 const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = async function setupExpress() {
-  const app = express();
   const dbStore = db.store(session);
+  const app = express();
+
+  const cookie = { sameSite: true };
+  if (!dev) {
+    app.set('trust proxy', 1);
+    cookie.secure = true;
+    cookie.maxAge = 1000 * 60 * 60 * 24 * 7; // 1 week
+  }
 
   app.use(morgan('combined'));
 
@@ -24,10 +31,7 @@ module.exports = async function setupExpress() {
       resave: false,
       saveUninitialized: false,
       store: new dbStore(),
-      cookie: {
-        sameSite: true,
-        secure: !dev
-      }
+      cookie
     })
   );
 
