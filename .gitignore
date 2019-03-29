@@ -1,5 +1,6 @@
-.next/
 *.env
+.next/
+.DS_Store
 coverage/
 db.json
 node_modules/

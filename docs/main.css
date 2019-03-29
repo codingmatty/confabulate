@@ -1,0 +1,222 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400, 700);
+html {
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.25;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+p {
+  line-height: 1.5;
+}
+body {
+  background-image: linear-gradient(
+      hsla(0, 0%, 62%, 0.5),
+      hsla(45, 90%, 88%, 0.2)
+    ),
+    url(/assets/friends-backdrop_left-align.jpg);
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.brand {
+  color: hsl(0, 0%, 38%);
+  font-size: 2.5rem;
+  left: 1rem;
+  letter-spacing: 1.5px;
+  margin: 0;
+  position: fixed;
+  top: 1rem;
+}
+.brand::after {
+  border: 3px solid hsl(43, 72%, 37%);
+  bottom: -3px;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+.github-corner:hover .octo-arm {
+  -webkit-animation: octocat-wave 560ms ease-in-out;
+  animation: octocat-wave 560ms ease-in-out;
+}
+@-webkit-keyframes octocat-wave {
+  0%,
+  100% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    -webkit-transform: rotate(-25deg);
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+  }
+}
+@keyframes octocat-wave {
+  0%,
+  100% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    -webkit-transform: rotate(-25deg);
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+  }
+}
+@media (max-width: 500px) {
+  .github-corner:hover .octo-arm {
+    -webkit-animation: none;
+    animation: none;
+  }
+  .github-corner .octo-arm {
+    -webkit-animation: octocat-wave 560ms ease-in-out;
+    animation: octocat-wave 560ms ease-in-out;
+  }
+}
+
+.signup-container {
+  align-items: center;
+  display: flex;
+  flex-basis: 40%;
+  justify-content: center;
+}
+/* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
+.flip-card {
+  background-color: transparent;
+  -webkit-perspective: 1000px;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  width: 420px;
+}
+
+/* This container is needed to position the front and back side */
+.flip-card-inner {
+  height: 100%;
+  position: relative;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transition: -webkit-transform 0.8s;
+  transition: transform 0.8s;
+  transition: transform 0.8s, -webkit-transform 0.8s;
+  width: 100%;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card.flipped .flip-card-inner {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-card-front,
+.flip-card-back {
+  align-items: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: hsla(0, 0%, 97%, 0.75);
+  border-radius: 3px;
+  bottom: 0;
+  display: flex;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  justify-content: center;
+  margin: auto;
+  padding: 2rem;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+}
+
+/* Style the back side */
+.flip-card-back {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.headline {
+  margin: 0;
+}
+.subheadline {
+  margin: 1rem 0;
+}
+.lede {
+  font-size: 0.8rem;
+  margin: 0;
+}
+.signup-content {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.signup-form {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  width: 100%;
+}
+.form-input,
+.form-button {
+  box-sizing: border-box;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  padding: 6px 12px;
+  width: 100%;
+}
+.form-input {
+}
+.form-button {
+  background-color: hsl(122, 39%, 41%);
+  border: none;
+  color: hsl(0, 0%, 97%);
+}
+
+@media (max-width: 1200px) {
+  .signup-container {
+    flex-basis: 60%;
+  }
+}
+@media (max-width: 768px) {
+  body {
+    background-image: linear-gradient(
+        hsla(0, 0%, 62%, 0.4),
+        hsla(0, 0%, 62%, 0.2)
+      ),
+      url(/assets/friends-backdrop.jpg);
+  }
+
+  .signup-container {
+    flex-basis: 100%;
+  }
+
+  .flip-card {
+    width: 90%;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    padding: 1rem 2rem;
+  }
+}
