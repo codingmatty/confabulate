@@ -31,13 +31,18 @@ module.exports = function registerPassport(db) {
         if (user) {
           done(null, user);
         } else {
-          done(null, false, { code: 'no-account' });
-          // Sign up user
-          // db.addUser(decodedIdToken.uid, {
-          //   email: decodedIdToken.email,
-          //   authProviders: [decodedIdToken.firebase.sign_in_provider]
-          // });
-          // done(null, idToken);
+          if (process.env.SETTINGS_ALLOW_SIGNUPS === 'true') {
+            const newUser = db.addUser(decodedIdToken.uid, {
+              email: decodedIdToken.email,
+              profile: {
+                image: decodedIdToken.image
+              },
+              authProviders: [decodedIdToken.firebase.sign_in_provider]
+            });
+            done(null, newUser);
+          } else {
+            done(null, false, { code: 'no-account' });
+          }
         }
       } catch (error) {
         done(error);

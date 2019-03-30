@@ -4,6 +4,6 @@ require('dotenv').config({
   path: path.resolve(
     __dirname,
     '..',
-    [`.${process.env.NODE_ENV || ''}`, '.env'].join('')
+    process.env.NODE_ENV ? `.${process.env.NODE_ENV}.env` : '.env'
   )
 });

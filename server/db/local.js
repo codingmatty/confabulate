@@ -12,10 +12,7 @@ const adapter =
 const db = low(adapter);
 
 const defaults = {
-  users: [
-    { id: '123', username: 'test-1', password: 'test' },
-    { id: '456', username: 'test-2', password: 'test' }
-  ],
+  users: {},
   sessions: {},
   contacts: [],
   events: []
@@ -27,10 +24,17 @@ function resetDb(data) {
   db.setState({ ...defaults, ..._.cloneDeep(data) });
 }
 
+function addUser(id, data) {
+  db.get('users')
+    .set(id, { ...data, id })
+    .write();
+  return getUser(id);
+}
+
 function getUser(id) {
   return db
     .get('users')
-    .find({ id })
+    .get(id)
     .value();
 }
 
@@ -169,6 +173,7 @@ function store(session) {
 
 module.exports = {
   resetDb,
+  addUser,
   getUser,
   findUser,
   addContact,
