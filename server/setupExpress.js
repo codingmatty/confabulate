@@ -21,7 +21,17 @@ module.exports = async function setupExpress() {
     cookie.maxAge = 1000 * 60 * 60 * 24 * 7; // 1 week
   }
 
-  app.use(morgan('combined'));
+  app.use(
+    morgan('short', {
+      skip: function(req) {
+        if (req.path.startsWith('/_next') || req.path.startsWith('/static')) {
+          // Skip _next or static specific requests
+          return true;
+        }
+        return false;
+      }
+    })
+  );
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
