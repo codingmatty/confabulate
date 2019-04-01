@@ -27,7 +27,7 @@ export default function ContactList() {
     data: { contacts },
     error,
     loading
-  } = useQuery(QUERY_CONTACTS);
+  } = useQuery(QUERY_CONTACTS, { fetchPolicy: 'cache-and-network' });
 
   if (loading) {
     return <div>Loading...</div>;
