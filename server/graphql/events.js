@@ -17,7 +17,7 @@ exports.typeDefs = gql`
     date: Date!
     type: String
     note: String
-    involvedContacts: [Contact]!
+    involvedContacts: [Contact!]!
   }
   input EventInputData {
     title: String!
@@ -46,40 +46,38 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    event: async (obj, { id }, { db, user }) => await db.getEvent(user.id, id),
+    event: async (obj, { id }, { db, user }) =>
+      await db.Events.get(user.id, id),
     events: async (obj, { query }, { db, user }) =>
-      await db.getEvents(user.id, query)
+      await db.Events.query(user.id, query)
   },
   Mutation: {
     addEvent: async (obj, { data }, { db, user }) => {
       const { involvedContacts = [] } = data;
-      return await db.addEvent(user.id, {
+      return db.Events.create(user.id, {
         ...data,
         involvedContacts
       });
     },
     updateEvent: async (obj, { id, data }, { db, user }) => {
-      const { involvedContacts = [] } = data;
-      return await db.updateEvent(user.id, id, {
-        ...data,
-        involvedContacts
-      });
+      return db.Events.update(user.id, id, data);
     },
     removeEvent: async (obj, { id }, { db, user }) => {
-      const removedEvent = await db.removeEvent(user.id, id);
+      const removedEvent = await db.Events.delete(user.id, id);
       return {
-        status: removedEvent > 0 ? 'SUCCESS' : 'IGNORE',
-        message: `${removedEvent} Event(s) Removed`
+        status: removedEvent ? 'SUCCESS' : 'IGNORED',
+        message: removedEvent ? 'Event Removed' : ''
       };
     }
   },
   Event: {
     involvedContacts: async (event, args, { db, user }) => {
-      return Promise.all(
+      const involvedContacts = await Promise.all(
         event.involvedContacts.map(
-          async (contactId) => await db.getContact(user.id, contactId)
+          async (contactId) => await db.Contacts.get(user.id, contactId)
         )
       );
+      return involvedContacts.filter(({ id }) => id);
     }
   }
 };

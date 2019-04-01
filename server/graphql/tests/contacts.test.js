@@ -1,6 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server-express');
 const { createTestClient } = require('apollo-server-testing');
 const db = require('../../db');
+const { resetDb } = require('../../db/local');
 const schema = require('../index');
 
 const user = { id: '123' };
@@ -43,7 +44,7 @@ const QUERY_CONTACT = gql`
 `;
 
 const ADD_CONTACT = gql`
-  mutation ADD_CONTACT($data: ContactInputData) {
+  mutation ADD_CONTACT($data: ContactInputData!) {
     contact: addContact(data: $data) {
       ...AllContactFields
     }
@@ -52,7 +53,7 @@ const ADD_CONTACT = gql`
 `;
 
 const UPDATE_CONTACT = gql`
-  mutation UPDATE_CONTACT($id: ID!, $data: ContactInputData) {
+  mutation UPDATE_CONTACT($id: ID!, $data: ContactInputData!) {
     contact: updateContact(id: $id, data: $data) {
       ...AllContactFields
     }
@@ -117,7 +118,7 @@ describe('Contacts GraphQL', () => {
   const { query, mutate } = createTestClient(server);
 
   beforeEach(() => {
-    db.resetDb(seedData);
+    resetDb(seedData);
   });
 
   describe('query contacts', () => {
@@ -211,9 +212,10 @@ describe('Contacts GraphQL', () => {
       });
       expect(data.status).toEqual({
         status: 'SUCCESS',
-        message: '1 Contact(s) Removed'
+        message: 'Contact Removed'
       });
-      expect(db.getContacts(user.id)).toHaveLength(2);
+      const remainingContacts = await db.Contacts.query(user.id);
+      expect(remainingContacts).toHaveLength(2);
     });
 
     it("avoids failure if contact to remove doesn't exist", async () => {
@@ -222,10 +224,11 @@ describe('Contacts GraphQL', () => {
         variables: { id: '100' }
       });
       expect(data.status).toEqual({
-        status: 'IGNORE',
-        message: '0 Contact(s) Removed'
+        status: 'IGNORED',
+        message: ''
       });
-      expect(db.getContacts(user.id)).toHaveLength(3);
+      const remainingContacts = await db.Contacts.query(user.id);
+      expect(remainingContacts).toHaveLength(3);
     });
   });
 });

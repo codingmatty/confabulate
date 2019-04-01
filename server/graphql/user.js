@@ -36,14 +36,14 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    user: async (obj, args, { db, user }) => await db.getUser(user.id)
+    user: async (obj, args, { db, user }) => await db.Users.get(user.id)
   },
   Mutation: {
     // updateEmail: async (obj, { email }, { db, user }) =>
-    //   await db.updateUser(user.id, { email }),
+    //   await db.Users.update(user.id, { email }),
     updateProfile: async (obj, { data }, { db, user }) =>
-      await db.updateUser(user.id, { profile: data })
+      await db.Users.update(user.id, { profile: data })
     // updateSettings: async (obj, { data }, { db, user }) =>
-    //   await db.updateUser(user.id, { settings: data })
+    //   await db.Users.update(user.id, { settings: data })
   }
 };

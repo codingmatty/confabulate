@@ -13,156 +13,102 @@ async function decorateSnapshot(snapshot) {
   };
 }
 
-async function decorateUser(snapshot) {
-  const user = await decorateSnapshot(snapshot);
-  user.profile = user.profile || {};
-  user.profile.firstName = user.profile.firstName || '';
-  user.profile.lastName = user.profile.lastName || '';
-  user.profile.fullName = [user.profile.firstName, user.profile.lastName]
-    .filter((s) => s)
-    .join(' ');
-
-  return user;
-}
-async function decorateContact(snapshot) {
-  const contact = await decorateSnapshot(snapshot);
-  return {
-    ...contact,
-    fullName: `${contact.firstName} ${contact.lastName}`
-  };
-}
-
-async function addUser(userId, data) {
-  const document = firestore.collection('users').doc(userId);
-  await document.set(data);
-  const snapshot = await document.get();
-  return await decorateUser(snapshot);
-}
-
-async function getUser(userId) {
-  const document = firestore.collection('users').doc(userId);
-  const snapshot = await document.get();
-  if (!snapshot.exists) {
-    return null;
+class DataModel {
+  constructor(type, { decorateData = async (data) => data } = {}) {
+    this.type = type;
+    this.decorateData = async (snapshot) => {
+      const decoratedSnapshot = await decorateSnapshot(snapshot);
+      return decorateData(decoratedSnapshot);
+    };
   }
-  return await decorateUser(snapshot);
-}
 
-async function updateUser(userId, data) {
-  const document = firestore.collection('users').doc(userId);
-  let snapshot = await document.get();
-  if (!snapshot.exists) {
-    return {};
+  async create(userId, data) {
+    const collectionRef = firestore.collection(this.type);
+    const document = await collectionRef.add({ ...data, userId });
+    const snapshot = await document.get();
+    return this.decorateData(snapshot);
   }
-  await document.update(data);
-  snapshot = await document.get();
-  return await decorateSnapshot(snapshot);
-}
 
-async function addContact(userId, data) {
-  const contacts = firestore.collection('contacts');
-  const document = await contacts.add({ ...data, userId });
-  const snapshot = await document.get();
-  return await decorateContact(snapshot);
-}
-
-async function getContacts(userId, query = {}) {
-  const contacts = firestore.collection('contacts');
-  let collectionQuery = contacts.where('userId', '==', userId);
-  for (let key in query) {
-    collectionQuery = collectionQuery.where(key, '==', query[key]);
+  async get(userId, id) {
+    const document = firestore.collection(this.type).doc(id);
+    const snapshot = await document.get();
+    if (!snapshot.exists || snapshot.get('userId') !== userId) {
+      return {};
+    }
+    return this.decorateData(snapshot);
   }
-  const { docs } = await collectionQuery.get();
-  return Promise.all(docs.map(decorateContact));
-}
 
-async function getContact(userId, id) {
-  const document = firestore.collection('contacts').doc(id);
-  const snapshot = await document.get();
-  if (!snapshot.exists || snapshot.get('userId') !== userId) {
-    return {};
+  async query(userId, query) {
+    const collectionRef = firestore.collection(this.type);
+    let collectionQuery = collectionRef.where('userId', '==', userId);
+    for (let key in query) {
+      collectionQuery = collectionQuery.where(key, '==', query[key]);
+    }
+    const { docs } = await collectionQuery.get();
+    return Promise.all(docs.map(this.decorateData));
   }
-  return await decorateContact(snapshot);
-}
 
-async function updateContact(userId, id, data) {
-  const document = firestore.collection('contacts').doc(id);
-  let snapshot = await document.get();
-  if (!snapshot.exists || snapshot.get('userId') !== userId) {
-    return {};
+  async update(userId, id, data) {
+    const document = firestore.collection(this.type).doc(id);
+    let snapshot = await document.get();
+    if (!snapshot.exists || snapshot.get('userId') !== userId) {
+      return {};
+    }
+    await document.update(data);
+    snapshot = await document.get();
+    return this.decorateData(snapshot);
   }
-  await document.update(data);
-  snapshot = await document.get();
-  return await decorateContact(snapshot);
-}
 
-async function removeContact(userId, id) {
-  const document = firestore.collection('contacts').doc(id);
-  let snapshot = await document.get();
-  if (!snapshot.exists || snapshot.get('userId') !== userId) {
-    return {};
+  async delete(userId, id) {
+    const document = firestore.collection(this.type).doc(id);
+    let snapshot = await document.get();
+    if (!snapshot.exists || snapshot.get('userId') !== userId) {
+      return null;
+    }
+    // fetch data before deleting
+    const data = this.decorateData(snapshot);
+    await document.delete();
+    return data;
   }
-  // fetch data before deleting
-  const data = await decorateContact(snapshot);
-  await document.delete();
-  return data;
 }
 
-async function addEvent(userId, data) {
-  const events = firestore.collection('events');
-  const document = await events.add({ ...data, userId });
-  const snapshot = await document.get();
-  return await decorateSnapshot(snapshot);
-}
-
-async function getEvents(userId, query = {}) {
-  const events = firestore.collection('events');
-  let collectionQuery = events.where('userId', '==', userId);
-  const { involvedContact, ...propQuery } = query;
-  for (let key in propQuery) {
-    collectionQuery = collectionQuery.where(key, '==', query[key]);
+class UserModel {
+  constructor({ decorateData = async (data) => data } = {}) {
+    this.decorateData = async (snapshot) => {
+      const decoratedSnapshot = await decorateSnapshot(snapshot);
+      return decorateData(decoratedSnapshot);
+    };
   }
-  const { docs } = await collectionQuery.get();
-  return Promise.all(docs.map(decorateSnapshot)).then((filteredEvents) =>
-    filteredEvents.filter((event) =>
-      event.involvedContacts.some((id) => id === involvedContact.id)
-    )
-  );
-}
 
-async function getEvent(userId, id) {
-  const document = firestore.collection('events').doc(id);
-  const snapshot = await document.get();
-  if (!snapshot.exists || snapshot.get('userId') !== userId) {
-    return {};
+  async create(id, data) {
+    const document = firestore.collection('users').doc(id);
+    await document.set(data);
+    const snapshot = await document.get();
+    return this.decorateData(snapshot);
   }
-  return await decorateSnapshot(snapshot);
-}
 
-async function updateEvent(userId, id, data) {
-  const document = firestore.collection('events').doc(id);
-  let snapshot = await document.get();
-  if (!snapshot.exists || snapshot.get('userId') !== userId) {
-    return {};
+  async get(id) {
+    const document = firestore.collection('users').doc(id);
+    const snapshot = await document.get();
+    if (!snapshot.exists) {
+      return null;
+    }
+    return this.decorateData(snapshot);
   }
-  await document.update(data);
-  snapshot = await document.get();
-  return await decorateSnapshot(snapshot);
-}
 
-async function removeEvent(userId, id) {
-  const document = firestore.collection('events').doc(id);
-  let snapshot = await document.get();
-  if (!snapshot.exists || snapshot.get('userId') !== userId) {
-    return {};
+  async update(id, data) {
+    const document = firestore.collection('users').doc(id);
+    let snapshot = await document.get();
+    if (!snapshot.exists) {
+      return null;
+    }
+    await document.update(data);
+    snapshot = await document.get();
+    return this.decorateData(snapshot);
   }
-  // fetch data before deleting
-  const data = await decorateSnapshot(snapshot);
-  await document.delete();
-  return data;
 }
 
-function store(session) {
+function getStore(session) {
   class FirestoreDBStore extends session.Store {
     async all(done) {
       try {
@@ -236,19 +182,6 @@ function store(session) {
   return FirestoreDBStore;
 }
 
-module.exports = {
-  addUser,
-  getUser,
-  updateUser,
-  addContact,
-  updateContact,
-  removeContact,
-  getContact,
-  getContacts,
-  addEvent,
-  updateEvent,
-  removeEvent,
-  getEvent,
-  getEvents,
-  store
-};
+exports.UserModel = UserModel;
+exports.DataModel = DataModel;
+exports.getStore = getStore;

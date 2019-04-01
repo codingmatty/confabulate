@@ -1,6 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server-express');
 const { createTestClient } = require('apollo-server-testing');
 const db = require('../../db');
+const { resetDb } = require('../../db/local');
 const schema = require('../index');
 
 const user = { id: '123' };
@@ -41,7 +42,7 @@ const QUERY_EVENT = gql`
 `;
 
 const ADD_EVENT = gql`
-  mutation ADD_EVENT($data: EventInputData) {
+  mutation ADD_EVENT($data: EventInputData!) {
     event: addEvent(data: $data) {
       ...AllEventFields
     }
@@ -50,7 +51,7 @@ const ADD_EVENT = gql`
 `;
 
 const UPDATE_EVENT = gql`
-  mutation UPDATE_EVENT($id: ID!, $data: EventUpdateData) {
+  mutation UPDATE_EVENT($id: ID!, $data: EventUpdateData!) {
     event: updateEvent(id: $id, data: $data) {
       ...AllEventFields
     }
@@ -92,7 +93,7 @@ const seedData = {
       note: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
       orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
       lectus. Donec porta pellentesque rhoncus.`,
-      involvedContacts: ['2', '3']
+      involvedContacts: ['2', '3', 'a']
     },
     {
       userId: '123',
@@ -127,7 +128,7 @@ describe('Events GraphQL', () => {
   const { query, mutate } = createTestClient(server);
 
   beforeEach(() => {
-    db.resetDb(seedData);
+    resetDb(seedData);
   });
 
   describe('query events', () => {
@@ -144,10 +145,7 @@ describe('Events GraphQL', () => {
         variables: { query: { type: 'meeting' } }
       });
       expect(data.events).toHaveLength(2);
-      expect(data.events.map(({ type }) => type)).toEqual([
-        'meeting',
-        'meeting'
-      ]);
+      expect(data.events.every(({ type }) => type === 'meeting')).toBeTruthy();
       expect(data.events.map(({ id }) => id)).toEqual(['1', '3']);
     });
   });
@@ -161,7 +159,7 @@ describe('Events GraphQL', () => {
       expect(data.event).toMatchSnapshot();
     });
 
-    it('contains contacts', async () => {
+    it('contains valid contacts', async () => {
       const { data } = await query({
         query: QUERY_EVENT,
         variables: { id: '1' }
@@ -203,22 +201,6 @@ describe('Events GraphQL', () => {
         involvedContacts: [{ id: '1' }]
       });
     });
-
-    it('avoids adding invalid contacts to event', async () => {
-      const inputData = {
-        title: 'New Test Event',
-        date: new Date().toISOString(),
-        involvedContacts: ['100']
-      };
-      const { data } = await mutate({
-        mutation: ADD_EVENT,
-        variables: { data: inputData }
-      });
-      expect(data.event).toMatchObject({
-        ...inputData,
-        involvedContacts: []
-      });
-    });
   });
 
   describe('update event', () => {
@@ -233,22 +215,6 @@ describe('Events GraphQL', () => {
       });
       expect(data.event).toMatchObject(updateData);
     });
-
-    it('avoids adding invalid contacts to event', async () => {
-      const updateData = {
-        title: 'New Test Event',
-        date: new Date().toISOString(),
-        involvedContacts: ['100', '2']
-      };
-      const { data } = await mutate({
-        mutation: UPDATE_EVENT,
-        variables: { id: '3', data: updateData }
-      });
-      expect(data.event).toMatchObject({
-        ...updateData,
-        involvedContacts: [{ id: '2' }]
-      });
-    });
   });
 
   describe('remove event', () => {
@@ -259,9 +225,10 @@ describe('Events GraphQL', () => {
       });
       expect(data.status).toEqual({
         status: 'SUCCESS',
-        message: '1 Event(s) Removed'
+        message: 'Event Removed'
       });
-      expect(db.getEvents(user.id)).toHaveLength(2);
+      const remainingEvents = await db.Events.query(user.id);
+      expect(remainingEvents).toHaveLength(2);
     });
 
     it("avoids failure if event to remove doesn't exist", async () => {
@@ -270,10 +237,11 @@ describe('Events GraphQL', () => {
         variables: { id: '100' }
       });
       expect(data.status).toEqual({
-        status: 'IGNORE',
-        message: '0 Event(s) Removed'
+        status: 'IGNORED',
+        message: ''
       });
-      expect(db.getEvents(user.id)).toHaveLength(3);
+      const remainingEvents = await db.Events.query(user.id);
+      expect(remainingEvents).toHaveLength(3);
     });
   });
 });

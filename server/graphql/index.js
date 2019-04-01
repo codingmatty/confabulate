@@ -18,7 +18,7 @@ const Common = gql`
   enum StatusEnum {
     SUCCESS
     ERROR
-    IGNORE
+    IGNORED
   }
   type Status {
     status: StatusEnum!

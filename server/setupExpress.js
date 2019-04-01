@@ -11,7 +11,7 @@ const db = require('./db');
 const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = async function setupExpress() {
-  const dbStore = db.store(session);
+  const dbStore = db.getStore(session);
   const app = express();
 
   const cookie = { sameSite: true };

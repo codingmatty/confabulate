@@ -12,7 +12,7 @@ module.exports = function registerPassport(db) {
 
   passport.deserializeUser(async (userId, done) => {
     try {
-      const user = await db.getUser(userId);
+      const user = await db.Users.get(userId);
       done(null, user);
     } catch (error) {
       done(error);
@@ -27,12 +27,12 @@ module.exports = function registerPassport(db) {
         const decodedIdToken = await firebaseAdmin
           .auth()
           .verifyIdToken(idToken);
-        const user = await db.getUser(decodedIdToken.uid);
+        const user = await db.Users.get(decodedIdToken.uid);
         if (user) {
           done(null, user);
         } else {
           if (process.env.SETTINGS_ALLOW_SIGNUPS === 'true') {
-            const newUser = db.addUser(decodedIdToken.uid, {
+            const newUser = db.Users.add(decodedIdToken.uid, {
               email: decodedIdToken.email,
               profile: {
                 image: decodedIdToken.image

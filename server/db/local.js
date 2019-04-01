@@ -24,105 +24,86 @@ function resetDb(data) {
   db.setState({ ...defaults, ..._.cloneDeep(data) });
 }
 
-function addUser(id, data) {
-  db.get('users')
-    .set(id, { ...data, id })
-    .write();
-  return getUser(id);
+class DataModel {
+  constructor(type, { decorateData = async (data) => data } = {}) {
+    this.type = type;
+    this.decorateData = decorateData;
+  }
+
+  async create(userId, data) {
+    const id = uuidv4();
+    const collectionRef = db.get(this.type);
+    collectionRef.push({ ...data, userId, id }).write();
+    const createdDocument = collectionRef.find({ id }).value();
+    return this.decorateData(createdDocument);
+  }
+
+  async get(userId, id) {
+    const document = db
+      .get(this.type)
+      .find({ userId, id })
+      .value();
+    return document ? this.decorateData(document) : {};
+  }
+
+  async query(userId, query = {}) {
+    const documents = db
+      .get(this.type)
+      .filter({ ...query, userId })
+      .value();
+    return Promise.all(documents.map(this.decorateData));
+  }
+
+  async update(userId, id, data) {
+    const updatedDocument = db
+      .get(this.type)
+      .find({ userId, id })
+      .assign(data)
+      .write();
+    return updatedDocument ? this.decorateData(updatedDocument) : {};
+  }
+
+  async delete(userId, id) {
+    const removedDocument = db
+      .get(this.type)
+      .remove({ userId, id })
+      .first()
+      .write();
+    return removedDocument ? this.decorateData(removedDocument) : null;
+  }
 }
 
-function getUser(id) {
-  return db
-    .get('users')
-    .get(id)
-    .value();
+class UserModel {
+  constructor({ decorateData = async (data) => data } = {}) {
+    this.decorateData = decorateData;
+  }
+
+  async create(id, data) {
+    db.get('users')
+      .set(id, { ...data, id })
+      .write();
+    return this.decorateData(this.get(id));
+  }
+
+  async get(id) {
+    const user = db
+      .get('users')
+      .get(id)
+      .value();
+    return this.decorateData(user);
+  }
+
+  async update(id, data) {
+    const user = db
+      .get('users')
+      .get(id)
+      .assign(data)
+      .write();
+    return this.decorateData(user);
+  }
 }
 
-function findUser(query) {
-  return db
-    .get('users')
-    .find(query)
-    .value();
-}
-
-function addContact(userId, contact) {
-  const contactsRef = db.get('contacts');
-  const id = uuidv4();
-  contactsRef.push({ ...contact, userId, id }).write();
-  return contactsRef.find({ id }).value();
-}
-
-function updateContact(userId, id, contact) {
-  return db
-    .get('contacts')
-    .find({ userId, id })
-    .assign(contact)
-    .write();
-}
-
-function removeContact(userId, id) {
-  return db
-    .get('contacts')
-    .remove({ userId, id })
-    .write();
-}
-
-function getContact(userId, id) {
-  const contact = db
-    .get('contacts')
-    .find({ userId, id })
-    .value();
-  return contact;
-}
-
-function getContacts(userId, query) {
-  return db
-    .get('contacts')
-    .filter({ ...query, userId })
-    .value();
-}
-
-function addEvent(userId, event) {
-  const eventsRef = db.get('events');
-  const id = uuidv4();
-  eventsRef.push({ ...event, userId, id }).write();
-  return eventsRef.find({ id }).value();
-}
-
-function updateEvent(userId, id, event) {
-  return db
-    .get('events')
-    .find({ userId, id })
-    .assign(event)
-    .write();
-}
-
-function removeEvent(userId, id) {
-  return db
-    .get('events')
-    .remove({ userId, id })
-    .write();
-}
-
-function getEvent(userId, id) {
-  return db
-    .get('events')
-    .find({ userId, id })
-    .value();
-}
-
-function getEvents(userId, query) {
-  const { involvedContact, ...propQuery } = query;
-  return db
-    .get('events')
-    .filter({ ...propQuery, userId })
-    .filter((event) =>
-      event.involvedContacts.some((id) => id === involvedContact.id)
-    )
-    .value();
-}
-
-function store(session) {
+function getStore(session) {
   class LowDBStore extends session.Store {
     all(done) {
       const sessions = db
@@ -175,20 +156,7 @@ function store(session) {
   return LowDBStore;
 }
 
-module.exports = {
-  resetDb,
-  addUser,
-  getUser,
-  findUser,
-  addContact,
-  updateContact,
-  removeContact,
-  getContact,
-  getContacts,
-  addEvent,
-  updateEvent,
-  removeEvent,
-  getEvent,
-  getEvents,
-  store
-};
+exports.resetDb = resetDb;
+exports.UserModel = UserModel;
+exports.DataModel = DataModel;
+exports.getStore = getStore;

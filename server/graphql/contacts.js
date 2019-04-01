@@ -42,31 +42,28 @@ exports.typeDefs = gql`
 exports.resolvers = {
   Query: {
     contact: async (obj, { id }, { db, user }) =>
-      await db.getContact(user.id, id),
+      await db.Contacts.get(user.id, id),
     contacts: async (obj, { query }, { db, user }) => {
-      const contacts = await db.getContacts(user.id, query);
+      const contacts = await db.Contacts.query(user.id, query);
       return contacts;
     }
   },
   Mutation: {
     addContact: async (obj, { data }, { db, user }) =>
-      await db.addContact(user.id, { ...data, favorite: false }),
+      await db.Contacts.create(user.id, { ...data, favorite: false }),
     updateContact: async (obj, { id, data }, { db, user }) =>
-      await db.updateContact(user.id, id, data),
+      await db.Contacts.update(user.id, id, data),
     removeContact: async (obj, { id }, { db, user }) => {
-      const removedContact = await db.removeContact(user.id, id);
+      const removedContact = await db.Contacts.delete(user.id, id);
       return {
-        status: removedContact ? 'SUCCESS' : 'IGNORE',
-        message: `${removedContact.length} Contact(s) Removed`
+        status: removedContact ? 'SUCCESS' : 'IGNORED',
+        message: removedContact ? 'Contact Removed' : ''
       };
     }
   },
   Contact: {
     events: async (contact, args, { db, user }) => {
-      const events = await db.getEvents(user.id);
-      return events.filter(({ involvedContacts }) =>
-        involvedContacts.includes(contact.id)
-      );
+      return db.Events.query(user.id, { involvedContact: { id: contact.id } });
     }
   }
 };
