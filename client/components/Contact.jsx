@@ -3,14 +3,12 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
-import moment from 'moment';
-import Modal from 'react-modal';
 import ContactForm from './ContactForm';
 import Avatar from './Avatar';
 import FavoriteContact from './FavoriteContact';
 import Icon from './Icon';
-import EventForm from './EventForm';
 import PageTitle from './PageTitle';
+import ContactEventList from './ContactEventList';
 
 const QUERY_CONTACT = gql`
   query QUERY_CONTACT($id: ID!) {
@@ -22,13 +20,6 @@ const QUERY_CONTACT = gql`
       email
       phoneNumber
       favorite
-      events {
-        id
-        title
-        date
-        type
-        note
-      }
     }
   }
 `;
@@ -85,91 +76,6 @@ const EditButton = styled.button`
   left: 0.5rem;
   font-size: 1.5rem;
 `;
-const EventTitle = styled.div``;
-const EventHeaderLine = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.25rem;
-`;
-const EventDate = styled.span`
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  font-weight: bold;
-`;
-const EventType = styled.span``;
-const EventSubheaderLine = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  line-height: 1.5;
-`;
-const EventNote = styled.p`
-  margin-bottom: 0;
-`;
-const EventCard = styled.li`
-  padding: 1rem;
-  position: relative;
-  border: 1px solid #888;
-  border-radius: 4px;
-  margin-left: 2.5rem;
-  margin-right: 0.5rem;
-  box-shadow: ${({ isNew, theme }) =>
-    isNew
-      ? `2px 2px 4px -2px ${theme.color.neutrals[5]}, 0 0 4px 2px ${
-          theme.color.greens[5]
-        }`
-      : `2px 2px 4px -2px ${theme.color.neutrals[5]}`};
-  &:not(:last-child) {
-    margin-bottom: 0.5rem;
-  }
-  &::before {
-    content: '';
-    border: 2px solid #ccc;
-    position: absolute;
-    height: calc(100% + 0.5rem + 2px);
-    left: -1.25rem;
-    top: 0;
-  }
-  &:last-child::before {
-    height: 50%;
-  }
-  &::after {
-    content: '';
-    transform: rotate(45deg);
-    background-color: #444;
-    position: absolute;
-    height: 0.6rem;
-    width: 0.6rem;
-    top: calc(50% - 0.3rem);
-    left: -1.425rem;
-  }
-`;
-const CreateEventButton = styled.button`
-  background: none;
-  border: 1px solid #555;
-  border-radius: 4px;
-  padding: 0.25rem 2.5rem;
-  text-transform: uppercase;
-`;
-const CreateEventContainer = styled.li`
-  display: flex;
-  justify-content: center;
-  position: relative;
-  padding: 1rem;
-  &::before {
-    ${({ showBorder }) => showBorder && `content: ''`};
-    border: 2px solid #ccc;
-    position: absolute;
-    height: calc(100% + 1rem);
-    left: 1.3rem;
-    top: -0.5rem;
-  }
-`;
-const EventList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
 
 export default function Contact({ id }) {
   const {
@@ -180,8 +86,6 @@ export default function Contact({ id }) {
     variables: { id }
   });
   const [editing, setEditing] = useState(false);
-  const [addingEvent, setAddingEvent] = useState(false);
-  const [newEventId, setNewEventId] = useState('');
 
   if (loading) {
     return <div>Loading...</div>;
@@ -225,48 +129,7 @@ export default function Contact({ id }) {
           </ContactDetail>
         </ContactDetails>
       </ContactCard>
-      <EventList>
-        <CreateEventContainer showBorder={contact.events.length > 0}>
-          <CreateEventButton onClick={() => setAddingEvent(true)}>
-            Add Event
-          </CreateEventButton>
-        </CreateEventContainer>
-        {contact.events
-          .sort(
-            ({ date: firstDate }, { date: secondDate }) =>
-              moment(secondDate) - moment(firstDate)
-          )
-          .map((event) => (
-            <EventCard key={event.id} isNew={event.id === newEventId}>
-              <EventHeaderLine>
-                <EventTitle>{event.title}</EventTitle>
-                <Icon type="edit" />
-              </EventHeaderLine>
-              <EventSubheaderLine>
-                <EventDate>
-                  {moment(event.date).format('MMMM DD, YYYY')}
-                </EventDate>
-                <EventType>{event.type}</EventType>
-              </EventSubheaderLine>
-              {event.note && <EventNote>{event.note}</EventNote>}
-            </EventCard>
-          ))}
-      </EventList>
-      <Modal
-        isOpen={addingEvent}
-        onRequestClose={() => setAddingEvent(false)}
-        contentLabel="Adding Event"
-        style={{ overlay: { zIndex: 1000 } }}
-      >
-        <EventForm
-          event={{ involvedContacts: [contact] }}
-          refetchQuery={{ query: QUERY_CONTACT, variables: { id } }}
-          onSubmit={({ id }) => {
-            setAddingEvent(false);
-            setNewEventId(id);
-          }}
-        />
-      </Modal>
+      <ContactEventList contact={contact} />
     </>
   );
 }

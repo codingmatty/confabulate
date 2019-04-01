@@ -18,7 +18,7 @@ const CREATE_EVENT = gql`
   }
 `;
 const UPDATE_EVENT = gql`
-  mutation UPDATE_EVENT($id: ID!, $data: EventInputData!) {
+  mutation UPDATE_EVENT($id: ID!, $data: EventUpdateData!) {
     event: updateEvent(id: $id, data: $data) {
       id
       title

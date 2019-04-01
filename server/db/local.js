@@ -112,9 +112,13 @@ function getEvent(userId, id) {
 }
 
 function getEvents(userId, query) {
+  const { involvedContact, ...propQuery } = query;
   return db
     .get('events')
-    .filter({ ...query, userId })
+    .filter({ ...propQuery, userId })
+    .filter((event) =>
+      event.involvedContacts.some((id) => id === involvedContact.id)
+    )
     .value();
 }
 

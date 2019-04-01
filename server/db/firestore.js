@@ -118,11 +118,16 @@ async function addEvent(userId, data) {
 async function getEvents(userId, query = {}) {
   const events = firestore.collection('events');
   let collectionQuery = events.where('userId', '==', userId);
-  for (let key in query) {
+  const { involvedContact, ...propQuery } = query;
+  for (let key in propQuery) {
     collectionQuery = collectionQuery.where(key, '==', query[key]);
   }
   const { docs } = await collectionQuery.get();
-  return Promise.all(docs.map(decorateSnapshot));
+  return Promise.all(docs.map(decorateSnapshot)).then((filteredEvents) =>
+    filteredEvents.filter((event) =>
+      event.involvedContacts.some((id) => id === involvedContact.id)
+    )
+  );
 }
 
 async function getEvent(userId, id) {
