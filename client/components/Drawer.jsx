@@ -1,24 +1,42 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Router from 'next/router';
+import { withRouter } from 'next/router';
 import Link from './Link';
 import Icon from './Icon';
 
 const StyledLink = styled(Link)`
-  width: 100%;
   font-size: 1.25rem;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  border-bottom: 2px solid transparent;
+
+  &:not(:first-child) {
+    margin-top: 0.5rem;
+  }
+
+  ${({ selected, theme }) =>
+    selected
+      ? `
+    cursor: default;
+    border-bottom: 2px solid ${theme.color.oranges[2]};
+  `
+      : `
+  &:hover {
+    border-bottom: 2px solid ${theme.color.oranges[1]};
+  }
+  `};
 `;
 const StyledIcon = styled(Icon)`
   margin-right: 0.5rem;
 `;
 
 const StyledDrawer = styled.div`
+  align-items: baseline;
   background: ${({ theme }) => theme.color.neutrals[0]};
-  border-right: 3px solid ${({ theme }) => theme.color.primary[2]};
   bottom: 0;
   box-shadow: 0 0 10px -2px ${({ theme }) => theme.color.neutrals[5]};
+  display: flex;
+  flex-direction: column;
   left: -100%;
   padding: 6rem 2rem 2rem;
   position: fixed;
@@ -32,12 +50,16 @@ const StyledDrawer = styled.div`
   }
 `;
 
-export default function Drawer({ isOpen, onClose }) {
+function Drawer({ isOpen, onClose, router }) {
   const drawerRef = useRef(null);
+  const [currentPath, setCurrentPath] = useState(router.asPath);
+
   useEffect(() => {
-    Router.events.on('routeChangeStart', onClose);
-    return () => Router.events.off('routeChangeStart', onClose);
-  });
+    if (router.asPath !== currentPath) {
+      onClose();
+      setCurrentPath(router.asPath);
+    }
+  }, [router.asPath]);
 
   const handleWindowClick = (e) => {
     if (isOpen && !drawerRef.current.contains(e.target)) {
@@ -59,10 +81,16 @@ export default function Drawer({ isOpen, onClose }) {
       className={`${isOpen ? 'open' : ''}`}
       ref={drawerRef}
     >
-      <StyledLink href="/contacts">
+      <StyledLink href="/contacts" selected={router.asPath === '/contacts'}>
         <StyledIcon type="people" />
         Contacts
+      </StyledLink>
+      <StyledLink href="/events" selected={router.asPath === '/events'}>
+        <StyledIcon type="calendar_today" />
+        Events
       </StyledLink>
     </StyledDrawer>
   );
 }
+
+export default withRouter(Drawer);

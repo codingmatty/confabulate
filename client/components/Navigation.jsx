@@ -34,6 +34,7 @@ const StyledNavigation = styled.nav`
   right: 0;
   height: 4rem;
   background-color: ${({ theme }) => theme.color.background};
+  border-bottom: 3px solid ${({ theme }) => theme.color.primary[2]};
   box-shadow: 0 0 10px -2px ${({ theme }) => theme.color.neutrals[5]};
   display: flex;
   justify-content: space-between;
