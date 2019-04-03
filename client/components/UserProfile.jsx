@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import styled from 'styled-components';
 import Avatar from './Avatar';
+import Loader from './Loader';
 
 const EmptyValue = styled.span`
   font-style: italic;
@@ -50,7 +51,7 @@ export default function UserProfile() {
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader size="5" />;
   } else if (error) {
     return <div>Error! {error.message}</div>;
   } else if (!dataLoaded) {

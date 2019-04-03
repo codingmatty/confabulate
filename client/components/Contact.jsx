@@ -9,6 +9,7 @@ import FavoriteContact from './FavoriteContact';
 import Icon from './Icon';
 import PageTitle from './PageTitle';
 import ContactEventList from './ContactEventList';
+import Loader from './Loader';
 
 const QUERY_CONTACT = gql`
   query QUERY_CONTACT($id: ID!) {
@@ -88,7 +89,7 @@ export default function Contact({ id }) {
   const [editing, setEditing] = useState(false);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader size="5" />;
   } else if (error) {
     return <div>Error! {error.message}</div>;
   }

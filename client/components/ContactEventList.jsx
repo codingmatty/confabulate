@@ -2,10 +2,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import Modal from 'react-modal';
-import EventForm from './EventForm';
-import Icon from './Icon';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
+import EventForm from './EventForm';
+import Icon from './Icon';
+import Loader from './Loader';
 
 const QUERY_CONTACT_EVENTS = gql`
   query QUERY_CONTACT_EVENTS($query: EventQueryData) {
@@ -121,7 +122,7 @@ export default function ContactEventList({ contact }) {
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader size="4" />;
   }
   if (error) {
     return <div>Error! {error.message}</div>;

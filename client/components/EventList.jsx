@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-// import Icon from './Icon';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
+import Loader from './Loader';
 
 const QUERY_EVENTS = gql`
   query QUERY_EVENTS {
@@ -73,7 +73,7 @@ export default function EventList({ search }) {
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader size="5" />;
   }
   if (error) {
     return <div>Error! {error.message}</div>;

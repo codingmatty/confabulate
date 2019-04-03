@@ -2,6 +2,7 @@ import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
 import styled from 'styled-components';
 import ContactListItem from './ContactListItem';
+import Loader from './Loader';
 
 const QUERY_CONTACTS = gql`
   query QUERY_CONTACTS {
@@ -30,7 +31,7 @@ export default function ContactList({ search }) {
   } = useQuery(QUERY_CONTACTS, { fetchPolicy: 'cache-and-network' });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader size="5" />;
   }
   if (error) {
     return <div>Error! {error.message}</div>;
