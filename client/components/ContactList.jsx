@@ -22,7 +22,7 @@ const StyledContactList = styled.ul`
   list-style: none;
 `;
 
-export default function ContactList() {
+export default function ContactList({ search }) {
   const {
     data: { contacts },
     error,
@@ -39,9 +39,17 @@ export default function ContactList() {
   return (
     <>
       <StyledContactList>
-        {contacts.map((contact) => (
-          <ContactListItem key={contact.id} contact={contact} />
-        ))}
+        {contacts
+          .filter((contact) =>
+            Object.values(contact)
+              .join('')
+              .toLowerCase()
+              .includes(search)
+          )
+
+          .map((contact) => (
+            <ContactListItem key={contact.id} contact={contact} />
+          ))}
       </StyledContactList>
     </>
   );

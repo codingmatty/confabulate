@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import ContactList from '../../components/ContactList';
 import PageTitle from '../../components/PageTitle';
 import Icon from '../../components/Icon';
 import Link from '../../components/Link';
+import SearchInput from '../../components/SearchInput';
 
 const CreateContactLink = styled(Link)`
   background-color: white;
@@ -22,10 +24,13 @@ const StyledContactsPage = styled.div`
 `;
 
 export default function Contacts() {
+  const [searchInput, setSearchInput] = useState('');
+
   return (
     <StyledContactsPage>
       <PageTitle>Contacts</PageTitle>
-      <ContactList />
+      <SearchInput onChange={(searchValue) => setSearchInput(searchValue)} />
+      <ContactList search={searchInput} />
       <CreateContactLink href="/contacts/create">
         <Icon type="add" />
       </CreateContactLink>

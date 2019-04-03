@@ -56,7 +56,7 @@ const StyledEventList = styled.ul`
   position: relative;
 `;
 
-export default function EventList() {
+export default function EventList({ search }) {
   const {
     data: { events },
     loading,
@@ -85,6 +85,12 @@ export default function EventList() {
         .sort(
           ({ date: firstDate }, { date: secondDate }) =>
             moment(secondDate) - moment(firstDate)
+        )
+        .filter((event) =>
+          Object.values(event)
+            .join('')
+            .toLowerCase()
+            .includes(search)
         )
         .map((event) => (
           <EventCard key={event.id} isNew={event.id === newEventId}>

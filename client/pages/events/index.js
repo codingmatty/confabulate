@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import EventList from '../../components/EventList';
 import PageTitle from '../../components/PageTitle';
 import Icon from '../../components/Icon';
 import Link from '../../components/Link';
+import SearchInput from '../../components/SearchInput';
 
 const CreateEventLink = styled(Link)`
   background-color: white;
@@ -22,10 +24,13 @@ const StyledeventsPage = styled.div`
 `;
 
 export default function events() {
+  const [searchInput, setSearchInput] = useState('');
+
   return (
     <StyledeventsPage>
       <PageTitle>Events</PageTitle>
-      <EventList />
+      <SearchInput onChange={(searchValue) => setSearchInput(searchValue)} />
+      <EventList search={searchInput} />
       {/* <CreateEventLink href="/events/create">
         <Icon type="add" />
       </CreateEventLink> */}
