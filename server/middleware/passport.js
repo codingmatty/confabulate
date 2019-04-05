@@ -29,13 +29,19 @@ module.exports = function registerPassport(db) {
           .verifyIdToken(idToken);
         const user = await db.Users.get(decodedIdToken.uid);
         if (user) {
+          console.log('Logged in user with email', user.email);
           done(null, user);
         } else {
-          if (process.env.SETTINGS_ALLOW_SIGNUPS === 'true') {
-            const newUser = db.Users.add(decodedIdToken.uid, {
+          if (
+            JSON.parse(process.env.SIGNUP_EMAIL_WHITELIST).includes(
+              decodedIdToken.email
+            )
+          ) {
+            console.log('Creating a new user for email', decodedIdToken.email);
+            const newUser = await db.Users.create(decodedIdToken.uid, {
               email: decodedIdToken.email,
               profile: {
-                image: decodedIdToken.image
+                image: decodedIdToken.picture
               },
               authProviders: [decodedIdToken.firebase.sign_in_provider]
             });

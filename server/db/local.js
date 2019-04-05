@@ -82,7 +82,7 @@ class UserModel {
     db.get('users')
       .set(id, { ...data, id })
       .write();
-    return this.decorateData(this.get(id));
+    return this.get(id);
   }
 
   async get(id) {
@@ -90,7 +90,7 @@ class UserModel {
       .get('users')
       .get(id)
       .value();
-    return this.decorateData(user);
+    return user ? this.decorateData(user) : null;
   }
 
   async update(id, data) {
