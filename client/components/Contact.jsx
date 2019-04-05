@@ -3,6 +3,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
+import { convertBirthdayToString } from '../utils/dates';
 import ContactForm from './ContactForm';
 import Avatar from './Avatar';
 import FavoriteContact from './FavoriteContact';
@@ -18,6 +19,11 @@ const QUERY_CONTACT = gql`
       firstName
       lastName
       fullName
+      birthday {
+        day
+        month
+        year
+      }
       email
       phoneNumber
       favorite
@@ -106,6 +112,9 @@ export default function Contact({ id }) {
       </>
     );
   }
+
+  const birthdayString = convertBirthdayToString(contact.birthday);
+
   return (
     <>
       <ContactCard>
@@ -121,6 +130,11 @@ export default function Contact({ id }) {
           {contact.firstName} {contact.lastName}
         </ContactName>
         <ContactDetails>
+          {birthdayString && (
+            <ContactDetail>
+              <ContactIcon type="cake" /> {birthdayString}
+            </ContactDetail>
+          )}
           <ContactDetail>
             <ContactIcon type="mail" /> {contact.email}
           </ContactDetail>

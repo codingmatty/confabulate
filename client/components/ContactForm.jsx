@@ -5,6 +5,7 @@ import { useMutation } from 'react-apollo-hooks';
 import pick from 'lodash/pick';
 import Form from './Form';
 import Input from './Input';
+import BirthdayInput from './BirthdayInput';
 
 const CREATE_CONTACT = gql`
   mutation CREATE_CONTACT($data: ContactInputData!) {
@@ -32,6 +33,11 @@ const UPDATE_CONTACT = gql`
 const DEFAULT_FORM_FIELDS = {
   firstName: '',
   lastName: '',
+  birthday: {
+    day: null,
+    month: null,
+    year: null
+  },
   email: '',
   phoneNumber: ''
 };
@@ -51,6 +57,9 @@ export default function ContactForm({
       },
       'firstName',
       'lastName',
+      'birthday.day',
+      'birthday.month',
+      'birthday.year',
       'email',
       'phoneNumber'
     )
@@ -101,6 +110,12 @@ export default function ContactForm({
         value={formData.lastName}
         onChange={onChange}
       />
+      <BirthdayInput
+        label="Birthday"
+        name="birthday"
+        value={formData.birthday}
+        onChange={onChange}
+      />
       <Input
         label="Email"
         type="email"
@@ -122,6 +137,11 @@ ContactForm.propTypes = {
     id: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    birthday: PropTypes.shape({
+      day: PropTypes.number,
+      month: PropTypes.number,
+      year: PropTypes.number
+    }),
     email: PropTypes.string,
     phoneNumber: PropTypes.string
   }),

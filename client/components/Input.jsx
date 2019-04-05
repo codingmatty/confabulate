@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 
 const InputWrapper = styled.div`
-  & + & {
+  :not(:first-child) {
     margin-top: 1rem;
   }
 `;
@@ -21,6 +21,7 @@ const InputControl = styled.input`
   font-size: 1.25rem;
   padding: 0.5rem;
   width: 100%;
+  border-radius: 2px;
 `;
 const Error = styled.div``;
 

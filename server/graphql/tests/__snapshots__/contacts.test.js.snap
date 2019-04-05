@@ -2,6 +2,11 @@
 
 exports[`Contacts GraphQL query contact renders all fields 1`] = `
 Object {
+  "birthday": Object {
+    "day": null,
+    "month": null,
+    "year": null,
+  },
   "email": "ringostarr@beatles.com",
   "events": Array [],
   "favorite": true,
@@ -16,6 +21,11 @@ Object {
 exports[`Contacts GraphQL query contacts renders all fields for all data 1`] = `
 Array [
   Object {
+    "birthday": Object {
+      "day": 23,
+      "month": 3,
+      "year": 2010,
+    },
     "email": "johnlennon@beatles.com",
     "events": Array [],
     "favorite": true,
@@ -26,6 +36,11 @@ Array [
     "phoneNumber": "5551234567",
   },
   Object {
+    "birthday": Object {
+      "day": 23,
+      "month": 3,
+      "year": null,
+    },
     "email": "paulmccartney@beatles.com",
     "events": Array [
       Object {
@@ -40,6 +55,11 @@ Array [
     "phoneNumber": "5552345678",
   },
   Object {
+    "birthday": Object {
+      "day": null,
+      "month": null,
+      "year": null,
+    },
     "email": "ringostarr@beatles.com",
     "events": Array [],
     "favorite": true,

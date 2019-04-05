@@ -16,14 +16,21 @@ exports.typeDefs = gql`
     firstName: String
     lastName: String
     fullName: String
+    birthday: DateStruct!
     email: String
     phoneNumber: String
     favorite: Boolean
     events: [Event]!
   }
+  type DateStruct {
+    day: Int
+    month: Int
+    year: Int
+  }
   input ContactInputData {
     firstName: String
     lastName: String
+    birthday: DateStructInput
     email: String
     phoneNumber: String
     favorite: Boolean
@@ -32,9 +39,15 @@ exports.typeDefs = gql`
     id: ID
     firstName: String
     lastName: String
+    birthday: DateStructInput
     email: String
     phoneNumber: String
     favorite: Boolean
+  }
+  input DateStructInput {
+    day: Int
+    month: Int
+    year: Int
   }
 `;
 

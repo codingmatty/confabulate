@@ -21,6 +21,7 @@ class ContactModel extends DataModel {
     super('contacts', {
       decorateData: (data) => ({
         ...data,
+        birthday: data.birthday || {},
         fullName: `${data.firstName} ${data.lastName}`
       })
     });

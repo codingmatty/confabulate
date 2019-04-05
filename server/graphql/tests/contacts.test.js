@@ -19,6 +19,11 @@ const AllContactFields = gql`
     email
     phoneNumber
     favorite
+    birthday {
+      day
+      month
+      year
+    }
     events {
       id
     }
@@ -79,7 +84,12 @@ const seedData = {
       lastName: 'Lennon',
       email: 'johnlennon@beatles.com',
       phoneNumber: '5551234567',
-      favorite: true
+      favorite: true,
+      birthday: {
+        day: 23,
+        month: 3,
+        year: 2010
+      }
     },
     {
       userId: '123',
@@ -88,7 +98,11 @@ const seedData = {
       lastName: 'McCartney',
       email: 'paulmccartney@beatles.com',
       phoneNumber: '5552345678',
-      favorite: false
+      favorite: false,
+      birthday: {
+        day: 23,
+        month: 3
+      }
     },
     {
       userId: '123',
