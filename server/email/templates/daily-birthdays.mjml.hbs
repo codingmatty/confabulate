@@ -1,0 +1,32 @@
+<mjml>
+  <mj-body>
+    <mj-section background-color="#f0f0f0">
+      <mj-column>
+        <mj-text font-size="20px" color="#626262">
+          Confabulate
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-url="{{baseUrl}}/static/happy-birthday.jpg" background-size="cover"
+      background-repeat="no-repeat" padding="75px">
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text>
+          <h2>Birthdays</h2>
+        </mj-text>
+        <mj-text>
+          Date: <strong>{{currentDate}}</strong>
+        </mj-text>
+        <mj-divider border-width="1px" border-style="solid" border-color="lightgrey" />
+      </mj-column>
+    </mj-section>
+    {{#each contacts}}
+    <mj-section>
+      <mj-column>
+        <mj-text><a href="{{url}}">{{fullName}}</a>{{#if age}} | {{age}}{{/if}}</mj-text>
+      </mj-column>
+    </mj-section>
+    {{/each}}
+  </mj-body>
+</mjml>

@@ -14,9 +14,11 @@
     "predeploy": "NODE_ENV=production npm run build",
     "deploy": "npm run deploy-skip-build",
     "deploy-skip-build": "gcloud app deploy --configuration confabulate",
+    "deploy:cron": "gcloud app deploy cron.yaml",
     "start": "node server"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "apollo-boost": "^0.3.1",
     "apollo-server-express": "^2.4.8",
     "body-parser": "^1.18.3",
@@ -27,9 +29,11 @@
     "firebase-admin": "^7.1.1",
     "flat": "^4.1.0",
     "graphql": "^14.1.1",
+    "handlebars": "^4.1.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.11",
     "md5-o-matic": "^0.1.1",
+    "mjml": "^4.4.0-beta.1",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "next": "^8.0.3",

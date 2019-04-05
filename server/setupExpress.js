@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const registerApi = require('./middleware/api');
+const registerCron = require('./middleware/cron');
 const registerNext = require('./middleware/next');
 const registerGraphQL = require('./middleware/graphql');
 const registerPassport = require('./middleware/passport');
@@ -49,6 +50,7 @@ module.exports = async function setupExpress() {
   app.use(registerPassport(db));
 
   // Setup API routes
+  app.use('/cron', registerCron({ db, dev }));
   app.use('/api', registerApi());
 
   app.use(registerGraphQL(db));
