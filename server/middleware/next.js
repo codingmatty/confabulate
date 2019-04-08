@@ -43,6 +43,11 @@ module.exports = async function registerNextApp({ dev }) {
     requestHandler(req, res, parsedUrl);
   });
 
+  router.get('/static/*', (req, res) => {
+    const parsedUrl = parse(req.url, true);
+    requestHandler(req, res, parsedUrl);
+  });
+
   router.get('/favicon.ico', (req, res) => {
     const parsedUrl = parse(req.url, true);
     requestHandler(req, res, parsedUrl);
