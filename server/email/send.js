@@ -3,6 +3,7 @@ const path = require('path');
 const sgMail = require('@sendgrid/mail');
 const mjml2html = require('mjml');
 const Handlebars = require('handlebars');
+const logger = require('../logger');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -30,7 +31,7 @@ module.exports = async function send({ receiver, template, data }) {
   const { html, errors } = mjml2html(mjmlMarkup);
 
   if (!errors.length) {
-    sgMail.send({
+    const emailData = {
       to: {
         name: receiver.fullName,
         email: receiver.email
@@ -41,6 +42,10 @@ module.exports = async function send({ receiver, template, data }) {
       },
       subject: TEMPLATE_SUBJECTS[template],
       html
-    });
+    };
+    logger.info('Sending Email', emailData);
+    sgMail.send(emailData);
+  } else {
+    logger.error('Email Markup Generation Errors', errors);
   }
 };

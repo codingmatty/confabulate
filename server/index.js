@@ -15,3 +15,11 @@ setupExpress().then((app) => {
     logger.info(`Server listening on port ${port}`);
   });
 });
+
+process.on('uncaughtException', (err) => {
+  logger.error('Uncaught Exception', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection', promise, reason);
+});
