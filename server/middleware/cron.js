@@ -7,7 +7,11 @@ module.exports = function registerApi({ db, dev }) {
   const router = new Router();
 
   router.use((req, res, next) => {
-    if (dev || req.get('X-Appengine-Cron')) {
+    if (
+      dev ||
+      req.get('X-Appengine-Cron') ||
+      req.query.secret === process.env.CRON_SECRET
+    ) {
       next();
       return;
     }
