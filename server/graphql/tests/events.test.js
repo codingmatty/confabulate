@@ -227,7 +227,7 @@ describe('Events GraphQL', () => {
         status: 'SUCCESS',
         message: 'Event Removed'
       });
-      const remainingEvents = await db.Events.query(user.id);
+      const remainingEvents = await db.Events.getAll(user.id);
       expect(remainingEvents).toHaveLength(2);
     });
 
@@ -240,7 +240,7 @@ describe('Events GraphQL', () => {
         status: 'IGNORED',
         message: ''
       });
-      const remainingEvents = await db.Events.query(user.id);
+      const remainingEvents = await db.Events.getAll(user.id);
       expect(remainingEvents).toHaveLength(3);
     });
   });

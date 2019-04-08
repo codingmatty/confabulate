@@ -38,11 +38,16 @@ class DataModel {
     return this.decorateData(snapshot);
   }
 
-  async query(userId, query) {
+  async getAll(userId, query) {
+    return this.query({ ...query, userId });
+  }
+
+  async query(query) {
     const collectionRef = firestore.collection(this.type);
-    let collectionQuery = collectionRef.where('userId', '==', userId);
-    for (let key in query) {
-      collectionQuery = collectionQuery.where(key, '==', query[key]);
+    let collectionQuery = collectionRef;
+    const flattenedQuery = flatten(query);
+    for (let key in flattenedQuery) {
+      collectionQuery = collectionQuery.where(key, '==', flattenedQuery[key]);
     }
     const { docs } = await collectionQuery.get();
     return Promise.all(docs.map(this.decorateData));

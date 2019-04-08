@@ -57,7 +57,7 @@ exports.resolvers = {
     contact: async (obj, { id }, { db, user }) =>
       await db.Contacts.get(user.id, id),
     contacts: async (obj, { query }, { db, user }) => {
-      const contacts = await db.Contacts.query(user.id, query);
+      const contacts = await db.Contacts.getAll(user.id, query);
       return contacts;
     }
   },
@@ -76,7 +76,9 @@ exports.resolvers = {
   },
   Contact: {
     events: async (contact, args, { db, user }) => {
-      return db.Events.query(user.id, { involvedContact: { id: contact.id } });
+      return db.Events.getAll(user.id, {
+        involvedContact: { id: contact.id }
+      });
     }
   }
 };

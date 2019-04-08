@@ -5,6 +5,9 @@ const { DataModel, UserModel, getStore } =
 
 const Users = new UserModel({
   decorateData: (user) => {
+    if (!user) {
+      return null;
+    }
     user.profile = user.profile || {};
     user.profile.firstName = user.profile.firstName || '';
     user.profile.lastName = user.profile.lastName || '';
@@ -32,9 +35,9 @@ class EventModel extends DataModel {
   constructor() {
     super('events');
   }
-  async query(userId, query = {}) {
+  async query(query = {}) {
     const { involvedContact, ...propsQuery } = query;
-    const events = await super.query(userId, propsQuery);
+    const events = await super.query(propsQuery);
     const filteredEvents = involvedContact
       ? events.filter((event) =>
           event.involvedContacts.some((id) => id === involvedContact.id)

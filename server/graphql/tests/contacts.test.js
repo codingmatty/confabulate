@@ -228,7 +228,7 @@ describe('Contacts GraphQL', () => {
         status: 'SUCCESS',
         message: 'Contact Removed'
       });
-      const remainingContacts = await db.Contacts.query(user.id);
+      const remainingContacts = await db.Contacts.getAll(user.id);
       expect(remainingContacts).toHaveLength(2);
     });
 
@@ -241,7 +241,7 @@ describe('Contacts GraphQL', () => {
         status: 'IGNORED',
         message: ''
       });
-      const remainingContacts = await db.Contacts.query(user.id);
+      const remainingContacts = await db.Contacts.getAll(user.id);
       expect(remainingContacts).toHaveLength(3);
     });
   });

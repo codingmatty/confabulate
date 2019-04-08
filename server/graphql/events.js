@@ -49,7 +49,7 @@ exports.resolvers = {
     event: async (obj, { id }, { db, user }) =>
       await db.Events.get(user.id, id),
     events: async (obj, { query }, { db, user }) =>
-      await db.Events.query(user.id, query)
+      await db.Events.getAll(user.id, query)
   },
   Mutation: {
     addEvent: async (obj, { data }, { db, user }) => {

@@ -2,6 +2,7 @@ const _ = require('lodash');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
 const low = require('lowdb');
+const { unflatten } = require('flat');
 const FileSync = require('lowdb/adapters/FileSync');
 const Memory = require('lowdb/adapters/Memory');
 
@@ -46,10 +47,14 @@ class DataModel {
     return document ? this.decorateData(document) : {};
   }
 
-  async query(userId, query = {}) {
+  async getAll(userId, query) {
+    return this.query({ ...query, userId });
+  }
+
+  async query(query = {}) {
     const documents = db
       .get(this.type)
-      .filter({ ...query, userId })
+      .filter(unflatten(query))
       .value();
     return Promise.all(documents.map(this.decorateData));
   }
