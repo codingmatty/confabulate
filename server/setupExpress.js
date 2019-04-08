@@ -8,6 +8,7 @@ const registerNext = require('./middleware/next');
 const registerGraphQL = require('./middleware/graphql');
 const registerPassport = require('./middleware/passport');
 const db = require('./db');
+const logger = require('./logger');
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -24,6 +25,7 @@ module.exports = async function setupExpress() {
 
   app.use(
     morgan('short', {
+      stream: logger.stream,
       skip: function(req) {
         if (req.path.startsWith('/_next') || req.path.startsWith('/static')) {
           // Skip _next or static specific requests
