@@ -29,11 +29,11 @@ module.exports = function registerPassport(db) {
           .auth()
           .verifyIdToken(idToken);
 
-        logger.info('Decoded Token', decodedIdToken);
+        logger.info('Decoded Token', { decodedIdToken });
 
         const user = await db.Users.getByUID(decodedIdToken.uid);
         if (user) {
-          logger.info('Logged in user', user);
+          logger.info('Logging in user', { user });
           done(null, user);
         } else {
           if (
@@ -41,7 +41,9 @@ module.exports = function registerPassport(db) {
               decodedIdToken.email
             )
           ) {
-            logger.info('Creating a new user for email', decodedIdToken.email);
+            logger.info(
+              `Creating a new user for email: ${decodedIdToken.email}`
+            );
             const newUser = await db.Users.create(decodedIdToken.uid, {
               email: decodedIdToken.email,
               profile: {
@@ -68,7 +70,7 @@ module.exports = function registerPassport(db) {
   router.use((err, req, res, next) => {
     if (err) {
       logger.error(err);
-      logger.info('Logging Out User', req.user);
+      logger.info('Logging Out User', { user: req.user });
       // If an error has occured, then logout and redirect
       if (req.user) {
         firebaseAdmin.auth().revokeRefreshTokens(req.user.uid);

@@ -43,9 +43,9 @@ module.exports = async function send({ receiver, template, data }) {
       subject: TEMPLATE_SUBJECTS[template],
       html
     };
-    logger.info('Sending Email', emailData);
+    logger.info('Sending Email', { emailData });
     sgMail.send(emailData);
   } else {
-    logger.error('Email Markup Generation Errors', errors);
+    logger.error('Email Markup Generation Errors', { errors });
   }
 };

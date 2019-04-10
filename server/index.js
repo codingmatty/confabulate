@@ -4,7 +4,7 @@ const http = require('http');
 const setupExpress = require('./setupExpress');
 const logger = require('./logger');
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8910;
 
 setupExpress().then((app) => {
   http.createServer(app).listen(port, (err) => {
@@ -16,10 +16,10 @@ setupExpress().then((app) => {
   });
 });
 
-process.on('uncaughtException', (err) => {
-  logger.error('Uncaught Exception', err);
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception', { error });
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled Rejection', promise, reason);
+  logger.error('Unhandled Rejection', { promise, reason });
 });
