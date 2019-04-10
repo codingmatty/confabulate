@@ -15,7 +15,13 @@
     "deploy": "npm run deploy-skip-build",
     "deploy-skip-build": "gcloud app deploy --configuration confabulate",
     "deploy:cron": "gcloud app deploy cron.yaml",
-    "start": "node server"
+    "prestart": "npm run migrate:up",
+    "start": "node server",
+    "migrate": "migrate --store ./db-manage/store --migrations-dir ./db-manage/migrations",
+    "migrate:list": "npm run migrate -- list",
+    "migrate:up": "npm run migrate -- up",
+    "migrate:down": "npm run migrate -- down",
+    "migrate:create": "migrate --migrations-dir ./db-manage/migrations -t ./db-manage/template.js create"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "^0.11.0",
@@ -35,6 +41,7 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.11",
     "md5-o-matic": "^0.1.1",
+    "migrate": "^1.6.2",
     "mjml": "^4.4.0-beta.1",
     "moment": "^2.24.0",
     "mongoose": "^5.5.0",
