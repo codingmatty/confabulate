@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
-const session = require('express-session');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const registerApi = require('./middleware/api');
 const registerCron = require('./middleware/cron');
 const registerNext = require('./middleware/next');
@@ -13,7 +14,6 @@ const logger = require('./logger');
 const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = async function setupExpress() {
-  const dbStore = db.getStore(session);
   const app = express();
 
   const cookie = { sameSite: true };
@@ -43,7 +43,7 @@ module.exports = async function setupExpress() {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      store: new dbStore(),
+      store: new MongoStore({ mongooseConnection: db.connection }),
       cookie
     })
   );

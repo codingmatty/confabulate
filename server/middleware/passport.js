@@ -31,7 +31,7 @@ module.exports = function registerPassport(db) {
 
         logger.info('Decoded Token', decodedIdToken);
 
-        const user = await db.Users.get(decodedIdToken.uid);
+        const user = await db.Users.getByUID(decodedIdToken.uid);
         if (user) {
           logger.info('Logged in user', user);
           done(null, user);

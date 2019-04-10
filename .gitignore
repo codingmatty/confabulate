@@ -5,3 +5,4 @@ coverage/
 db.json
 node_modules/
 confabulate-*.json
+data/

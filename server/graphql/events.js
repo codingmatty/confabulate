@@ -48,12 +48,18 @@ exports.resolvers = {
   Query: {
     event: async (obj, { id }, { db, user }) =>
       await db.Events.get(user.id, id),
-    events: async (obj, { query }, { db, user }) =>
-      await db.Events.getAll(user.id, query)
+    events: async (obj, { query }, { db, user }) => {
+      const { involvedContact, ...normalizedQuery } = query;
+      if (involvedContact) {
+        normalizedQuery.involvedContacts = involvedContact.id;
+      }
+      return db.Events.getAll(user.id, normalizedQuery);
+    }
   },
   Mutation: {
     addEvent: async (obj, { data }, { db, user }) => {
       const { involvedContacts = [] } = data;
+      // TODO: verify data in involvedContacts exist
       return db.Events.create(user.id, {
         ...data,
         involvedContacts
@@ -72,12 +78,9 @@ exports.resolvers = {
   },
   Event: {
     involvedContacts: async (event, args, { db, user }) => {
-      const involvedContacts = await Promise.all(
-        event.involvedContacts.map(
-          async (contactId) => await db.Contacts.get(user.id, contactId)
-        )
-      );
-      return involvedContacts.filter(({ id }) => id);
+      return db.Contacts.getAll(user.id, {
+        _id: { $in: event.involvedContacts }
+      });
     }
   }
 };
