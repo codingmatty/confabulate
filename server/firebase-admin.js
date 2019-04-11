@@ -5,7 +5,7 @@ admin.initializeApp({
   authDomain: process.env.FIREBASE_AUTHDOMAIN,
   databaseURL: process.env.FIREBASE_DATABASEURL,
   credential: admin.credential.cert(
-    require(`../${process.env.FIREBASE_CREDENTIALS_JSON}`)
+    JSON.parse(process.env.FIREBASE_CREDENTIALS_STRING)
   )
 });
 
