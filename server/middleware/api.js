@@ -5,6 +5,10 @@ const firebaseAdmin = require('../firebase-admin');
 module.exports = function registerApi() {
   const router = new Router();
 
+  router.get('/ping', (req, res) => {
+    res.status(200).send('pong');
+  });
+
   router.post('/login', (req, res, next) => {
     passport.authenticate('custom', (err, user, info) => {
       if (err) {

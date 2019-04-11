@@ -7,7 +7,7 @@ const EventModel = require('./Event');
 
 mongoose.connect(
   process.env.NODE_ENV === 'production'
-    ? `mongodb+srv://${process.env.MONGODB_USERNAME}:${
+    ? `mongodb://${process.env.MONGODB_USERNAME}:${
         process.env.MONGODB_PASSWORD
       }@${process.env.MONGODB_URI}`
     : `mongodb://${process.env.MONGODB_URI}`,
@@ -17,7 +17,7 @@ mongoose.connect(
 );
 
 mongoose.connection.on('error', (error) => {
-  logger.error('DB Connection Error', { error });
+  logger.error('DB Connection Error', { error, message: error.message });
 });
 mongoose.connection.once('open', () => {
   logger.info('DB Connected');

@@ -18,3 +18,8 @@ node_modules/
 
 # Ignore Dev Env file
 .env
+
+coverage/
+data/
+docs/
+docker-compose.yml
