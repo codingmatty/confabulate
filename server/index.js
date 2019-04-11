@@ -17,7 +17,11 @@ setupExpress().then((app) => {
 });
 
 process.on('uncaughtException', (error) => {
-  logger.error('Uncaught Exception', { error, message: error.message });
+  logger.error('Uncaught Exception', {
+    error,
+    message: error.message,
+    stack: error.stack
+  });
 });
 
 process.on('unhandledRejection', (reason, promise) => {
