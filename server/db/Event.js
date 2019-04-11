@@ -4,7 +4,6 @@ const DataModel = require('./DataModel');
 const EventSchema = new Schema(
   {
     ownerId: { type: Schema.Types.ObjectId, required: true },
-    title: String,
     date: Date,
     type: String,
     note: String,

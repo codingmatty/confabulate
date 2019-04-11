@@ -12,7 +12,6 @@ const QUERY_CONTACT_EVENTS = gql`
   query QUERY_CONTACT_EVENTS($query: EventQueryData) {
     events(query: $query) {
       id
-      title
       date
       type
       note

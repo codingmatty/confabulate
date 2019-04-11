@@ -9,7 +9,6 @@ const QUERY_EVENTS = gql`
   query QUERY_EVENTS {
     events {
       id
-      title
       date
       type
       note

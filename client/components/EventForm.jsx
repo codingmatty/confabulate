@@ -10,7 +10,6 @@ const CREATE_EVENT = gql`
   mutation CREATE_EVENT($data: EventInputData!) {
     event: addEvent(data: $data) {
       id
-      title
       date
       type
       note
@@ -21,7 +20,6 @@ const UPDATE_EVENT = gql`
   mutation UPDATE_EVENT($id: ID!, $data: EventUpdateData!) {
     event: updateEvent(id: $id, data: $data) {
       id
-      title
       date
       type
       note
@@ -30,7 +28,6 @@ const UPDATE_EVENT = gql`
 `;
 
 const DEFAULT_FORM_FIELDS = {
-  title: '',
   date: moment().toISOString(),
   type: '',
   involvedContacts: [],
@@ -75,12 +72,6 @@ export default function EventForm({
   return (
     <Form onSubmit={onFormSubmit} loading={loading} submitLabel="Submit">
       <Input
-        label="Title"
-        name="title"
-        value={formData.title}
-        onChange={onChange}
-      />
-      <Input
         label="Date"
         type="date"
         name="date"
@@ -110,7 +101,6 @@ export default function EventForm({
 EventForm.propTypes = {
   event: PropTypes.shape({
     id: PropTypes.string,
-    title: PropTypes.string,
     date: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     type: PropTypes.string,
     involvedContacts: PropTypes.array

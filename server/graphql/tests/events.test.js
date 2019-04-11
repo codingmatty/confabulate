@@ -13,7 +13,6 @@ const server = new ApolloServer({
 const AllEventFields = gql`
   fragment AllEventFields on Event {
     id
-    title
     date
     type
     note
@@ -87,7 +86,6 @@ const seedData = {
     {
       userId: '123',
       id: '1',
-      title: 'Test Event 1',
       date: '2019-01-01T00:00:00.000Z',
       type: 'meeting',
       note: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
@@ -98,7 +96,6 @@ const seedData = {
     {
       userId: '123',
       id: '2',
-      title: 'Test Event 2',
       date: '2019-02-01T00:00:00.000Z',
       type: 'lunch',
       note: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
@@ -109,7 +106,6 @@ const seedData = {
     {
       userId: '123',
       id: '3',
-      title: 'Test Event 3',
       date: '2019-03-01T00:00:00.000Z',
       type: 'meeting',
       note: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
@@ -171,7 +167,6 @@ describe('Events GraphQL', () => {
   describe('add event', () => {
     it('can add event', async () => {
       const inputData = {
-        title: 'New Test Event',
         date: new Date().toISOString(),
         type: 'party',
         note: 'Lorem Ipsum Dolor Sit Amet'
@@ -188,7 +183,6 @@ describe('Events GraphQL', () => {
 
     it('can add event with contacts', async () => {
       const inputData = {
-        title: 'New Test Event',
         date: new Date().toISOString(),
         involvedContacts: ['1']
       };

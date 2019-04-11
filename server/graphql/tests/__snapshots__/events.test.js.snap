@@ -12,7 +12,6 @@ Object {
   "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
       orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
       lectus. Donec porta pellentesque rhoncus.",
-  "title": "Test Event 3",
   "type": "meeting",
 }
 `;
@@ -33,7 +32,6 @@ Array [
     "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
       orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
       lectus. Donec porta pellentesque rhoncus.",
-    "title": "Test Event 1",
     "type": "meeting",
   },
   Object {
@@ -43,7 +41,6 @@ Array [
     "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
       orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
       lectus. Donec porta pellentesque rhoncus.",
-    "title": "Test Event 2",
     "type": "lunch",
   },
   Object {
@@ -57,7 +54,6 @@ Array [
     "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
       orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
       lectus. Donec porta pellentesque rhoncus.",
-    "title": "Test Event 3",
     "type": "meeting",
   },
 ]
