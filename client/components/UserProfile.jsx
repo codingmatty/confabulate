@@ -16,9 +16,7 @@ const QUERY_USER = gql`
       id
       email
       profile {
-        firstName
-        lastName
-        fullName
+        name
       }
     }
   }
@@ -28,8 +26,7 @@ const UPDATE_PROFILE = gql`
     event: updateProfile(data: $data) {
       id
       profile {
-        firstName
-        lastName
+        name
       }
     }
   }
@@ -43,10 +40,9 @@ export default function UserProfile() {
   } = useQuery(QUERY_USER);
   const [editingName, setEditingName] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [firstNameInput, setFirstNameInput] = useState(null);
-  const [lastNameInput, setLastNameInput] = useState(null);
+  const [nameInput, setNameInput] = useState(null);
   const updateUserName = useMutation(UPDATE_PROFILE, {
-    variables: { data: { firstName: firstNameInput, lastName: lastNameInput } },
+    variables: { data: { name: nameInput } },
     refetchQueries: [{ query: QUERY_USER }]
   });
 
@@ -56,8 +52,7 @@ export default function UserProfile() {
     return <div>Error! {error.message}</div>;
   } else if (!dataLoaded) {
     setDataLoaded(true);
-    setFirstNameInput(user.profile.firstName);
-    setLastNameInput(user.profile.lastName);
+    setNameInput(user.profile.name);
   }
 
   return (
@@ -73,20 +68,15 @@ export default function UserProfile() {
             }}
           >
             <input
-              name="firstName"
-              value={firstNameInput}
-              onChange={({ target }) => setFirstNameInput(target.value)}
-            />
-            <input
-              name="lastName"
-              value={lastNameInput}
-              onChange={({ target }) => setLastNameInput(target.value)}
+              name="name"
+              value={nameInput}
+              onChange={({ target }) => setNameInput(target.value)}
             />
             <button>Save</button>
           </form>
         ) : (
           <div>
-            {user.profile.fullName || <EmptyValue>empty</EmptyValue>}
+            {user.profile.name || <EmptyValue>empty</EmptyValue>}
             <button onClick={() => setEditingName(true)}>Edit</button>
           </div>
         )}

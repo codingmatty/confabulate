@@ -9,19 +9,13 @@ const UserSchema = new Schema(
     profile: {
       type: {
         image: String,
-        firstName: { type: String, default: '' },
-        lastName: { type: String, default: '' }
+        name: String
       },
       default: {}
     }
   },
   { timestamps: true }
 );
-UserSchema.virtual('profile.fullName').get(function() {
-  return [this.profile.firstName, this.profile.lastName]
-    .filter((s) => s)
-    .join(' ');
-});
 
 class UserModal extends DataModel {
   constructor() {

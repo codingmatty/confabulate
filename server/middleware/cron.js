@@ -57,7 +57,7 @@ async function sendDailyBirthdayEmails({ baseUrl, db }) {
         const contacts = contactsByUserId[user.id];
         return sendEmail({
           receiver: {
-            fullName: user.profile.fullName,
+            name: user.profile.name,
             email: user.email
           },
           template: 'daily-birthdays',

@@ -33,7 +33,7 @@ module.exports = async function send({ receiver, template, data }) {
   if (!errors.length) {
     const emailData = {
       to: {
-        name: receiver.fullName,
+        name: receiver.name,
         email: receiver.email
       },
       from: {

@@ -47,7 +47,8 @@ module.exports = function registerPassport(db) {
             const newUser = await db.Users.create(decodedIdToken.uid, {
               email: decodedIdToken.email,
               profile: {
-                image: decodedIdToken.picture
+                image: decodedIdToken.picture,
+                name: decodedIdToken.name
               },
               authProviders: [decodedIdToken.firebase.sign_in_provider]
             });

@@ -19,15 +19,13 @@ exports.typeDefs = gql`
   }
   type Profile {
     image: String
-    firstName: String
-    lastName: String
-    fullName: String
+    name: String
   }
   # type Settings {
   # }
   input ProfileUpdateData {
-    firstName: String
-    lastName: String
+    image: String
+    name: String
   }
   # input SettingsUpdateData {
   # }
