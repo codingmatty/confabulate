@@ -9,7 +9,7 @@
     "dev": "nodemon --watch server server",
     "lint": "eslint client server",
     "lint:fix": "eslint --fix client server",
-    "build": "next build client",
+    "build": "NODE_ENV=production next build client",
     "predeploy": "NODE_ENV=production npm run build",
     "deploy": "npm run deploy-skip-build",
     "prestart": "npm run migrate:up",
