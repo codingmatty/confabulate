@@ -16,9 +16,7 @@ const QUERY_CONTACT = gql`
   query QUERY_CONTACT($id: ID!) {
     contact(id: $id) {
       id
-      firstName
-      lastName
-      fullName
+      name
       birthday {
         day
         month
@@ -126,9 +124,7 @@ export default function Contact({ id }) {
           isFavorite={contact.favorite}
         />
         <StyledContactAvatar email={contact.email} size={contactAvatarSize} />
-        <ContactName>
-          {contact.firstName} {contact.lastName}
-        </ContactName>
+        <ContactName>{contact.name}</ContactName>
         <ContactDetails>
           {birthdayString && (
             <ContactDetail>

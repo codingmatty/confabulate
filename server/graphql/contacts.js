@@ -13,9 +13,7 @@ exports.typeDefs = gql`
   }
   type Contact {
     id: ID!
-    firstName: String
-    lastName: String
-    fullName: String
+    name: String
     birthday: DateStruct!
     email: String
     phoneNumber: String
@@ -28,8 +26,7 @@ exports.typeDefs = gql`
     year: Int
   }
   input ContactInputData {
-    firstName: String
-    lastName: String
+    name: String
     birthday: DateStructInput
     email: String
     phoneNumber: String
@@ -37,8 +34,7 @@ exports.typeDefs = gql`
   }
   input ContactQueryData {
     id: ID
-    firstName: String
-    lastName: String
+    name: String
     birthday: DateStructInput
     email: String
     phoneNumber: String

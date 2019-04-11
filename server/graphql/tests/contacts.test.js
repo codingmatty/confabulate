@@ -13,9 +13,7 @@ const server = new ApolloServer({
 const AllContactFields = gql`
   fragment AllContactFields on Contact {
     id
-    firstName
-    lastName
-    fullName
+    name
     email
     phoneNumber
     favorite
@@ -80,8 +78,7 @@ const seedData = {
     {
       userId: '123',
       id: '1',
-      firstName: 'John',
-      lastName: 'Lennon',
+      name: 'John Lennon',
       email: 'johnlennon@beatles.com',
       phoneNumber: '5551234567',
       favorite: true,
@@ -94,8 +91,7 @@ const seedData = {
     {
       userId: '123',
       id: '2',
-      firstName: 'Paul',
-      lastName: 'McCartney',
+      name: 'Paul McCartney',
       email: 'paulmccartney@beatles.com',
       phoneNumber: '5552345678',
       favorite: false,
@@ -107,8 +103,7 @@ const seedData = {
     {
       userId: '123',
       id: '3',
-      firstName: 'Ringo',
-      lastName: 'Starr',
+      name: 'Ringo Starr',
       email: 'ringostarr@beatles.com',
       phoneNumber: '5553456789',
       favorite: true
@@ -171,7 +166,7 @@ describe('Contacts GraphQL', () => {
         query: QUERY_CONTACT,
         variables: { id: '3' }
       });
-      expect(data.contact).toHaveProperty('fullName', 'Ringo Starr');
+      expect(data.contact).toHaveProperty('name', 'Ringo Starr');
     });
 
     it('contains events', async () => {
@@ -186,8 +181,7 @@ describe('Contacts GraphQL', () => {
   describe('add contact', () => {
     it('can add contact', async () => {
       const inputData = {
-        firstName: 'Test',
-        lastName: 'Test',
+        name: 'Test Test',
         email: 'test@email.com',
         phoneNumber: '5551234567'
       };
@@ -197,7 +191,7 @@ describe('Contacts GraphQL', () => {
       });
       expect(data.contact).toMatchObject({
         ...inputData,
-        fullName: 'Test Test',
+        name: 'Test Test',
         favorite: false,
         events: []
       });

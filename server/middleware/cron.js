@@ -37,7 +37,7 @@ async function sendDailyBirthdayEmails({ baseUrl, db }) {
   const contactsByUserId = groupBy(
     dbContacts.map((contact) => ({
       userId: contact.userId,
-      fullName: contact.fullName,
+      name: contact.name,
       age:
         contact.birthday.year &&
         `${today.year() - contact.birthday.year} years`,

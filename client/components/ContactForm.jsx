@@ -11,8 +11,7 @@ const CREATE_CONTACT = gql`
   mutation CREATE_CONTACT($data: ContactInputData!) {
     contact: addContact(data: $data) {
       id
-      firstName
-      lastName
+      name
       email
       phoneNumber
     }
@@ -22,8 +21,7 @@ const UPDATE_CONTACT = gql`
   mutation UPDATE_CONTACT($id: ID!, $data: ContactInputData!) {
     contact: updateContact(id: $id, data: $data) {
       id
-      firstName
-      lastName
+      name
       email
       phoneNumber
     }
@@ -31,8 +29,7 @@ const UPDATE_CONTACT = gql`
 `;
 
 const DEFAULT_FORM_FIELDS = {
-  firstName: '',
-  lastName: '',
+  name: '',
   birthday: {
     day: null,
     month: null,
@@ -55,8 +52,7 @@ export default function ContactForm({
         ...DEFAULT_FORM_FIELDS,
         ...contact
       },
-      'firstName',
-      'lastName',
+      'name',
       'birthday.day',
       'birthday.month',
       'birthday.year',
@@ -99,15 +95,9 @@ export default function ContactForm({
       onCancel={isExistingContact && onCancel}
     >
       <Input
-        label="First Name"
-        name="firstName"
-        value={formData.firstName}
-        onChange={onChange}
-      />
-      <Input
-        label="Last Name"
-        name="lastName"
-        value={formData.lastName}
+        label="Name"
+        name="name"
+        value={formData.name}
         onChange={onChange}
       />
       <BirthdayInput
@@ -135,8 +125,7 @@ export default function ContactForm({
 ContactForm.propTypes = {
   contact: PropTypes.shape({
     id: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
+    name: PropTypes.string,
     birthday: PropTypes.shape({
       day: PropTypes.number,
       month: PropTypes.number,

@@ -4,8 +4,7 @@ const DataModel = require('./DataModel');
 const ContactSchema = new Schema(
   {
     ownerId: { type: Schema.Types.ObjectId, required: true },
-    firstName: String,
-    lastName: String,
+    name: String,
     birthday: {
       type: {
         day: Number,
@@ -21,9 +20,6 @@ const ContactSchema = new Schema(
   },
   { timestamps: true }
 );
-ContactSchema.virtual('fullName').get(function() {
-  return `${this.firstName} ${this.lastName}`;
-});
 
 class ContactModel extends DataModel {
   constructor() {

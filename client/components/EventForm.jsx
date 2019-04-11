@@ -86,7 +86,7 @@ export default function EventForm({
       />
       {/* <div>
         Contacts:{' '}
-        {event.involvedContacts.map(({ fullName }) => fullName).join(', ')}
+        {event.involvedContacts.map(({ name }) => name).join(', ')}
       </div> */}
       <Input
         label="Note"

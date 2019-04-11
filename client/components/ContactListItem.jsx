@@ -46,9 +46,7 @@ export default function ContactListItem({ contact }) {
       >
         <Avatar email={contact.email || ''} />
         <ContactInfo>
-          <b>
-            {contact.firstName} {contact.lastName}
-          </b>
+          <b>{contact.name}</b>
           <ContactDetails>
             <ContactDetail>
               <ContactIcon type="mail" /> {contact.email}
@@ -70,8 +68,7 @@ export default function ContactListItem({ contact }) {
 }
 ContactListItem.propTypes = {
   contact: PropTypes.shape({
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
+    name: PropTypes.string,
     email: PropTypes.string,
     phoneNumber: PropTypes.string
   })
