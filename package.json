@@ -17,7 +17,8 @@
     "migrate:up": "npm run migrate -- up",
     "migrate:down": "npm run migrate -- down",
     "migrate:create": "migrate --migrations-dir ./db-manage/migrations -t ./db-manage/template.js create",
-    "cron": "NODE_ENV=production node scripts/execute-cron.js"
+    "cron": "NODE_ENV=production node scripts/execute-cron.js",
+    "update-env-vars": "heroku config:push -o -f .production.env"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "^0.11.1",

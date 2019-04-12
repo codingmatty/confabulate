@@ -1,5 +1,0 @@
-cron:
-  - description: 'Daily birthday emails'
-    url: /cron/daily-birthdays
-    schedule: every day 00:00
-    timezone: America/Chicago

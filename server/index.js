@@ -1,7 +1,7 @@
 require('./setup-env-vars');
 require('isomorphic-fetch');
 const http = require('http');
-const setupExpress = require('./setupExpress');
+const setupExpress = require('./setup-express');
 const logger = require('./logger');
 
 const port = process.env.PORT || 8910;
