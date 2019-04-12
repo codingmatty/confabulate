@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix client server",
     "build": "NODE_ENV=production next build client",
     "prestart": "npm run migrate:up",
+    "start:dev": "docker-compose up",
     "start": "node server",
     "migrate": "migrate --store ./db-manage/store --migrations-dir ./db-manage/migrations",
     "migrate:list": "npm run migrate -- list",

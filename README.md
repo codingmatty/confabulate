@@ -29,13 +29,13 @@ npm install
 3. Start development server
 
 ```
-npm run dev
+npm run start:dev
 ```
 
 4. Open app in browser
 
 ```
-open http://localhost:8080
+open http://localhost:8082
 ```
 
 ### Stack

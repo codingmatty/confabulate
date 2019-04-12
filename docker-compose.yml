@@ -1,9 +1,23 @@
 version: '2'
 services:
-  mongo:
-    container_name: mongo
+  dev:
+    image: node:lts-jessie
+    volumes:
+      - .:/usr/app
+    working_dir: /usr/app
+    command: npm run dev
+    environment:
+      - MONGODB_URI=mongo_dev:27017/confabulate_development
+      - NODE_ENV=development
+      - PORT=8082
+    ports:
+      - 8082:8082
+    links:
+      - mongo_dev
+  mongo_dev:
     image: mongo
+    container_name: mongo_dev
     volumes:
       - ./data:/data/db
-    ports:
-      - '27018:27017'
+    expose:
+      - 27017
