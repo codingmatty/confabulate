@@ -10,15 +10,14 @@
     "lint": "eslint client server",
     "lint:fix": "eslint --fix client server",
     "build": "NODE_ENV=production next build client",
-    "predeploy": "NODE_ENV=production npm run build",
-    "deploy": "npm run deploy-skip-build",
     "prestart": "npm run migrate:up",
     "start": "node server",
     "migrate": "migrate --store ./db-manage/store --migrations-dir ./db-manage/migrations",
     "migrate:list": "npm run migrate -- list",
     "migrate:up": "npm run migrate -- up",
     "migrate:down": "npm run migrate -- down",
-    "migrate:create": "migrate --migrations-dir ./db-manage/migrations -t ./db-manage/template.js create"
+    "migrate:create": "migrate --migrations-dir ./db-manage/migrations -t ./db-manage/template.js create",
+    "cron": "NODE_ENV=production node scripts/execute-cron.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "^0.11.1",
