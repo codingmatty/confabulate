@@ -21,7 +21,6 @@
     "update-env-vars": "heroku config:push -o -f .production.env"
   },
   "dependencies": {
-    "@google-cloud/logging-winston": "^0.11.1",
     "@sendgrid/mail": "^6.3.1",
     "apollo-boost": "^0.3.1",
     "apollo-server-express": "^2.4.8",
