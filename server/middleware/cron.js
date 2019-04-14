@@ -29,7 +29,8 @@ module.exports = function registerApi({ db, dev }) {
 
 async function sendDailyBirthdayEmails({ baseUrl, db }) {
   const today = moment();
-  const dbContacts = await db.Contacts.query({
+  // User Model directly to bypass need for a user id
+  const dbContacts = await db.Contacts.model.find({
     'birthday.month': today.month(),
     'birthday.day': today.date()
   });

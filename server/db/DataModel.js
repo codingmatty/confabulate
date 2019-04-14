@@ -6,8 +6,13 @@ module.exports = class DataModel {
   }
 
   async create(ownerId, data) {
-    const createdDocument = await this.model.create({ ...data, ownerId });
-    return createdDocument;
+    const dataToCreate = Array.isArray(data)
+      ? data.map((doc) => ({ ...doc, ownerId }))
+      : { ...data, ownerId };
+    const createdDocuments = await this.model.create(dataToCreate);
+    return Array.isArray(createdDocuments)
+      ? createdDocuments.map((doc) => doc.toObject({ getters: true }))
+      : createdDocuments.toObject({ getters: true });
   }
 
   async get(ownerId, id) {
@@ -16,12 +21,8 @@ module.exports = class DataModel {
   }
 
   async getAll(ownerId, query) {
-    return this.query({ ...query, ownerId });
-  }
-
-  async query(query = {}) {
-    const documents = await this.model.find(query);
-    return documents;
+    const documents = await this.model.find({ ...query, ownerId });
+    return documents.map((doc) => doc.toObject({ getters: true }));
   }
 
   async update(ownerId, id, data) {
@@ -30,7 +31,7 @@ module.exports = class DataModel {
       data,
       { new: true }
     );
-    return updatedDocument ? updatedDocument : {};
+    return updatedDocument ? updatedDocument.toObject({ getter: true }) : {};
   }
 
   async delete(ownerId, id) {
@@ -38,6 +39,14 @@ module.exports = class DataModel {
       _id: id,
       ownerId
     });
-    return removedDocument ? removedDocument : null;
+    return removedDocument ? removedDocument.toObject({ getter: true }) : null;
+  }
+
+  async deleteMany(ownerId, query = {}) {
+    const { ok, deletedCount } = await this.model.deleteMany({
+      ...query,
+      ownerId
+    });
+    return { ok, deletedCount };
   }
 };
