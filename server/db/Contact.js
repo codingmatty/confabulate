@@ -5,6 +5,7 @@ const ContactSchema = new Schema(
   {
     ownerId: { type: Schema.Types.ObjectId, required: true },
     name: String,
+    image: String,
     birthday: {
       type: {
         day: Number,
@@ -16,7 +17,11 @@ const ContactSchema = new Schema(
     email: String,
     phoneNumber: String,
     favorite: Boolean,
-    events: [Schema.Types.ObjectId]
+    events: [Schema.Types.ObjectId],
+    source: {
+      type: { type: String, enum: ['google'] },
+      id: String
+    }
   },
   { timestamps: true }
 );

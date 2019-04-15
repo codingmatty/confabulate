@@ -3,6 +3,7 @@ const logger = require('../logger');
 
 const UserModel = require('./User');
 const ContactModel = require('./Contact');
+const GoogleContactModel = require('./GoogleContact');
 const EventModel = require('./Event');
 
 mongoose.connect(
@@ -27,5 +28,6 @@ module.exports = {
   connection: mongoose.connection,
   Users: new UserModel(),
   Contacts: new ContactModel(),
+  GoogleContacts: new GoogleContactModel(),
   Events: new EventModel()
 };
