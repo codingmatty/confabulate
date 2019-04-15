@@ -14,19 +14,16 @@ exports.typeDefs = gql`
   type Contact {
     id: ID!
     name: String
+    image: String
     birthday: DateStruct!
     email: String
     phoneNumber: String
     favorite: Boolean
     events: [Event]!
   }
-  type DateStruct {
-    day: Int
-    month: Int
-    year: Int
-  }
   input ContactInputData {
     name: String
+    image: String
     birthday: DateStructInput
     email: String
     phoneNumber: String
@@ -39,11 +36,6 @@ exports.typeDefs = gql`
     email: String
     phoneNumber: String
     favorite: Boolean
-  }
-  input DateStructInput {
-    day: Int
-    month: Int
-    year: Int
   }
 `;
 
