@@ -2,12 +2,23 @@ import { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import styled from 'styled-components';
+import UtilityText from './styled/UtilityText';
 import Avatar from './Avatar';
 import Loader from './Loader';
+import GoogleContactsButton from './GoogleContactsButton';
 
 const EmptyValue = styled.span`
   font-style: italic;
   color: ${({ theme }) => theme.color.neutrals[5]};
+`;
+const InfoSection = styled.div`
+  margin: 1rem 0;
+`;
+const InfoLabel = styled.label`
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
 `;
 
 const QUERY_USER = gql`
@@ -59,8 +70,11 @@ export default function UserProfile() {
   return (
     <div>
       <Avatar image={user.profile.image} email={user.email} size={8} />
-      <div>
-        <label>Full Name:</label>
+      <InfoSection>
+        <UtilityText small>Details</UtilityText>
+        <InfoLabel>Email:</InfoLabel>
+        <div>{user.email}</div>
+        <InfoLabel>Full Name:</InfoLabel>
         {editingName ? (
           <form
             onSubmit={(e) => {
@@ -81,7 +95,11 @@ export default function UserProfile() {
             <button onClick={() => setEditingName(true)}>Edit</button>
           </div>
         )}
-      </div>
+      </InfoSection>
+      <InfoSection>
+        <UtilityText small>Connection</UtilityText>
+        <GoogleContactsButton />
+      </InfoSection>
     </div>
   );
 }
