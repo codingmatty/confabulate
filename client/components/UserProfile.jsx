@@ -17,6 +17,7 @@ const QUERY_USER = gql`
       email
       profile {
         name
+        image
       }
     }
   }
@@ -57,7 +58,7 @@ export default function UserProfile() {
 
   return (
     <div>
-      <Avatar email={user.email} size={8} />
+      <Avatar image={user.profile.image} email={user.email} size={8} />
       <div>
         <label>Full Name:</label>
         {editingName ? (
