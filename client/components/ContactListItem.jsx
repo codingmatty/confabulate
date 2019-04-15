@@ -48,12 +48,16 @@ export default function ContactListItem({ contact }) {
         <ContactInfo>
           <b>{contact.name}</b>
           <ContactDetails>
-            <ContactDetail>
-              <ContactIcon type="mail" /> {contact.email}
-            </ContactDetail>
-            <ContactDetail>
-              <ContactIcon type="phone" /> {contact.phoneNumber}
-            </ContactDetail>
+            {contact.email && (
+              <ContactDetail>
+                <ContactIcon type="mail" /> {contact.email}
+              </ContactDetail>
+            )}
+            {contact.phoneNumber && (
+              <ContactDetail>
+                <ContactIcon type="phone" /> {contact.phoneNumber}
+              </ContactDetail>
+            )}
           </ContactDetails>
         </ContactInfo>
         <Actions>

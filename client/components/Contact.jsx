@@ -136,13 +136,20 @@ export default function Contact({ id }) {
               <ContactIcon type="cake" /> {birthdayString}
             </ContactDetail>
           )}
-          <ContactDetail>
-            <ContactIcon type="mail" /> {contact.email}
-          </ContactDetail>
-          <ContactDetail>
-            <ContactIcon type="phone" />{' '}
-            {contact.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
-          </ContactDetail>
+          {contact.email && (
+            <ContactDetail>
+              <ContactIcon type="mail" /> {contact.email}
+            </ContactDetail>
+          )}
+          {contact.phoneNumber && (
+            <ContactDetail>
+              <ContactIcon type="phone" />{' '}
+              {contact.phoneNumber.replace(
+                /(\d{3})(\d{3})(\d{4})/,
+                '($1) $2-$3'
+              )}
+            </ContactDetail>
+          )}
         </ContactDetails>
       </ContactCard>
       <ContactEventList contact={contact} />
