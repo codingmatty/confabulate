@@ -44,7 +44,7 @@ export default function ContactListItem({ contact }) {
         asUrl={`/contacts/${contact.id}`}
         href={{ pathname: '/contacts/info', query: { id: contact.id } }}
       >
-        <Avatar email={contact.email || ''} />
+        <Avatar image={contact.image} email={contact.email} />
         <ContactInfo>
           <b>{contact.name}</b>
           <ContactDetails>

@@ -9,17 +9,23 @@ const StyledAvatar = styled.img`
   border: 1px solid ${({ theme }) => theme.color.neutrals[8]};
 `;
 
-export default function Avatar({ className, email = '', image, size = 3 }) {
+function getSource({ email, image, size }) {
   if (image) {
-    return <StyledAvatar src={image} size={size} className={className} />;
+    return image;
   }
 
-  const hash = md5(email);
-  const gravatarUrl = `https://s.gravatar.com/avatar/${hash}?s=${size *
-    16 *
-    2}&d=mp`;
+  const hash = md5(email || '');
+  return `https://s.gravatar.com/avatar/${hash}?s=${size * 16 * 2}&d=mp`;
+}
 
-  return <StyledAvatar src={gravatarUrl} size={size} className={className} />;
+export default function Avatar({ className, email, image, size = 3 }) {
+  return (
+    <StyledAvatar
+      src={getSource({ email, image, size })}
+      size={size}
+      className={className}
+    />
+  );
 }
 Avatar.propTypes = {
   className: PropTypes.string,
