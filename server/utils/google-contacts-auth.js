@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const { createAuthConnection } = require('./google-auth');
 
+const REDIRECT_URL = `${process.env.BASE_URL}/api/callback/google-contacts`;
 const CONTACTS_SCOPE = ['https://www.googleapis.com/auth/contacts.readonly'];
 const CONTACTS_FIELDS = [
   'emailAddresses',
@@ -13,7 +14,7 @@ const CONTACTS_FIELDS = [
 function generateAuthUrl({ email }) {
   const auth = createAuthConnection();
   return auth.generateAuthUrl({
-    redirect_uri: process.env.GOOGLE_AUTH_REDIRECT_CONTACTS,
+    redirect_uri: REDIRECT_URL,
     scope: CONTACTS_SCOPE,
     access_type: 'offline',
     prompt: 'consent', // access type and approval prompt will force a new refresh token to be made each time signs in
@@ -69,7 +70,7 @@ async function getTokensFromCode(code) {
   const auth = createAuthConnection();
   const { tokens } = await auth.getToken({
     code,
-    redirect_uri: process.env.GOOGLE_AUTH_REDIRECT_CONTACTS
+    redirect_uri: REDIRECT_URL
   });
 
   return tokens;
@@ -79,7 +80,7 @@ async function getContactsFromCode(code) {
   const auth = createAuthConnection();
   const { tokens } = await auth.getToken({
     code,
-    redirect_uri: process.env.GOOGLE_AUTH_REDIRECT_CONTACTS
+    redirect_uri: REDIRECT_URL
   });
 
   auth.setCredentials(tokens);
