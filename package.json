@@ -33,6 +33,7 @@
     "firebase": "^5.9.3",
     "firebase-admin": "^7.2.0",
     "flat": "^4.1.0",
+    "googleapis": "^39.2.0",
     "graphql": "^14.2.1",
     "handlebars": "^4.1.1",
     "isomorphic-fetch": "^2.2.1",

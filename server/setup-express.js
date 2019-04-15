@@ -16,7 +16,9 @@ const dev = process.env.NODE_ENV !== 'production';
 module.exports = async function setupExpress() {
   const app = express();
 
-  const cookie = { sameSite: true };
+  const cookie = {
+    sameSite: 'lax' // This is required to get the cookie in the oauth2 callback
+  };
   if (!dev) {
     app.set('trust proxy', 1);
     cookie.secure = true;
@@ -53,7 +55,7 @@ module.exports = async function setupExpress() {
 
   // Setup API routes
   app.use('/cron', registerCron({ db, dev }));
-  app.use('/api', registerApi());
+  app.use('/api', registerApi(db));
 
   app.use(registerGraphQL(db));
 
