@@ -34,7 +34,7 @@ module.exports = class DataModel {
       data,
       { new: true }
     );
-    return updatedDocument ? updatedDocument.toObject({ getter: true }) : {};
+    return updatedDocument ? updatedDocument.toObject({ getters: true }) : {};
   }
 
   async delete(ownerId, id) {
@@ -42,7 +42,7 @@ module.exports = class DataModel {
       _id: id,
       ownerId
     });
-    return removedDocument ? removedDocument.toObject({ getter: true }) : null;
+    return removedDocument ? removedDocument.toObject({ getters: true }) : null;
   }
 
   async deleteMany(ownerId, query = {}) {
