@@ -10,6 +10,9 @@ module.exports = class DataModel {
       ? data.map((doc) => ({ ...doc, ownerId }))
       : { ...data, ownerId };
     const createdDocuments = await this.model.create(dataToCreate);
+    if (!createdDocuments) {
+      return null;
+    }
     return Array.isArray(createdDocuments)
       ? createdDocuments.map((doc) => doc.toObject({ getters: true }))
       : createdDocuments.toObject({ getters: true });
