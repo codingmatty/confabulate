@@ -2,8 +2,9 @@ const { Router } = require('express');
 const next = require('next');
 const path = require('path');
 const { parse } = require('url');
+const gqlSchema = require('../graphql');
 
-module.exports = async function registerNextApp({ dev }) {
+module.exports = async function registerNextApp({ db, dev }) {
   const router = new Router();
   const nextApp = next({
     dev,
@@ -60,6 +61,16 @@ module.exports = async function registerNextApp({ dev }) {
       return;
     }
     res.status(401).redirect('/login');
+  });
+
+  router.use((req, res, next) => {
+    // Add this info to use for SSR for Apollo Client
+    req.apolloClientContext = {
+      db,
+      schema: gqlSchema,
+      user: req.user
+    };
+    next();
   });
 
   // Example of how to redirect /a to pages/a-template.js

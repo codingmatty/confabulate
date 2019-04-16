@@ -2,7 +2,10 @@ import App from 'next/app';
 import Modal from 'react-modal';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import Page from '../components/Page';
+import withApolloClient from '../utils/with-apollo-client';
 
 NProgress.configure({ showSpinner: false });
 Router.events.on('routeChangeStart', () => {
@@ -16,12 +19,14 @@ Modal.setAppElement('#__next');
 class ConfabulateApp extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
+    let gqlContext = {};
 
-    ctx.isServer = Boolean(ctx.req);
+    ctx.isServer = !process.browser;
     if (ctx.isServer) {
       // on server
       ctx.urlPrefix = `${ctx.req.protocol}://${ctx.req.get('Host')}`;
       ctx.url = ctx.urlPrefix + ctx.asPath;
+      gqlContext = ctx.req.apolloClientContext;
     } else {
       // on client
       ctx.urlPrefix = '';
@@ -32,18 +37,22 @@ class ConfabulateApp extends App {
       pageProps = await Component.getInitialProps(ctx);
     }
 
-    return { pageProps };
+    return { pageProps, gqlContext };
   }
 
   render() {
-    const { Component, pageProps, router } = this.props;
+    const { Component, pageProps, router, apolloClient } = this.props;
 
     return (
-      <Page router={router}>
-        <Component {...pageProps} />
-      </Page>
+      <ApolloProvider client={apolloClient}>
+        <ApolloHooksProvider client={apolloClient}>
+          <Page router={router}>
+            <Component {...pageProps} />
+          </Page>
+        </ApolloHooksProvider>
+      </ApolloProvider>
     );
   }
 }
 
-export default ConfabulateApp;
+export default withApolloClient(ConfabulateApp);

@@ -24,6 +24,7 @@
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
     "apollo-boost": "^0.3.1",
+    "apollo-link-schema": "^1.2.2",
     "apollo-server-express": "^2.4.8",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",

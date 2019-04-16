@@ -60,7 +60,7 @@ module.exports = async function setupExpress() {
   app.use(registerGraphQL(db));
 
   // Setup Next to handle client-side pages
-  app.use(await registerNext({ dev }));
+  app.use(await registerNext({ db, dev }));
 
   return app;
 };

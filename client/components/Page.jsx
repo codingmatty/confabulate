@@ -1,13 +1,8 @@
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import theme from '../utils/theme';
 import Meta from './Meta';
 import Navigation from './Navigation';
-
-const apolloClient = new ApolloClient({ uri: '/graphql' });
 
 const StyledPage = styled.div`
   background: ${({ theme }) => theme.color.background};
@@ -45,18 +40,14 @@ const GlobalStyle = createGlobalStyle`
 export default function Page({ children, router }) {
   const shouldRenderNav = !['/login', '/signup'].includes(router.pathname);
   return (
-    <ApolloProvider client={apolloClient}>
-      <ApolloHooksProvider client={apolloClient}>
-        <ThemeProvider theme={theme}>
-          <StyledPage>
-            <Meta />
-            <GlobalStyle />
-            {shouldRenderNav && <Navigation />}
-            <Inner withNav={shouldRenderNav}>{children}</Inner>
-          </StyledPage>
-        </ThemeProvider>
-      </ApolloHooksProvider>
-    </ApolloProvider>
+    <ThemeProvider theme={theme}>
+      <StyledPage>
+        <Meta />
+        <GlobalStyle />
+        {shouldRenderNav && <Navigation />}
+        <Inner withNav={shouldRenderNav}>{children}</Inner>
+      </StyledPage>
+    </ThemeProvider>
   );
 }
 Page.propTypes = {
