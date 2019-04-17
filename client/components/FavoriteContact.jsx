@@ -5,9 +5,9 @@ import { gql } from 'apollo-boost';
 import { useMutation } from 'react-apollo-hooks';
 import Icon from './Icon';
 
-const FAVORITE_CONTACT = gql`
-  mutation FAVORITE_CONTACT($id: ID!, $data: ContactInputData!) {
-    contact: updateContact(id: $id, data: $data) {
+const TOGGLE_FAVORITE = gql`
+  mutation TOGGLE_FAVORITE($id: ID!) {
+    contact: toggleFavoriteState(id: $id) {
       favorite
     }
   }
@@ -23,12 +23,9 @@ const FavoriteButton = styled.button`
 
 export default function FavoriteContact({ contactId, isFavorite, className }) {
   const [favorite, setFavorite] = useState(isFavorite);
-  const toggleFavorite = useMutation(FAVORITE_CONTACT, {
+  const toggleFavorite = useMutation(TOGGLE_FAVORITE, {
     variables: {
-      id: contactId,
-      data: {
-        favorite: !favorite
-      }
+      id: contactId
     }
   });
 
