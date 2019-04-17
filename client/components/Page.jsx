@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
+import { ToastContainer } from 'react-toastify';
 import theme from '../utils/theme';
-import Meta from './Meta';
+import Head from './Head';
 import Navigation from './Navigation';
 
 const StyledPage = styled.div`
@@ -42,10 +43,11 @@ export default function Page({ children, router }) {
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
-        <Meta />
+        <Head />
         <GlobalStyle />
         {shouldRenderNav && <Navigation />}
         <Inner withNav={shouldRenderNav}>{children}</Inner>
+        <ToastContainer />
       </StyledPage>
     </ThemeProvider>
   );

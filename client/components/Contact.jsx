@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
+import { toast } from 'react-toastify';
 import { convertBirthdayToString } from '../utils/dates';
 import ContactForm from './ContactForm';
 import Avatar from './Avatar';
@@ -11,6 +13,7 @@ import Icon from './Icon';
 import PageTitle from './PageTitle';
 import ContactEventList from './ContactEventList';
 import Loader from './Loader';
+import DeleteContact from './DeleteContact';
 
 const QUERY_CONTACT = gql`
   query QUERY_CONTACT($id: ID!) {
@@ -77,10 +80,12 @@ const StyledFavoriteContact = styled(FavoriteContact)`
 const EditButton = styled.button`
   background: none;
   border: none;
+  font-size: 1.5rem;
+`;
+const Actions = styled.div`
   position: absolute;
   top: 0.5rem;
-  left: 0.5rem;
-  font-size: 1.5rem;
+  left: ${({ location }) => location === 'left' && '0.5rem'};
 `;
 
 export default function Contact({ id }) {
@@ -117,9 +122,18 @@ export default function Contact({ id }) {
   return (
     <>
       <ContactCard>
-        <EditButton onClick={() => setEditing(true)}>
-          <Icon type="edit" />
-        </EditButton>
+        <Actions location="left">
+          <EditButton onClick={() => setEditing(true)}>
+            <Icon type="edit" />
+          </EditButton>
+          <DeleteContact
+            contactId={contact.id}
+            onDelete={({ message }) => {
+              toast.warn(message);
+              Router.replace('/contacts');
+            }}
+          />
+        </Actions>
         <StyledFavoriteContact
           contactId={contact.id}
           isFavorite={contact.favorite}
