@@ -7,11 +7,7 @@ module.exports = function registerApi({ db, dev }) {
   const router = new Router();
 
   router.use((req, res, next) => {
-    if (
-      dev ||
-      req.get('X-Appengine-Cron') ||
-      req.query.secret === process.env.CRON_SECRET
-    ) {
+    if (dev || req.query.secret === process.env.CRON_SECRET) {
       next();
       return;
     }
@@ -21,6 +17,8 @@ module.exports = function registerApi({ db, dev }) {
   router.get('/daily-birthdays', async (req, res) => {
     const baseUrl = `${req.protocol}://${req.get('Host')}`;
     await sendDailyBirthdayEmails({ baseUrl, db });
+    // Check in with Honeybedger
+    await fetch(process.env.HONEYBADGER_CHECKIN_URL_DAILY_BIRTHDAYS);
     res.status(200).end();
   });
 
@@ -35,27 +33,27 @@ async function sendDailyBirthdayEmails({ baseUrl, db }) {
     'birthday.day': today.date()
   });
 
-  const contactsByUserId = groupBy(
+  const contactsByOwnerId = groupBy(
     dbContacts.map((contact) => ({
-      userId: contact.userId,
+      ownerId: contact.ownerId,
       name: contact.name,
       age:
         contact.birthday.year &&
         `${today.year() - contact.birthday.year} years`,
       url: `${baseUrl}/contacts/${contact.id}`
     })),
-    'userId'
+    'ownerId'
   );
 
   const users = await Promise.all(
-    Object.keys(contactsByUserId).map((userId) => db.Users.get(userId))
+    Object.keys(contactsByOwnerId).map((ownerId) => db.Users.get(ownerId))
   );
 
   return Promise.all(
     users
       .filter((user) => user) // protect against invalid users
       .map((user) => {
-        const contacts = contactsByUserId[user.id];
+        const contacts = contactsByOwnerId[user.id];
         return sendEmail({
           receiver: {
             name: user.profile.name,

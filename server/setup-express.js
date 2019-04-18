@@ -1,8 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const honeybadger = require('honeybadger');
 const registerApi = require('./middleware/api');
 const registerCron = require('./middleware/cron');
 const registerNext = require('./middleware/next');
@@ -12,6 +14,9 @@ const db = require('./db');
 const logger = require('./logger');
 
 const dev = process.env.NODE_ENV !== 'production';
+const Honeybadger = honeybadger.configure({
+  apiKey: process.env.HONEYBADGER_API_KEY
+});
 
 module.exports = async function setupExpress() {
   const app = express();
@@ -23,6 +28,9 @@ module.exports = async function setupExpress() {
     app.set('trust proxy', 1);
     cookie.secure = true;
     cookie.maxAge = 1000 * 60 * 60 * 24 * 7; // 1 week
+
+    app.use(Honeybadger.requestHandler);
+    app.use(cors());
   }
 
   app.use(
@@ -61,6 +69,10 @@ module.exports = async function setupExpress() {
 
   // Setup Next to handle client-side pages
   app.use(await registerNext({ db, dev }));
+
+  if (!dev) {
+    app.use(Honeybadger.errorHandler);
+  }
 
   return app;
 };

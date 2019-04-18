@@ -19,9 +19,7 @@ function runCron(type) {
   Promise.all(
     jobsToRun.map(async (job) => {
       const response = await fetch(
-        `https://app.confabulate.co/cron/${job}?secret=${
-          process.env.CRON_SECRET
-        }`
+        `${process.env.BASE_URL}/cron/${job}?secret=${process.env.CRON_SECRET}`
       );
       if (response.ok && response.status === 200) {
         logger.info(`Cron job complete: ${job}`);
