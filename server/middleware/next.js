@@ -21,7 +21,7 @@ module.exports = async function registerNextApp({ db, dev }) {
 
   const requestHandler = nextApp.getRequestHandler();
 
-  router.get('/login', (req, res) => {
+  router.get(['/login', '/signup'], (req, res) => {
     if (req.isAuthenticated && req.isAuthenticated()) {
       res.redirect('/');
       return;
@@ -30,26 +30,7 @@ module.exports = async function registerNextApp({ db, dev }) {
     requestHandler(req, res, parsedUrl);
   });
 
-  router.get('/signup', (req, res) => {
-    if (req.isAuthenticated && req.isAuthenticated()) {
-      res.redirect('/');
-      return;
-    }
-    const parsedUrl = parse(req.url, true);
-    requestHandler(req, res, parsedUrl);
-  });
-
-  router.get('/_next/*', (req, res) => {
-    const parsedUrl = parse(req.url, true);
-    requestHandler(req, res, parsedUrl);
-  });
-
-  router.get('/static/*', (req, res) => {
-    const parsedUrl = parse(req.url, true);
-    requestHandler(req, res, parsedUrl);
-  });
-
-  router.get('/favicon.ico', (req, res) => {
+  router.get(['/_next/*', '/static/*'], (req, res) => {
     const parsedUrl = parse(req.url, true);
     requestHandler(req, res, parsedUrl);
   });
