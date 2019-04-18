@@ -51,6 +51,7 @@
     "passport-custom": "^1.0.5",
     "polished": "^3.2.0",
     "prop-types": "^15.7.2",
+    "pwa-install-prompt": "^1.1.0",
     "react": "^16.8.6",
     "react-apollo": "^2.5.4",
     "react-apollo-hooks": "^0.4.5",
