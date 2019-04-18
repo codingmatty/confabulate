@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import theme from '../utils/theme';
 import Head from './Head';
 import Navigation from './Navigation';
+import InstallPrompt from './InstallPrompt';
 
 const StyledPage = styled.div`
   background: ${({ theme }) => theme.color.background};
@@ -12,8 +13,8 @@ const StyledPage = styled.div`
 `;
 
 const Inner = styled.div`
+  margin: 4rem auto 0;
   max-width: ${({ theme }) => theme.layout.maxWidth};
-  margin: ${({ withNav }) => (withNav ? '4rem auto 0' : '0 auto')};
   padding: 1rem 1.5rem 2rem;
 `;
 
@@ -39,14 +40,15 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function Page({ children, router }) {
-  const shouldRenderNav = !['/login', '/signup'].includes(router.pathname);
+  const isLoggedIn = !['/login', '/signup'].includes(router.pathname);
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
         <Head />
         <GlobalStyle />
-        {shouldRenderNav && <Navigation />}
-        <Inner withNav={shouldRenderNav}>{children}</Inner>
+        <InstallPrompt />
+        <Navigation isLoggedIn={isLoggedIn} />
+        <Inner>{children}</Inner>
         <ToastContainer />
       </StyledPage>
     </ThemeProvider>
