@@ -22,6 +22,7 @@
     "update-env-vars": "heroku config:push -o -f .production.env"
   },
   "dependencies": {
+    "@honeybadger-io/react": "0.0.3",
     "@sendgrid/mail": "^6.3.1",
     "apollo-boost": "^0.3.1",
     "apollo-link-schema": "^1.2.2",
@@ -38,6 +39,7 @@
     "graphql": "^14.2.1",
     "handlebars": "^4.1.2",
     "honeybadger": "^1.3.0",
+    "honeybadger-js": "^1.0.2",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.11",
     "md5-o-matic": "^0.1.1",

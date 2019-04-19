@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import theme from '../utils/theme';
-import Head from './Head';
 import Navigation from './Navigation';
 import InstallPrompt from './InstallPrompt';
 
@@ -39,22 +38,20 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export default function Page({ children, router }) {
-  const isLoggedIn = !['/login', '/signup'].includes(router.pathname);
+export default function Page({ children, isLoggedIn }) {
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
-        <Head />
         <GlobalStyle />
-        <InstallPrompt />
-        <Navigation isLoggedIn={isLoggedIn} />
+        <Navigation key={isLoggedIn} isLoggedIn={isLoggedIn} />
         <Inner>{children}</Inner>
         <ToastContainer />
+        <InstallPrompt />
       </StyledPage>
     </ThemeProvider>
   );
 }
 Page.propTypes = {
   children: PropTypes.node,
-  router: PropTypes.object
+  isLoggedIn: PropTypes.bool
 };

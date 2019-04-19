@@ -4,6 +4,10 @@ import NProgress from 'nprogress';
 import Router from 'next/router';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import HoneybadgerWrapper, {
+  SetHoneybadgerContext
+} from '../components/HoneybadgerWrapper';
+import Head from '../components/Head';
 import Page from '../components/Page';
 import withApolloClient from '../utils/with-apollo-client';
 
@@ -43,14 +47,22 @@ class ConfabulateApp extends App {
   render() {
     const { Component, pageProps, router, apolloClient } = this.props;
 
+    const isLoggedIn = !['/login', '/signup'].includes(router.pathname);
+
     return (
-      <ApolloProvider client={apolloClient}>
-        <ApolloHooksProvider client={apolloClient}>
-          <Page router={router}>
-            <Component {...pageProps} />
-          </Page>
-        </ApolloHooksProvider>
-      </ApolloProvider>
+      <>
+        <Head />
+        <HoneybadgerWrapper>
+          <ApolloProvider client={apolloClient}>
+            <ApolloHooksProvider client={apolloClient}>
+              <Page isLoggedIn={isLoggedIn}>
+                <Component {...pageProps} />
+              </Page>
+              <SetHoneybadgerContext key={isLoggedIn} />
+            </ApolloHooksProvider>
+          </ApolloProvider>
+        </HoneybadgerWrapper>
+      </>
     );
   }
 }
