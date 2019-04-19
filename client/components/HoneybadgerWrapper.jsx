@@ -10,7 +10,7 @@ export default function HoneybadgerWrapper({ children }) {
       environment: process.env.NODE_ENV
     });
     window.Honeybadger.setContext({
-      tags: ['client']
+      tags: 'client'
     });
     return <ErrorBoundary honeybadger={honeybadger}>{children}</ErrorBoundary>;
   }

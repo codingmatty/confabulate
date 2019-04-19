@@ -17,6 +17,9 @@ const dev = process.env.NODE_ENV !== 'production';
 const Honeybadger = honeybadger.configure({
   apiKey: process.env.HONEYBADGER_API_KEY
 });
+Honeybadger.setContext({
+  tags: 'server'
+});
 
 module.exports = async function setupExpress() {
   const app = express();
