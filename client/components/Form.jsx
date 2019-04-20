@@ -1,16 +1,23 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const StyledForm = styled.form`
-  width: 100%;
+const ControlsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 const Fieldset = styled.fieldset`
   border: none;
   padding: 0;
+  height: 100%;
 
   &[disabled] {
     opacity: 0.5;
   }
+`;
+const StyledForm = styled.form`
+  width: 100%;
+  height: 100%;
 `;
 const commonButtonStyles = `
 border: none;
@@ -47,15 +54,17 @@ export default function Form({
   return (
     <StyledForm onSubmit={onFormSubmit} autoComplete="off">
       <Fieldset disabled={disabled}>
-        {children}
-        {submitLabel && (
-          <SubmitButton type="submit">{submitLabel}</SubmitButton>
-        )}
-        {onCancel && (
-          <CancelButton type="button" onClick={onCancel}>
-            Cancel
-          </CancelButton>
-        )}
+        <ControlsWrapper>
+          {children}
+          {submitLabel && (
+            <SubmitButton type="submit">{submitLabel}</SubmitButton>
+          )}
+          {onCancel && (
+            <CancelButton type="button" onClick={onCancel}>
+              Cancel
+            </CancelButton>
+          )}
+        </ControlsWrapper>
       </Fieldset>
     </StyledForm>
   );

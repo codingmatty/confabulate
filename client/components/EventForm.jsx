@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import { useState } from 'react';
 import { gql } from 'apollo-boost';
 import PropTypes from 'prop-types';
@@ -5,6 +6,7 @@ import { useMutation } from 'react-apollo-hooks';
 import moment from 'moment';
 import Form from './Form';
 import Input from './Input';
+import ContactSelectInput from './ContactSelectInput';
 
 const CREATE_EVENT = gql`
   mutation CREATE_EVENT($data: EventInputData!) {
@@ -33,6 +35,10 @@ const DEFAULT_FORM_FIELDS = {
   involvedContacts: [],
   note: ''
 };
+
+const NotesInput = styled(Input)`
+  flex-grow: 1;
+`;
 
 export default function EventForm({
   event: { id, __typename, ...event },
@@ -71,6 +77,14 @@ export default function EventForm({
 
   return (
     <Form onSubmit={onFormSubmit} loading={loading} submitLabel="Submit">
+      <ContactSelectInput
+        label="Contacts"
+        name="involvedContacts"
+        value={formData.involvedContacts}
+        onChange={onChange}
+        placeholder="Who was involved"
+        required
+      />
       <Input
         label="Date"
         type="date"
@@ -83,17 +97,15 @@ export default function EventForm({
         name="type"
         value={formData.type}
         onChange={onChange}
+        placeholder="What type of event was this?"
       />
-      {/* <div>
-        Contacts:{' '}
-        {event.involvedContacts.map(({ name }) => name).join(', ')}
-      </div> */}
-      <Input
-        label="Note"
+      <NotesInput
+        label="Notes"
         name="note"
         type="textarea"
         value={formData.note}
         onChange={onChange}
+        placeholder="What all did you talk about at this event?"
       />
     </Form>
   );

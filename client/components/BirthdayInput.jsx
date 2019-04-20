@@ -19,6 +19,8 @@ const months = [
 const monthDayCount = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 const BirthdayInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   :not(:first-child) {
     margin-top: 1rem;
   }
@@ -37,7 +39,7 @@ const sharedInputStyles = css`
   border: 1px solid gray;
   border-radius: 2px;
   box-sizing: border-box;
-  font-size: 1.25rem;
+  font-size: 1rem;
   padding: 0.5rem;
 `;
 const SelectControl = styled.select`

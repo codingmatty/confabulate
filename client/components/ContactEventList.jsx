@@ -156,7 +156,7 @@ export default function ContactEventList({ contact }) {
           ))}
       </EventList>
       <Modal
-        isOpen={editingEvent}
+        isOpen={Boolean(editingEvent)}
         onRequestClose={() => setEditingEvent(false)}
         contentLabel="Adding Event"
         style={{ overlay: { zIndex: 1000 } }}

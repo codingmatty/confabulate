@@ -99,6 +99,8 @@ export default function ContactForm({
         name="name"
         value={formData.name}
         onChange={onChange}
+        placeholder="Contact Name"
+        required
       />
       <BirthdayInput
         label="Birthday"
@@ -112,12 +114,14 @@ export default function ContactForm({
         name="email"
         value={formData.email}
         onChange={onChange}
+        placeholder="Contact Email"
       />
       <Input
         label="Phone Number"
         name="phoneNumber"
         value={formData.phoneNumber}
         onChange={onChange}
+        placeholder="Contact Phone Number"
       />
     </Form>
   );

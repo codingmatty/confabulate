@@ -30,6 +30,7 @@
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
     "dotenv": "^6.2.0",
+    "downshift": "^3.2.8",
     "express": "^4.16.4",
     "express-session": "^1.16.0",
     "firebase": "^5.9.3",
