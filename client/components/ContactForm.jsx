@@ -7,25 +7,37 @@ import Form from './Form';
 import Input from './Input';
 import BirthdayInput from './BirthdayInput';
 
+const ContactFields = gql`
+  fragment ContactFields on Contact {
+    id
+    name
+    email
+    phoneNumber
+  }
+`;
+const QUERY_CONTACTS = gql`
+  query QUERY_CONTACTS($query: ContactQueryData) {
+    contacts(query: $query) {
+      ...ContactFields
+    }
+  }
+  ${ContactFields}
+`;
 const CREATE_CONTACT = gql`
   mutation CREATE_CONTACT($data: ContactInputData!) {
     contact: addContact(data: $data) {
-      id
-      name
-      email
-      phoneNumber
+      ...ContactFields
     }
   }
+  ${ContactFields}
 `;
 const UPDATE_CONTACT = gql`
   mutation UPDATE_CONTACT($id: ID!, $data: ContactInputData!) {
     contact: updateContact(id: $id, data: $data) {
-      id
-      name
-      email
-      phoneNumber
+      ...ContactFields
     }
   }
+  ${ContactFields}
 `;
 
 const DEFAULT_FORM_FIELDS = {
@@ -63,8 +75,8 @@ export default function ContactForm({
   const mutateContact = useMutation(
     isExistingContact ? UPDATE_CONTACT : CREATE_CONTACT,
     {
-      variables: { id, data: formData },
-      refetchQueries: [refetchQuery].filter((x) => x)
+      refetchQueries: [refetchQuery].filter((x) => x),
+      variables: { data: formData, id }
     }
   );
 
@@ -129,14 +141,14 @@ export default function ContactForm({
 }
 ContactForm.propTypes = {
   contact: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
     birthday: PropTypes.shape({
       day: PropTypes.number,
       month: PropTypes.number,
       year: PropTypes.number
     }),
     email: PropTypes.string,
+    id: PropTypes.string,
+    name: PropTypes.string,
     phoneNumber: PropTypes.string
   }),
   onSubmit: PropTypes.func,
@@ -147,5 +159,6 @@ ContactForm.propTypes = {
 };
 ContactForm.defaultProps = {
   contact: {},
-  onSubmit: () => {}
+  onSubmit: () => {},
+  refetchQuery: { query: QUERY_CONTACTS }
 };
