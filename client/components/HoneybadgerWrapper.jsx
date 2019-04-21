@@ -27,18 +27,19 @@ const QUERY_USER = gql`
 `;
 
 export function SetHoneybadgerContext() {
+  const Honeybadger = process.browser ? window.Honeybadger : null;
   const {
     data: { user }
   } = useQuery(QUERY_USER);
 
   useEffect(() => {
-    if (user && window.Honeybadger) {
-      window.Honeybadger.setContext({
+    if (user && Honeybadger) {
+      Honeybadger.setContext({
         user_id: user.id,
         user_email: user.email
       });
     }
-  }, [user, process.browser ? window.Honeybadger : null]);
+  }, [user, Honeybadger]);
 
   return null;
 }

@@ -60,7 +60,7 @@ function Drawer({ isOpen, onClose, router }) {
       onClose();
       setCurrentPath(router.asPath);
     }
-  }, [router.asPath]);
+  }, [currentPath, onClose, router.asPath]);
 
   const handleWindowClick = (e) => {
     if (isOpen && !drawerRef.current.contains(e.target)) {
