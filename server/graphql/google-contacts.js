@@ -29,7 +29,7 @@ exports.typeDefs = gql`
 exports.resolvers = {
   Query: {
     googleContacts: async (obj, args, { db, user }) =>
-      await db.GoogleContacts.getAll(user.id)
+      db.GoogleContacts.getAll(user.id)
   },
   Mutation: {
     importGoogleContacts: async (obj, { selectedIds }, { db, user }) => {

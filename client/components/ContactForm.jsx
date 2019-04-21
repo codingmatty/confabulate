@@ -68,7 +68,7 @@ export default function ContactForm({
     }
   );
 
-  const onFormSubmit = async () => {
+  const onFormSubmit = () => {
     setLoading(true);
     mutateContact()
       .then(({ data }) => {

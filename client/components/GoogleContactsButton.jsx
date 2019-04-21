@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import Button from './common/Button';
@@ -144,7 +144,6 @@ export default function GoogleContactsButton() {
         if (popup && popup.closed) {
           clearInterval(closePopupInterval);
           setLoadingGoogleContacts(false);
-          return;
         } else if (popup.location.origin === window.location.origin) {
           popup.close();
           setShowContacts(true);

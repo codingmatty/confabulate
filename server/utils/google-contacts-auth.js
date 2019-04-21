@@ -53,6 +53,7 @@ async function fetchContacts({ people }) {
   const contactData = [];
 
   do {
+    // eslint-disable-next-line no-await-in-loop
     const connectionsList = await people.connections.list({
       resourceName: 'people/me',
       personFields: CONTACTS_FIELDS,

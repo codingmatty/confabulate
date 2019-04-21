@@ -43,8 +43,7 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    event: async (obj, { id }, { db, user }) =>
-      await db.Events.get(user.id, id),
+    event: async (obj, { id }, { db, user }) => db.Events.get(user.id, id),
     events: async (obj, { query }, { db, user }) => {
       const { involvedContact, ...normalizedQuery } = query;
       if (involvedContact) {

@@ -1,4 +1,4 @@
-import { render, cleanup } from 'react-testing-library';
+import { cleanup, render } from 'react-testing-library';
 import md5 from 'md5-o-matic';
 import Avatar from '../Avatar';
 

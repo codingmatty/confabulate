@@ -9,7 +9,14 @@
   "extends": ["eslint:recommended"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error"
+    "no-await-in-loop": "error",
+    "no-duplicate-imports": "error",
+    "no-return-await": "error",
+    "no-sequences": "error",
+    "no-useless-return": "error",
+    "prettier/prettier": "error",
+    "sort-imports": ["warn", { "ignoreCase": true }],
+    "sort-keys": "warn"
   },
   "overrides": [
     {

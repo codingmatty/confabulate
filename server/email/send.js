@@ -7,7 +7,7 @@ const logger = require('../logger');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const getFileContents = async (filename) =>
+const getFileContents = (filename) =>
   new Promise((resolve, reject) =>
     fs.readFile(path.resolve(filename), { encoding: 'utf8' }, (err, output) =>
       err ? reject(err) : resolve(output)

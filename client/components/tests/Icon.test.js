@@ -1,4 +1,4 @@
-import { render, cleanup } from 'react-testing-library';
+import { cleanup, render } from 'react-testing-library';
 import Icon from '../Icon';
 
 describe('Icon', () => {

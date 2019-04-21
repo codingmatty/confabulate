@@ -1,10 +1,10 @@
 import {
-  useState,
-  useRef,
+  Children,
+  cloneElement,
   useEffect,
   useLayoutEffect,
-  cloneElement,
-  Children
+  useRef,
+  useState
 } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
@@ -110,7 +110,7 @@ export default function Dropdown({ children, renderTrigger, onChange }) {
     if (triggerRef.current) {
       setTriggerWidth(triggerRef.current.getBoundingClientRect().width);
     }
-  });
+  }, []);
 
   const options = Children.map(children, (child) => (
     <MenuItem>{cloneElement(child, { onChange })}</MenuItem>

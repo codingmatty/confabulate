@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
+import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
 import { SchemaLink } from 'apollo-link-schema';
 
 let apolloClient = null;

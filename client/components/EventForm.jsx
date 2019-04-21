@@ -57,7 +57,7 @@ export default function EventForm({
     refetchQueries: [refetchQuery]
   });
 
-  const onFormSubmit = async () => {
+  const onFormSubmit = () => {
     setLoading(true);
     mutateEvent()
       .then(({ data }) => {

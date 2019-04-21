@@ -43,8 +43,7 @@ exports.typeDefs = gql`
 // Provide resolver functions for your schema fields
 exports.resolvers = {
   Query: {
-    contact: async (obj, { id }, { db, user }) =>
-      await db.Contacts.get(user.id, id),
+    contact: async (obj, { id }, { db, user }) => db.Contacts.get(user.id, id),
     contacts: async (obj, { query }, { db, user }) => {
       const contacts = await db.Contacts.getAll(user.id, query);
       return contacts;
@@ -52,12 +51,12 @@ exports.resolvers = {
   },
   Mutation: {
     addContact: async (obj, { data }, { db, user }) =>
-      await db.Contacts.create(user.id, { ...data, favorite: false }),
+      db.Contacts.create(user.id, { ...data, favorite: false }),
     updateContact: async (obj, { id, data }, { db, user }) =>
-      await db.Contacts.update(user.id, id, data),
+      db.Contacts.update(user.id, id, data),
     toggleFavoriteState: async (obj, { id }, { db, user }) => {
       const { favorite } = await db.Contacts.get(user.id, id);
-      return await db.Contacts.update(user.id, id, { favorite: !favorite });
+      return db.Contacts.update(user.id, id, { favorite: !favorite });
     },
     removeContact: async (obj, { id }, { db, user }) => {
       const removedContact = await db.Contacts.delete(user.id, id);
