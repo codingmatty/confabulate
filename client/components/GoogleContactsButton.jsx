@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import Button from './styled/Button';
+import Button from './common/Button';
 import Avatar from './Avatar';
 import Loader from './Loader';
 import SearchInput from './SearchInput';

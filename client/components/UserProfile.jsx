@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import styled from 'styled-components';
-import UtilityText from './styled/UtilityText';
+import UtilityText from './common/UtilityText';
 import Avatar from './Avatar';
 import Loader from './Loader';
 import GoogleContactsButton from './GoogleContactsButton';

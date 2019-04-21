@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import styled, { createGlobalStyle } from 'styled-components';
 import PropTypes from 'prop-types';
 import { rgba } from 'polished';
-import Button from './styled/Button';
+import Button from './common/Button';
 
 const Content = styled.div`
   padding: 1rem;
