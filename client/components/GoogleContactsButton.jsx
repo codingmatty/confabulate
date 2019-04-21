@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
+import Router, { withRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import Modal from 'react-modal';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Button from './common/Button';
 import Avatar from './Avatar';
@@ -77,10 +79,10 @@ function GoogleContactsList({ onClose }) {
           importContacts().then(({ data: { importGoogleContacts } }) => {
             if (importGoogleContacts.status === 'IGNORED') {
               // eslint-disable-next-line no-console
-              console.error(importGoogleContacts.message);
+              toast.error(importGoogleContacts.message);
             } else {
               // eslint-disable-next-line no-console
-              console.log(importGoogleContacts.message);
+              toast.success(importGoogleContacts.message);
             }
             onClose();
           })
@@ -132,26 +134,35 @@ width=800,height=800`
   );
 }
 
-export default function GoogleContactsButton() {
-  const [loadingGoogleContacts, setLoadingGoogleContacts] = useState(false);
-  const [showContacts, setShowContacts] = useState(false);
+function GoogleContactsButton({ router }) {
+  const returningFromGoogleAuth = router.query.googleAuthCallback === 'true';
+  const [loadingGoogleContacts, setLoadingGoogleContacts] = useState(
+    returningFromGoogleAuth
+  );
+  const [showContacts, setShowContacts] = useState(returningFromGoogleAuth);
 
   const onButtonClick = () => {
-    setLoadingGoogleContacts(true);
-    const popup = openAuthWindow();
-    const closePopupInterval = setInterval(() => {
-      try {
-        if (popup && popup.closed) {
-          clearInterval(closePopupInterval);
-          setLoadingGoogleContacts(false);
-        } else if (popup.location.origin === window.location.origin) {
-          popup.close();
-          setShowContacts(true);
+    if (window.matchMedia('(max-width: 500px)').matches) {
+      Router.push(
+        `${window.location.origin}/api/google-contacts-auth?inline=true`
+      );
+    } else {
+      setLoadingGoogleContacts(true);
+      const popup = openAuthWindow();
+      const closePopupInterval = setInterval(() => {
+        try {
+          if (popup && popup.closed) {
+            clearInterval(closePopupInterval);
+            setLoadingGoogleContacts(false);
+          } else if (popup.location.origin === window.location.origin) {
+            popup.close();
+            setShowContacts(true);
+          }
+        } catch {
+          // Checking popup.location will throw while the url has a different origin
         }
-      } catch {
-        // Checking popup.location will throw while the url has a different origin
-      }
-    }, 200);
+      }, 200);
+    }
   };
 
   return (
@@ -172,3 +183,10 @@ export default function GoogleContactsButton() {
     </>
   );
 }
+GoogleContactsButton.propTypes = {
+  router: PropTypes.shape({
+    query: PropTypes.object
+  })
+};
+
+export default withRouter(GoogleContactsButton);

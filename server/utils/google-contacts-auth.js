@@ -11,14 +11,15 @@ const CONTACTS_FIELDS = [
   'birthdays'
 ].join(',');
 
-function generateAuthUrl({ email }) {
+function generateAuthUrl({ email, inline }) {
   const auth = createAuthConnection();
   return auth.generateAuthUrl({
+    access_type: 'offline',
+    login_hint: email,
+    prompt: 'consent', // access type and approval prompt will force a new refresh token to be made each time signs in
     redirect_uri: REDIRECT_URL,
     scope: CONTACTS_SCOPE,
-    access_type: 'offline',
-    prompt: 'consent', // access type and approval prompt will force a new refresh token to be made each time signs in
-    login_hint: email
+    state: Buffer.from(JSON.stringify({ inline })).toString('base64')
   });
 }
 

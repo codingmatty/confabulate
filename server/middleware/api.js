@@ -43,13 +43,20 @@ module.exports = function registerApi(db) {
   });
 
   router.get('/google-contacts-auth', (req, res) => {
-    const authUrl = generateAuthUrl({ email: req.user.email });
+    const authUrl = generateAuthUrl({
+      email: req.user.email,
+      inline: req.query.inline
+    });
     res.redirect(authUrl);
   });
 
   router.get('/callback/google-contacts', async (req, res) => {
     const { user } = req;
-    const { code } = req.query;
+    const { code, state } = req.query;
+
+    const stateObjectString =
+      Buffer.from(state, 'base64').toString('ascii') || '{}';
+    const { inline } = JSON.parse(stateObjectString);
 
     // Clear temporarily stored google contacts first
     await db.GoogleContacts.deleteMany(user.id);
@@ -94,7 +101,11 @@ module.exports = function registerApi(db) {
     // Temporarily save new google contacts
     await db.GoogleContacts.create(user.id, filteredContacts);
 
-    res.status(200).end();
+    if (inline) {
+      res.redirect(`${process.env.BASE_URL}/user?googleAuthCallback=true`);
+    } else {
+      res.status(200).end();
+    }
   });
 
   router.get('/logout', (req, res) => {

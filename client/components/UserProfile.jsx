@@ -54,8 +54,8 @@ export default function UserProfile() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [nameInput, setNameInput] = useState(null);
   const updateUserName = useMutation(UPDATE_PROFILE, {
-    variables: { data: { name: nameInput } },
-    refetchQueries: [{ query: QUERY_USER }]
+    refetchQueries: [{ query: QUERY_USER }],
+    variables: { data: { name: nameInput } }
   });
 
   if (loading) {
