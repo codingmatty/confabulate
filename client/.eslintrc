@@ -11,9 +11,14 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
     }
   },
-  "extends": ["plugin:react/recommended"],
+  "extends": ["plugin:react/recommended", "plugin:import/react"],
   "plugins": ["react-hooks"],
   "rules": {
     "react/react-in-jsx-scope": "off",

@@ -23,7 +23,7 @@ const StyledeventsPage = styled.div`
   margin-bottom: 3rem;
 `;
 
-export default function events() {
+export default function Events() {
   const [searchInput, setSearchInput] = useState('');
 
   return (

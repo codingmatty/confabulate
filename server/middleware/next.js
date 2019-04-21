@@ -1,7 +1,7 @@
-const { Router } = require('express');
-const next = require('next');
 const path = require('path');
 const { parse } = require('url');
+const { Router } = require('express');
+const next = require('next');
 const gqlSchema = require('../graphql');
 
 module.exports = async function registerNextApp({ db, dev }) {

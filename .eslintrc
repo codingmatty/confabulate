@@ -6,16 +6,21 @@
   "globals": {
     "process": true
   },
-  "extends": ["eslint:recommended"],
-  "plugins": ["prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/recommended"
+  ],
+  "plugins": ["prettier", "import"],
   "rules": {
+    "import/order": ["error", { "newlines-between": "never" }],
     "no-await-in-loop": "error",
     "no-duplicate-imports": "error",
     "no-return-await": "error",
     "no-sequences": "error",
     "no-useless-return": "error",
     "prettier/prettier": "error",
-    "sort-imports": ["warn", { "ignoreCase": true }],
     "sort-keys": "warn"
   },
   "overrides": [

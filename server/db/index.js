@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const logger = require('../logger');
-
 const UserModel = require('./User');
 const ContactModel = require('./Contact');
 const GoogleContactModel = require('./GoogleContact');
