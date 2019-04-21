@@ -55,7 +55,7 @@ exports.resolvers = {
       await db.Contacts.create(user.id, { ...data, favorite: false }),
     updateContact: async (obj, { id, data }, { db, user }) =>
       await db.Contacts.update(user.id, id, data),
-    toggleFavoriteState: async (obj, { id, data }, { db, user }) => {
+    toggleFavoriteState: async (obj, { id }, { db, user }) => {
       const { favorite } = await db.Contacts.get(user.id, id);
       return await db.Contacts.update(user.id, id, { favorite: !favorite });
     },
