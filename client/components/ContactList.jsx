@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
 import styled from 'styled-components';
@@ -54,3 +55,6 @@ export default function ContactList({ search }) {
     </>
   );
 }
+ContactList.propTypes = {
+  search: PropTypes.string
+};

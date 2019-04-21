@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const StyledSearchInput = styled.input`
   width: 100%;
@@ -17,5 +18,8 @@ function SearchInput({ onChange }) {
     />
   );
 }
+SearchInput.propTypes = {
+  onChange: PropTypes.func
+};
 
 export default SearchInput;

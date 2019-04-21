@@ -76,6 +76,7 @@ export default function ContactForm({
         setFormData(DEFAULT_FORM_FIELDS);
       })
       .catch((reason) => {
+        // eslint-disable-next-line no-console
         console.error({ reason });
       });
   };
@@ -138,7 +139,11 @@ ContactForm.propTypes = {
     email: PropTypes.string,
     phoneNumber: PropTypes.string
   }),
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  refetchQuery: PropTypes.shape({
+    query: PropTypes.string.isRequired,
+    variables: PropTypes.object
+  })
 };
 ContactForm.defaultProps = {
   contact: {},

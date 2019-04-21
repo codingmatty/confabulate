@@ -45,5 +45,6 @@ export default function FavoriteContact({ contactId, isFavorite, className }) {
 }
 FavoriteContact.propTypes = {
   contactId: PropTypes.string.isRequired,
-  isFavorite: PropTypes.bool
+  isFavorite: PropTypes.bool,
+  className: PropTypes.string
 };

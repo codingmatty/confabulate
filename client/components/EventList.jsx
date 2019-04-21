@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import moment from 'moment';
 import { gql } from 'apollo-boost';
@@ -106,3 +107,6 @@ export default function EventList({ search }) {
     </StyledEventList>
   );
 }
+EventList.propTypes = {
+  search: PropTypes.string
+};

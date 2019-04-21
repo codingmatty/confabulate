@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import Link from './Link';
 import Icon from './Icon';
@@ -92,5 +93,12 @@ function Drawer({ isOpen, onClose, router }) {
     </StyledDrawer>
   );
 }
+Drawer.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  router: PropTypes.shape({
+    asPath: PropTypes.string.isRequired
+  }).isRequired
+};
 
 export default withRouter(Drawer);

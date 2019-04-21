@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from 'react-apollo-hooks';
 import Modal from 'react-modal';
@@ -75,8 +76,10 @@ function GoogleContactsList({ onClose }) {
         onClick={() =>
           importContacts().then(({ data: { importGoogleContacts } }) => {
             if (importGoogleContacts.status === 'IGNORED') {
+              // eslint-disable-next-line no-console
               console.error(importGoogleContacts.message);
             } else {
+              // eslint-disable-next-line no-console
               console.log(importGoogleContacts.message);
             }
             onClose();
@@ -116,6 +119,9 @@ function GoogleContactsList({ onClose }) {
     </>
   );
 }
+GoogleContactsList.propTypes = {
+  onClose: PropTypes.func
+};
 
 function openAuthWindow() {
   return window.open(

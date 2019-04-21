@@ -41,6 +41,7 @@ const NotesInput = styled(Input)`
 `;
 
 export default function EventForm({
+  // eslint-disable-next-line no-unused-vars
   event: { id, __typename, ...event },
   onSubmit,
   refetchQuery
@@ -64,6 +65,7 @@ export default function EventForm({
         onSubmit(data.event);
       })
       .catch((reason) => {
+        // eslint-disable-next-line no-console
         console.error({ reason });
       });
   };
@@ -117,7 +119,11 @@ EventForm.propTypes = {
     type: PropTypes.string,
     involvedContacts: PropTypes.array
   }),
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  refetchQuery: PropTypes.shape({
+    query: PropTypes.string.isRequired,
+    variables: PropTypes.object
+  })
 };
 EventForm.defaultProps = {
   event: {},

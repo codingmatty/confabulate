@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -176,3 +177,8 @@ export default function ContactEventList({ contact }) {
     </>
   );
 }
+ContactEventList.propTypes = {
+  contact: PropTypes.shape({
+    id: PropTypes.string
+  })
+};

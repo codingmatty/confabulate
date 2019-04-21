@@ -6,6 +6,7 @@ import {
   cloneElement,
   Children
 } from 'react';
+import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import Router from 'next/router';
 import Link from './Link';
@@ -86,6 +87,13 @@ function DropdownOption({ href, children, value, onClick, onChange }) {
     </MenuOption>
   );
 }
+DropdownOption.propTypes = {
+  href: PropTypes.string,
+  children: PropTypes.node,
+  value: PropTypes.string,
+  onClick: PropTypes.func,
+  onChange: PropTypes.func
+};
 
 export default function Dropdown({ children, renderTrigger, onChange }) {
   const triggerRef = useRef(null);
@@ -126,7 +134,11 @@ export default function Dropdown({ children, renderTrigger, onChange }) {
   );
 }
 Dropdown.Option = DropdownOption;
-Dropdown.propTypes = {};
+Dropdown.propTypes = {
+  children: PropTypes.node,
+  renderTrigger: PropTypes.func,
+  onChange: PropTypes.func
+};
 Dropdown.defaultProps = {
   onChange: () => {}
 };

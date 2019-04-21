@@ -7,8 +7,8 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "dev": "nodemon --watch server server",
-    "lint": "eslint client server",
-    "lint:fix": "eslint --fix client server",
+    "lint": "eslint --ext .js,.jsx client server",
+    "lint:fix": "eslint --fix --ext .js,.jsx client server",
     "build": "NODE_ENV=production next build client",
     "prestart": "npm run migrate:up",
     "start:dev": "docker-compose up",
@@ -92,7 +92,7 @@
     }
   },
   "lint-staged": {
-    "{client,server}/*.{js,jsx,json,md}": [
+    "{client,server}/**/*.{js,jsx,json,md}": [
       "eslint --fix",
       "git add"
     ]
