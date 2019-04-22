@@ -6,14 +6,14 @@ import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
 import { toast } from 'react-toastify';
 import { convertBirthdayToString } from '../utils/dates';
-import ContactForm from './ContactForm';
-import Avatar from './Avatar';
-import FavoriteContact from './FavoriteContact';
-import Icon from './Icon';
-import PageTitle from './PageTitle';
+import Avatar from './common/Avatar';
+import Icon from './common/Icon';
+import Loader from './common/Loader';
+import PageTitle from './common/PageTitle';
 import ContactEventList from './ContactEventList';
-import Loader from './Loader';
+import ContactForm from './ContactForm';
 import DeleteContact from './DeleteContact';
+import FavoriteContact from './FavoriteContact';
 
 const QUERY_CONTACT = gql`
   query QUERY_CONTACT($id: ID!) {

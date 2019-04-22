@@ -1,13 +1,13 @@
+import { gql } from 'apollo-boost';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import styled from 'styled-components';
-import moment from 'moment';
-import Modal from 'react-modal';
-import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
+import Modal from 'react-modal';
+import styled from 'styled-components';
+import Icon from './common/Icon';
+import Loader from './common/Loader';
 import EventForm from './EventForm';
-import Icon from './Icon';
-import Loader from './Loader';
 
 const QUERY_CONTACT_EVENTS = gql`
   query QUERY_CONTACT_EVENTS($query: EventQueryData) {

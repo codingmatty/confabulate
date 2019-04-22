@@ -14,7 +14,7 @@ export default function Icon({ type, bold, className = '' }) {
   );
 }
 Icon.propTypes = {
-  type: PropTypes.string,
   bold: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
+  type: PropTypes.string
 };

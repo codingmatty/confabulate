@@ -4,8 +4,8 @@ import { gql } from 'apollo-boost';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
 import moment from 'moment';
-import Form from './Form';
-import Input from './Input';
+import Form from './common/Form';
+import Input from './common/Input';
 import ContactSelectInput from './ContactSelectInput';
 
 const CREATE_EVENT = gql`

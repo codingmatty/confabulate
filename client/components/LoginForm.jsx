@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import Router from 'next/router';
 import useFirebase from '../utils/firebase';
-import Form from './Form';
-import Input from './Input';
+import Form from './common/Form';
+import Input from './common/Input';
 
 const SignInWithGoogle = styled.button`
   background-color: white;

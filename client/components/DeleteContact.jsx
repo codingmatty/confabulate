@@ -4,7 +4,7 @@ import { gql } from 'apollo-boost';
 import { useState } from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import Dialog from './common/Dialog';
-import Icon from './Icon';
+import Icon from './common/Icon';
 
 const QUERY_CONTACTS = gql`
   query QUERY_CONTACTS {

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Avatar allows image before using email 1`] = `
+.c0 {
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+  border: 1px solid #3B3B3B;
+}
+
+<div>
+  <img
+    class="c0"
+    size="3"
+    src="image.url"
+  />
+</div>
+`;
+
+exports[`Avatar matches default snapshot 1`] = `
+.c0 {
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+  border: 1px solid #3B3B3B;
+}
+
+<div>
+  <img
+    class="c0"
+    size="3"
+    src="https://s.gravatar.com/avatar/93942e96f5acd83e2e047ad8fe03114d?s=96&d=mp"
+  />
+</div>
+`;

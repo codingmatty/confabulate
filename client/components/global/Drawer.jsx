@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
-import Link from './Link';
-import Icon from './Icon';
+import Link from '../common/Link';
+import Icon from '../common/Icon';
 
 const StyledLink = styled(Link)`
   font-size: 1.25rem;

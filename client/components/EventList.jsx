@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
-import Loader from './Loader';
+import Loader from './common/Loader';
 
 const QUERY_EVENTS = gql`
   query QUERY_EVENTS {

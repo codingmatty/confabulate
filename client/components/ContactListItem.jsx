@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Link from './Link';
-import Avatar from './Avatar';
-import Icon from './Icon';
+import Avatar from './common/Avatar';
+import Icon from './common/Icon';
+import Link from './common/Link';
 import FavoriteContact from './FavoriteContact';
 
 const ContactInfo = styled.div`

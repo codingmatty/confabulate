@@ -6,9 +6,9 @@ import { useMutation, useQuery } from 'react-apollo-hooks';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import Avatar from './common/Avatar';
 import Button from './common/Button';
-import Avatar from './Avatar';
-import Loader from './Loader';
+import Loader from './common/Loader';
 import SearchInput from './SearchInput';
 
 const QUERY_GOOGLE_CONTACTS = gql`

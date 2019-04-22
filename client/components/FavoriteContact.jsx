@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useMutation } from 'react-apollo-hooks';
-import Icon from './Icon';
+import styled from 'styled-components';
+import Icon from './common/Icon';
 
 const TOGGLE_FAVORITE = gql`
   mutation TOGGLE_FAVORITE($id: ID!) {

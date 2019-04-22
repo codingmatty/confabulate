@@ -1,5 +1,5 @@
 import Router from 'next/router';
-import PageTitle from '../../components/PageTitle';
+import PageTitle from '../../components/common/PageTitle';
 import ContactForm from '../../components/ContactForm';
 
 export default function CreateContact() {

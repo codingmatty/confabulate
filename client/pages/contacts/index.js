@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import ContactList from '../../components/ContactList';
-import PageTitle from '../../components/PageTitle';
-import Icon from '../../components/Icon';
-import Link from '../../components/Link';
+import PageTitle from '../../components/common/PageTitle';
+import Icon from '../../components/common/Icon';
+import Link from '../../components/common/Link';
 import SearchInput from '../../components/SearchInput';
 
 const CreateContactLink = styled(Link)`

@@ -3,10 +3,10 @@ import { gql } from 'apollo-boost';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Avatar from './Avatar';
-import Dropdown from './Dropdown';
+import Avatar from '../common/Avatar';
+import Dropdown from '../common/Dropdown';
+import Icon from '../common/Icon';
 import Drawer from './Drawer';
-import Icon from './Icon';
 
 const QUERY_USER_IMAGE = gql`
   query QUERY_USER_IMAGE {

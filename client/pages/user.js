@@ -1,4 +1,4 @@
-import PageTitle from '../components/PageTitle';
+import PageTitle from '../components/common/PageTitle';
 import UserProfile from '../components/UserProfile';
 
 export default function User() {

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { ToastContainer } from 'react-toastify';
-import theme from '../utils/theme';
+import theme from '../../utils/theme';
 import Navigation from './Navigation';
 import InstallPrompt from './InstallPrompt';
 

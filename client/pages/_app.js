@@ -4,11 +4,11 @@ import NProgress from 'nprogress';
 import Router from 'next/router';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import Head from '../components/global/Head';
 import HoneybadgerWrapper, {
   SetHoneybadgerContext
-} from '../components/HoneybadgerWrapper';
-import Head from '../components/Head';
-import Page from '../components/Page';
+} from '../components/global/HoneybadgerWrapper';
+import Page from '../components/global/Page';
 import withApolloClient from '../utils/with-apollo-client';
 
 NProgress.configure({ showSpinner: false });

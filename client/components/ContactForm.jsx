@@ -3,9 +3,9 @@ import { gql } from 'apollo-boost';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
 import pick from 'lodash/pick';
-import Form from './Form';
-import Input from './Input';
-import BirthdayInput from './BirthdayInput';
+import BirthdayInput from './common/BirthdayInput';
+import Form from './common/Form';
+import Input from './common/Input';
 
 const ContactFields = gql`
   fragment ContactFields on Contact {

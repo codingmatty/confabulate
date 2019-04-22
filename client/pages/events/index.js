@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import PageTitle from '../../components/common/PageTitle';
 import EventList from '../../components/EventList';
-import PageTitle from '../../components/PageTitle';
 // import Icon from '../../components/Icon';
 // import Link from '../../components/Link';
 import SearchInput from '../../components/SearchInput';

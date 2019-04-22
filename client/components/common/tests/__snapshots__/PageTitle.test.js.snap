@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageTitle matches default snapshot 1`] = `
+.c0 {
+  color: #7E7E7E;
+  font-size: 1rem;
+  margin: 0 0 1em;
+  text-transform: uppercase;
+}
+
+<div>
+  <h1
+    class="c0"
+  >
+    Page Title
+  </h1>
+</div>
+`;

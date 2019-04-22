@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
+import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 import styled from 'styled-components';
+import Loader from './common/Loader';
 import ContactListItem from './ContactListItem';
-import Loader from './Loader';
 
 const QUERY_CONTACTS = gql`
   query QUERY_CONTACTS {

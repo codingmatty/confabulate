@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button applies destructive styles 1`] = `
+.c0 {
+  background-color: #D64545;
+  border: 1px solid #911111;
+  color: white;
+  border-radius: 2px;
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+<div>
+  <button
+    class="c0"
+    type="destructive"
+  />
+</div>
+`;
+
+exports[`Button applies neutral styles 1`] = `
+.c0 {
+  background-color: #E1E1E1;
+  border: 1px solid #515151;
+  border-radius: 2px;
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+<div>
+  <button
+    class="c0"
+    type="neutral"
+  />
+</div>
+`;
+
+exports[`Button applies primary styles 1`] = `
+.c0 {
+  background-color: #84C5F4;
+  border: 1px solid #0F609B;
+  border-radius: 2px;
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+<div>
+  <button
+    class="c0"
+    type="primary"
+  />
+</div>
+`;
+
+exports[`Button applies transparent styles 1`] = `
+.c0 {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+<div>
+  <button
+    class="c0"
+    type="transparent"
+  />
+</div>
+`;
+
+exports[`Button matches default snapshot 1`] = `
+.c0 {
+  background: none;
+  border: 1px solid #7E7E7E;
+  border-radius: 2px;
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+<div>
+  <button
+    class="c0"
+  />
+</div>
+`;
