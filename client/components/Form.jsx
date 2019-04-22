@@ -72,7 +72,7 @@ export default function Form({
 Form.propTypes = {
   children: PropTypes.node,
   disabled: PropTypes.bool,
+  onCancel: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   onSubmit: PropTypes.func,
-  onCancel: PropTypes.func,
   submitLabel: PropTypes.string
 };

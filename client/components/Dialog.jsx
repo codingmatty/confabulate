@@ -48,6 +48,10 @@ const DialogStyles = createGlobalStyle`
 `;
 
 const defaultLabels = {
+  no: {
+    text: 'No',
+    type: 'neutral'
+  },
   ok: {
     text: 'Ok',
     type: 'primary'
@@ -55,10 +59,6 @@ const defaultLabels = {
   yes: {
     text: 'Yes',
     type: 'primary'
-  },
-  no: {
-    text: 'No',
-    type: 'neutral'
   }
 };
 
@@ -101,16 +101,16 @@ export default function Dialog({
   );
 }
 Dialog.propTypes = {
-  message: PropTypes.string,
   isOpen: PropTypes.bool,
-  type: PropTypes.oneOf('confirm', 'option'),
+  labels: PropTypes.shape({
+    no: PropTypes.shape({ text: PropTypes.string, type: PropTypes.string }),
+    ok: PropTypes.shape({ text: PropTypes.string, type: PropTypes.string }),
+    yes: PropTypes.shape({ text: PropTypes.string, type: PropTypes.string })
+  }),
+  message: PropTypes.string,
   onConfirm: PropTypes.func,
   onDeny: PropTypes.func,
-  labels: PropTypes.shape({
-    ok: PropTypes.shape({ text: PropTypes.string, type: PropTypes.string }),
-    yes: PropTypes.shape({ text: PropTypes.string, type: PropTypes.string }),
-    no: PropTypes.shape({ text: PropTypes.string, type: PropTypes.string })
-  })
+  type: PropTypes.oneOf(['confirm', 'option'])
 };
 Dialog.defaultProps = {
   onConfirm: () => {},

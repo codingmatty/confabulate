@@ -110,13 +110,15 @@ export default function UserSelectInput({
     data: { contacts },
     error: fetchError,
     loading
-  } = useQuery(QUERY_CONTACTS);
+  } = useQuery(QUERY_CONTACTS, { fetchPolicy: 'cache-and-network' });
 
   const selectedContacts = loading
     ? []
-    : value.map((selectedContactId) =>
-        contacts.find(({ id }) => id === selectedContactId)
-      );
+    : value
+        .map((selectedContactId) =>
+          contacts.find(({ id }) => id === selectedContactId)
+        )
+        .filter((contact) => contact);
 
   const onSelectChange = (type) => (selection) => {
     onChange({
@@ -150,7 +152,7 @@ export default function UserSelectInput({
         <InputWrapper {...getRootProps({ disabled })}>
           <LabelWrapper
             {...getLabelProps({
-              for: id
+              htmlFor: id
             })}
           >
             <Label>{label}</Label>

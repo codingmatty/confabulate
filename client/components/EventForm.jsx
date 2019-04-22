@@ -31,9 +31,9 @@ const UPDATE_EVENT = gql`
 
 const DEFAULT_FORM_FIELDS = {
   date: moment().toISOString(),
-  type: '',
   involvedContacts: [],
-  note: ''
+  note: '',
+  type: ''
 };
 
 const NotesInput = styled(Input)`
@@ -53,8 +53,8 @@ export default function EventForm({
     involvedContacts: event.involvedContacts.map(({ id }) => id)
   });
   const mutateEvent = useMutation(id ? UPDATE_EVENT : CREATE_EVENT, {
-    variables: { id, data: formData },
-    refetchQueries: [refetchQuery]
+    refetchQueries: [refetchQuery],
+    variables: { data: formData, id }
   });
 
   const onFormSubmit = () => {
@@ -114,14 +114,16 @@ export default function EventForm({
 }
 EventForm.propTypes = {
   event: PropTypes.shape({
-    id: PropTypes.string,
     date: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-    type: PropTypes.string,
-    involvedContacts: PropTypes.array
+    id: PropTypes.string,
+    involvedContacts: PropTypes.arrayOf(
+      PropTypes.shape({ id: PropTypes.string })
+    ),
+    type: PropTypes.string
   }),
   onSubmit: PropTypes.func,
   refetchQuery: PropTypes.shape({
-    query: PropTypes.string.isRequired,
+    query: PropTypes.object.isRequired,
     variables: PropTypes.object
   })
 };

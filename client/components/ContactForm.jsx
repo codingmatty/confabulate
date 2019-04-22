@@ -153,7 +153,7 @@ ContactForm.propTypes = {
   }),
   onSubmit: PropTypes.func,
   refetchQuery: PropTypes.shape({
-    query: PropTypes.string.isRequired,
+    query: PropTypes.object.isRequired,
     variables: PropTypes.object
   })
 };
