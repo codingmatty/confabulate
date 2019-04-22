@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useState } from 'react';
 import { useMutation } from 'react-apollo-hooks';
-import Dialog from './Dialog';
+import Dialog from './common/Dialog';
 import Icon from './Icon';
 
 const QUERY_CONTACTS = gql`
