@@ -2,11 +2,11 @@
 
 exports[`Events GraphQL query event renders all fields 1`] = `
 Object {
-  "date": "2019-03-01T00:00:00.000Z",
-  "id": "3",
+  "date": 2019-03-01T00:00:00.000Z,
+  "id": "5cbf91a5b32bb3b358c11be3",
   "involvedContacts": Array [
     Object {
-      "id": "2",
+      "id": "5cbf91a5b32bb3b358c11bc2",
     },
   ],
   "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
@@ -19,14 +19,14 @@ Object {
 exports[`Events GraphQL query events renders all fields for all data 1`] = `
 Array [
   Object {
-    "date": "2019-01-01T00:00:00.000Z",
-    "id": "1",
+    "date": 2019-01-01T00:00:00.000Z,
+    "id": "5cbf91a5b32bb3b358c11be1",
     "involvedContacts": Array [
       Object {
-        "id": "2",
+        "id": "5cbf91a5b32bb3b358c11bc2",
       },
       Object {
-        "id": "3",
+        "id": "5cbf91a5b32bb3b358c11bc3",
       },
     ],
     "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
@@ -35,8 +35,8 @@ Array [
     "type": "meeting",
   },
   Object {
-    "date": "2019-02-01T00:00:00.000Z",
-    "id": "2",
+    "date": 2019-02-01T00:00:00.000Z,
+    "id": "5cbf91a5b32bb3b358c11be2",
     "involvedContacts": Array [],
     "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 
       orci malesuada, tincidunt turpis sed, tristique velit. Sed sed nunc 
@@ -44,11 +44,11 @@ Array [
     "type": "lunch",
   },
   Object {
-    "date": "2019-03-01T00:00:00.000Z",
-    "id": "3",
+    "date": 2019-03-01T00:00:00.000Z,
+    "id": "5cbf91a5b32bb3b358c11be3",
     "involvedContacts": Array [
       Object {
-        "id": "2",
+        "id": "5cbf91a5b32bb3b358c11bc2",
       },
     ],
     "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu 

@@ -42,14 +42,11 @@ exports.typeDefs = gql`
 
 // Provide resolver functions for your schema fields
 exports.resolvers = {
-  Query: {
-    event: async (obj, { id }, { db, user }) => db.Events.get(user.id, id),
-    events: async (obj, { query }, { db, user }) => {
-      const { involvedContact, ...normalizedQuery } = query;
-      if (involvedContact) {
-        normalizedQuery.involvedContacts = involvedContact.id;
-      }
-      return db.Events.getAll(user.id, normalizedQuery);
+  Event: {
+    involvedContacts: async (event, args, { db, user }) => {
+      return db.Contacts.getAll(user.id, {
+        _id: { $in: event.involvedContacts }
+      });
     }
   },
   Mutation: {
@@ -61,22 +58,25 @@ exports.resolvers = {
         involvedContacts
       });
     },
-    updateEvent: async (obj, { id, data }, { db, user }) => {
-      return db.Events.update(user.id, id, data);
-    },
     removeEvent: async (obj, { id }, { db, user }) => {
       const removedEvent = await db.Events.delete(user.id, id);
       return {
-        status: removedEvent ? 'SUCCESS' : 'IGNORED',
-        message: removedEvent ? 'Event Removed' : ''
+        message: removedEvent ? 'Event Removed' : '',
+        status: removedEvent ? 'SUCCESS' : 'IGNORED'
       };
+    },
+    updateEvent: async (obj, { id, data }, { db, user }) => {
+      return db.Events.update(user.id, id, data);
     }
   },
-  Event: {
-    involvedContacts: async (event, args, { db, user }) => {
-      return db.Contacts.getAll(user.id, {
-        _id: { $in: event.involvedContacts }
-      });
+  Query: {
+    event: async (obj, { id }, { db, user }) => db.Events.get(user.id, id),
+    events: async (obj, { query }, { db, user }) => {
+      const { involvedContact, ...normalizedQuery } = query;
+      if (involvedContact) {
+        normalizedQuery.involvedContacts = involvedContact.id;
+      }
+      return db.Events.getAll(user.id, normalizedQuery);
     }
   }
 };
