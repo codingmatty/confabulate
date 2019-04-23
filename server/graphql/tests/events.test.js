@@ -124,7 +124,7 @@ describe('Events GraphQL', () => {
   let query;
 
   beforeAll(async () => {
-    db = initDatabase(process.env.MONGO_URL);
+    db = initDatabase(global.__MONGO_URI__);
     const server = new ApolloServer({
       context: () => ({ db, user }),
       schema

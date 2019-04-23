@@ -13,7 +13,7 @@ module.exports = {
     },
     {
       displayName: 'client',
-      setupFilesAfterEnv: ['./tests/setup'],
+      setupFilesAfterEnv: ['./test/setup'],
       testMatch: ['<rootDir>/client/**/*.test.js']
     }
   ],
