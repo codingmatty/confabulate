@@ -1,20 +1,21 @@
 // eslint-disable-next-line no-undef
 module.exports = {
-  verbose: true,
-  projects: [
-    {
-      displayName: 'server',
-      testMatch: ['<rootDir>/server/**/*.test.js']
-    },
-    {
-      displayName: 'client',
-      testMatch: ['<rootDir>/client/**/*.test.js'],
-      setupFilesAfterEnv: ['./tests/setup']
-    }
-  ],
   collectCoverageFrom: [
     '{client,server}/**/*.{js,jsx}',
     '!{client,server}/**/*.test.{js,jsx}',
     '!server/db/**/*'
-  ]
+  ],
+  projects: [
+    {
+      displayName: 'server',
+      preset: '@shelf/jest-mongodb',
+      testMatch: ['<rootDir>/server/**/*.test.js']
+    },
+    {
+      displayName: 'client',
+      setupFilesAfterEnv: ['./tests/setup'],
+      testMatch: ['<rootDir>/client/**/*.test.js']
+    }
+  ],
+  verbose: true
 };

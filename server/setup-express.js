@@ -10,7 +10,7 @@ const registerCron = require('./middleware/cron');
 const registerNext = require('./middleware/next');
 const registerGraphQL = require('./middleware/graphql');
 const registerPassport = require('./middleware/passport');
-const db = require('./db');
+const initDatabase = require('./db');
 const logger = require('./logger');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -22,6 +22,13 @@ Honeybadger.setContext({
 });
 
 module.exports = async function setupExpress() {
+  const db = initDatabase(
+    process.env.NODE_ENV === 'production'
+      ? `mongodb://${process.env.MONGO_USERNAME}:${
+          process.env.MONGO_PASSWORD
+        }@${process.env.MONGO_URI}`
+      : process.env.MONGO_URL
+  );
   const app = express();
 
   const cookie = {
