@@ -42,35 +42,35 @@ exports.typeDefs = gql`
 
 // Provide resolver functions for your schema fields
 exports.resolvers = {
-  Query: {
-    contact: async (obj, { id }, { db, user }) => db.Contacts.get(user.id, id),
-    contacts: async (obj, { query }, { db, user }) => {
-      const contacts = await db.Contacts.getAll(user.id, query);
-      return contacts;
+  Contact: {
+    events: async (contact, args, { db, user }) => {
+      return db.Events.getAll(user.id, {
+        involvedContacts: contact.id
+      });
     }
   },
   Mutation: {
     addContact: async (obj, { data }, { db, user }) =>
       db.Contacts.create(user.id, { ...data, favorite: false }),
-    updateContact: async (obj, { id, data }, { db, user }) =>
-      db.Contacts.update(user.id, id, data),
+    removeContact: async (obj, { id }, { db, user }) => {
+      const removedContact = await db.Contacts.delete(user.id, id);
+      return {
+        message: removedContact ? 'Contact Removed' : '',
+        status: removedContact ? 'SUCCESS' : 'IGNORED'
+      };
+    },
     toggleFavoriteState: async (obj, { id }, { db, user }) => {
       const { favorite } = await db.Contacts.get(user.id, id);
       return db.Contacts.update(user.id, id, { favorite: !favorite });
     },
-    removeContact: async (obj, { id }, { db, user }) => {
-      const removedContact = await db.Contacts.delete(user.id, id);
-      return {
-        status: removedContact ? 'SUCCESS' : 'IGNORED',
-        message: removedContact ? 'Contact Removed' : ''
-      };
-    }
+    updateContact: async (obj, { id, data }, { db, user }) =>
+      db.Contacts.update(user.id, id, data)
   },
-  Contact: {
-    events: async (contact, args, { db, user }) => {
-      return db.Events.getAll(user.id, {
-        involvedContact: { id: contact.id }
-      });
+  Query: {
+    contact: async (obj, { id }, { db, user }) => db.Contacts.get(user.id, id),
+    contacts: async (obj, { query }, { db, user }) => {
+      const contacts = await db.Contacts.getAll(user.id, query);
+      return contacts;
     }
   }
 };

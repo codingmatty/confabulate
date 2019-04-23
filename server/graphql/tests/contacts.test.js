@@ -1,14 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server-express');
 const { createTestClient } = require('apollo-server-testing');
-const db = require('../../db');
-const { resetDb } = require('../../db/local');
+const initDatabase = require('../../db');
 const schema = require('../index');
-
-const user = { id: '123' };
-const server = new ApolloServer({
-  schema,
-  context: () => ({ db, user })
-});
 
 const AllContactFields = gql`
   fragment AllContactFields on Contact {
@@ -64,6 +57,15 @@ const UPDATE_CONTACT = gql`
   ${AllContactFields}
 `;
 
+const TOGGLE_FAVORITE_STATE = gql`
+  mutation TOGGLE_FAVORITE_STATE($id: ID!) {
+    contact: toggleFavoriteState(id: $id) {
+      ...AllContactFields
+    }
+  }
+  ${AllContactFields}
+`;
+
 const REMOVE_CONTACT = gql`
   mutation REMOVE_CONTACT($id: ID!) {
     status: removeContact(id: $id) {
@@ -73,61 +75,82 @@ const REMOVE_CONTACT = gql`
   }
 `;
 
+const user = { id: '5cbe7a1777201aa79d52fcc1' };
 const seedData = {
   contacts: [
     {
-      userId: '123',
-      id: '1',
-      name: 'John Lennon',
-      email: 'johnlennon@beatles.com',
-      phoneNumber: '5551234567',
-      favorite: true,
+      _id: '5cbe7a2a5e55d05aadfd38c1',
       birthday: {
         day: 23,
         month: 3,
         year: 2010
-      }
+      },
+      email: 'johnlennon@beatles.com',
+      favorite: true,
+      name: 'John Lennon',
+      ownerId: user.id,
+      phoneNumber: '5551234567'
     },
     {
-      userId: '123',
-      id: '2',
-      name: 'Paul McCartney',
-      email: 'paulmccartney@beatles.com',
-      phoneNumber: '5552345678',
-      favorite: false,
+      _id: '5cbe7a4816430674b1375ac2',
       birthday: {
         day: 23,
         month: 3
-      }
+      },
+      email: 'paulmccartney@beatles.com',
+      favorite: false,
+      name: 'Paul McCartney',
+      ownerId: user.id,
+      phoneNumber: '5552345678'
     },
     {
-      userId: '123',
-      id: '3',
-      name: 'Ringo Starr',
+      _id: '5cbe7a52a7c6dd86a4b719c3',
       email: 'ringostarr@beatles.com',
-      phoneNumber: '5553456789',
-      favorite: true
+      favorite: true,
+      name: 'Ringo Starr',
+      ownerId: user.id,
+      phoneNumber: '5553456789'
     },
     {
       // This is a dummy for a different user
-      userId: 'xyz',
-      id: '4'
+      _id: '5cbe7a62e299349e8b9a7ec4',
+      ownerId: '5cbe7a58c668896ebfe887ce'
     }
   ],
   events: [
     {
-      userId: '123',
-      id: '1',
-      involvedContacts: ['2']
+      _id: '5cbe7a6cbcc4685e1341fce1',
+      involvedContacts: ['5cbe7a4816430674b1375ac2'],
+      ownerId: user.id
     }
   ]
 };
 
 describe('Contacts GraphQL', () => {
-  const { query, mutate } = createTestClient(server);
+  let db;
+  let mutate;
+  let query;
 
-  beforeEach(() => {
-    resetDb(seedData);
+  beforeAll(async () => {
+    db = initDatabase(process.env.MONGO_URL);
+    const server = new ApolloServer({
+      context: () => ({ db, user }),
+      schema
+    });
+
+    const testClient = createTestClient(server);
+    mutate = testClient.mutate;
+    query = testClient.query;
+  });
+
+  beforeEach(async () => {
+    db.connection.dropDatabase();
+    await db.Contacts.model.insertMany(seedData.contacts);
+    await db.Events.model.insertMany(seedData.events);
+  });
+
+  afterAll(async () => {
+    await db.connection.close();
   });
 
   describe('query contacts', () => {
@@ -148,7 +171,10 @@ describe('Contacts GraphQL', () => {
         true,
         true
       ]);
-      expect(data.contacts.map(({ id }) => id)).toEqual(['1', '3']);
+      expect(data.contacts.map(({ id }) => id)).toEqual([
+        '5cbe7a2a5e55d05aadfd38c1',
+        '5cbe7a52a7c6dd86a4b719c3'
+      ]);
     });
   });
 
@@ -156,7 +182,7 @@ describe('Contacts GraphQL', () => {
     it('renders all fields', async () => {
       const { data } = await query({
         query: QUERY_CONTACT,
-        variables: { id: '3' }
+        variables: { id: '5cbe7a52a7c6dd86a4b719c3' }
       });
       expect(data.contact).toMatchSnapshot();
     });
@@ -164,7 +190,7 @@ describe('Contacts GraphQL', () => {
     it('contains full name', async () => {
       const { data } = await query({
         query: QUERY_CONTACT,
-        variables: { id: '3' }
+        variables: { id: '5cbe7a52a7c6dd86a4b719c3' }
       });
       expect(data.contact).toHaveProperty('name', 'Ringo Starr');
     });
@@ -172,17 +198,17 @@ describe('Contacts GraphQL', () => {
     it('contains events', async () => {
       const { data } = await query({
         query: QUERY_CONTACT,
-        variables: { id: '2' }
+        variables: { id: '5cbe7a4816430674b1375ac2' }
       });
-      expect(data.contact.events).toEqual([{ id: '1' }]);
+      expect(data.contact.events).toEqual([{ id: '5cbe7a6cbcc4685e1341fce1' }]);
     });
   });
 
   describe('add contact', () => {
     it('can add contact', async () => {
       const inputData = {
-        name: 'Test Test',
         email: 'test@email.com',
+        name: 'Test Test',
         phoneNumber: '5551234567'
       };
       const { data } = await mutate({
@@ -191,9 +217,9 @@ describe('Contacts GraphQL', () => {
       });
       expect(data.contact).toMatchObject({
         ...inputData,
-        name: 'Test Test',
+        events: [],
         favorite: false,
-        events: []
+        name: 'Test Test'
       });
     });
   });
@@ -206,9 +232,24 @@ describe('Contacts GraphQL', () => {
       };
       const { data } = await mutate({
         mutation: UPDATE_CONTACT,
-        variables: { id: '3', data: updateData }
+        variables: { data: updateData, id: '5cbe7a52a7c6dd86a4b719c3' }
       });
       expect(data.contact).toMatchObject(updateData);
+    });
+  });
+
+  describe('toggle favorite state', () => {
+    it('updates favorite value', async () => {
+      const { data } = await mutate({
+        mutation: TOGGLE_FAVORITE_STATE,
+        variables: { id: '5cbe7a52a7c6dd86a4b719c3' }
+      });
+      expect(data.contact).toHaveProperty('favorite', false);
+      const { data: secondData } = await mutate({
+        mutation: TOGGLE_FAVORITE_STATE,
+        variables: { id: '5cbe7a52a7c6dd86a4b719c3' }
+      });
+      expect(secondData.contact).toHaveProperty('favorite', true);
     });
   });
 
@@ -216,11 +257,11 @@ describe('Contacts GraphQL', () => {
     it('removes contact', async () => {
       const { data } = await mutate({
         mutation: REMOVE_CONTACT,
-        variables: { id: '3' }
+        variables: { id: '5cbe7a52a7c6dd86a4b719c3' }
       });
       expect(data.status).toEqual({
-        status: 'SUCCESS',
-        message: 'Contact Removed'
+        message: 'Contact Removed',
+        status: 'SUCCESS'
       });
       const remainingContacts = await db.Contacts.getAll(user.id);
       expect(remainingContacts).toHaveLength(2);
@@ -229,11 +270,11 @@ describe('Contacts GraphQL', () => {
     it("avoids failure if contact to remove doesn't exist", async () => {
       const { data } = await mutate({
         mutation: REMOVE_CONTACT,
-        variables: { id: '100' }
+        variables: { id: '5cbe7a52a7c6dd86a4b70000' }
       });
       expect(data.status).toEqual({
-        status: 'IGNORED',
-        message: ''
+        message: '',
+        status: 'IGNORED'
       });
       const remainingContacts = await db.Contacts.getAll(user.id);
       expect(remainingContacts).toHaveLength(3);

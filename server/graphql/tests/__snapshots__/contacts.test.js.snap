@@ -10,8 +10,8 @@ Object {
   "email": "ringostarr@beatles.com",
   "events": Array [],
   "favorite": true,
+  "id": "5cbe7a52a7c6dd86a4b719c3",
   "name": "Ringo Starr",
-  "id": "3",
   "phoneNumber": "5553456789",
 }
 `;
@@ -27,8 +27,8 @@ Array [
     "email": "johnlennon@beatles.com",
     "events": Array [],
     "favorite": true,
+    "id": "5cbe7a2a5e55d05aadfd38c1",
     "name": "John Lennon",
-    "id": "1",
     "phoneNumber": "5551234567",
   },
   Object {
@@ -40,12 +40,12 @@ Array [
     "email": "paulmccartney@beatles.com",
     "events": Array [
       Object {
-        "id": "1",
+        "id": "5cbe7a6cbcc4685e1341fce1",
       },
     ],
     "favorite": false,
+    "id": "5cbe7a4816430674b1375ac2",
     "name": "Paul McCartney",
-    "id": "2",
     "phoneNumber": "5552345678",
   },
   Object {
@@ -57,8 +57,8 @@ Array [
     "email": "ringostarr@beatles.com",
     "events": Array [],
     "favorite": true,
+    "id": "5cbe7a52a7c6dd86a4b719c3",
     "name": "Ringo Starr",
-    "id": "3",
     "phoneNumber": "5553456789",
   },
 ]

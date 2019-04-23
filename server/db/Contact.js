@@ -3,27 +3,27 @@ const DataModel = require('./DataModel');
 
 const ContactSchema = new Schema(
   {
-    ownerId: { type: Schema.Types.ObjectId, required: true },
-    name: String,
-    image: String,
     birthday: {
+      default: {},
       type: {
         day: Number,
         month: Number,
         year: Number
-      },
-      default: {}
+      }
     },
     email: String,
-    phoneNumber: String,
-    favorite: Boolean,
     events: [Schema.Types.ObjectId],
+    favorite: Boolean,
+    image: String,
+    name: String,
+    ownerId: { required: true, type: Schema.Types.ObjectId },
+    phoneNumber: String,
     source: {
-      type: { type: String, enum: ['google'] },
-      id: String
+      id: String,
+      type: { enum: ['google'], type: String }
     }
   },
-  { timestamps: true }
+  { minimize: false, timestamps: true }
 );
 
 class ContactModel extends DataModel {
