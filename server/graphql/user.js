@@ -7,7 +7,7 @@ exports.typeDefs = gql`
   }
   extend type Mutation {
     # updateEmail(email: String!): User
-    updateProfile(data: ProfileUpdateData!): User
+    updateUserProfile(data: ProfileUpdateData!): User
     # updateSettings(data: SettingsUpdateData!): User
   }
   type User {
@@ -33,15 +33,15 @@ exports.typeDefs = gql`
 
 // Provide resolver functions for your schema fields
 exports.resolvers = {
-  Query: {
-    user: async (obj, args, { db, user }) => db.Users.get(user.id)
-  },
   Mutation: {
     // updateEmail: async (obj, { email }, { db, user }) =>
     //  db.Users.update(user.id, { email }),
-    updateProfile: async (obj, { data }, { db, user }) =>
+    updateUserProfile: async (obj, { data }, { db, user }) =>
       db.Users.update(user.id, { profile: data })
     // updateSettings: async (obj, { data }, { db, user }) =>
     //  db.Users.update(user.id, { settings: data })
+  },
+  Query: {
+    user: async (obj, args, { db, user }) => db.Users.get(user.id)
   }
 };

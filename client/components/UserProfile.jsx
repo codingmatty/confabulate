@@ -33,9 +33,9 @@ const QUERY_USER = gql`
     }
   }
 `;
-const UPDATE_PROFILE = gql`
-  mutation UPDATE_PROFILE($data: ProfileUpdateData!) {
-    event: updateProfile(data: $data) {
+const UPDATE_USER_PROFILE = gql`
+  mutation UPDATE_USER_PROFILE($data: ProfileUpdateData!) {
+    event: updateUserProfile(data: $data) {
       id
       profile {
         name
@@ -53,7 +53,7 @@ export default function UserProfile() {
   const [editingName, setEditingName] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [nameInput, setNameInput] = useState(null);
-  const updateUserName = useMutation(UPDATE_PROFILE, {
+  const updateUserName = useMutation(UPDATE_USER_PROFILE, {
     refetchQueries: [{ query: QUERY_USER }],
     variables: { data: { name: nameInput } }
   });
