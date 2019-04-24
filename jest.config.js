@@ -8,7 +8,7 @@ module.exports = {
   projects: [
     {
       displayName: 'server',
-      preset: '@shelf/jest-mongodb',
+      testEnvironment: '<rootDir>/test/server-env.js',
       testMatch: ['<rootDir>/server/**/*.test.js']
     },
     {
