@@ -52,10 +52,13 @@ exports.resolvers = {
   Mutation: {
     addEvent: async (obj, { data }, { db, user }) => {
       const { involvedContacts = [] } = data;
-      // TODO: verify data in involvedContacts exist
+      // Verify data in involvedContacts exists by querying Contacts db
+      const contacts = await db.Contacts.getAll(user.id, {
+        _id: { $in: involvedContacts }
+      });
       return db.Events.create(user.id, {
         ...data,
-        involvedContacts
+        involvedContacts: contacts.map(({ id }) => id)
       });
     },
     removeEvent: async (obj, { id }, { db, user }) => {
@@ -66,6 +69,14 @@ exports.resolvers = {
       };
     },
     updateEvent: async (obj, { id, data }, { db, user }) => {
+      const { involvedContacts } = data;
+      if (involvedContacts) {
+        // Verify data in involvedContacts exists by querying Contacts db
+        const contacts = await db.Contacts.getAll(user.id, {
+          _id: { $in: involvedContacts }
+        });
+        data.involvedContacts = contacts.map(({ id }) => id);
+      }
       return db.Events.update(user.id, id, data);
     }
   },

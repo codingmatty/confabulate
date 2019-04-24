@@ -238,6 +238,21 @@ describe('Events GraphQL', () => {
         involvedContacts: [{ id: '5cbf91a5b32bb3b358c11bc1' }]
       });
     });
+
+    it('onlys adds valid contacts', async () => {
+      const inputData = {
+        date: new Date(),
+        involvedContacts: ['5cbf91a5b32bb3b358c11bff']
+      };
+      const { data } = await mutate({
+        mutation: ADD_EVENT,
+        variables: { data: inputData }
+      });
+      expect(data.event).toMatchObject({
+        ...inputData,
+        involvedContacts: []
+      });
+    });
   });
 
   describe('update event', () => {
@@ -251,6 +266,24 @@ describe('Events GraphQL', () => {
         variables: { data: updateData, id: '5cbf91a5b32bb3b358c11be3' }
       });
       expect(data.event).toMatchObject(updateData);
+    });
+
+    it('does not allow addition of invalid contacts', async () => {
+      const updateData = {
+        date: new Date(),
+        involvedContacts: [
+          '5cbf91a5b32bb3b358c11bc1',
+          '5cbf91a5b32bb3b358c11bff'
+        ]
+      };
+      const { data } = await mutate({
+        mutation: UPDATE_EVENT,
+        variables: { data: updateData, id: '5cbf91a5b32bb3b358c11be3' }
+      });
+      expect(data.event).toMatchObject({
+        ...updateData,
+        involvedContacts: [{ id: '5cbf91a5b32bb3b358c11bc1' }]
+      });
     });
   });
 
