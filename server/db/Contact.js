@@ -16,6 +16,12 @@ const ContactSchema = new Schema(
     favorite: Boolean,
     image: String,
     name: String,
+    notes: [
+      {
+        label: { required: true, type: String },
+        value: String
+      }
+    ],
     ownerId: { required: true, type: Schema.Types.ObjectId },
     phoneNumber: String,
     source: {

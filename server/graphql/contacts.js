@@ -19,8 +19,17 @@ exports.typeDefs = gql`
     birthday: DateStruct!
     email: String
     phoneNumber: String
+    notes: [NoteStruct!]
     favorite: Boolean
     events: [Event]!
+  }
+  type NoteStruct {
+    label: String!
+    value: String
+  }
+  input NoteStructInput {
+    label: String!
+    value: String
   }
   input ContactInputData {
     name: String
@@ -28,6 +37,7 @@ exports.typeDefs = gql`
     birthday: DateStructInput
     email: String
     phoneNumber: String
+    notes: [NoteStructInput!]
     favorite: Boolean
   }
   input ContactQueryData {

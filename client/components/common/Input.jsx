@@ -26,20 +26,21 @@ const InputControl = styled.input`
   border-radius: 2px;
   flex-grow: 1;
 `;
-const Error = styled.div``;
+const Error = styled.div`
+  font-weight: bold;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: ${({ theme }) => theme.color.reds[4]};
+`;
 
 export default function Input({
   error,
-  disabled,
   id,
   label,
-  name,
-  onChange,
-  required,
   type,
   value,
-  placeholder,
-  className
+  className,
+  ...props
 }) {
   let normalizedValue = value;
   if (type === 'date') {
@@ -49,15 +50,10 @@ export default function Input({
     <InputWrapper className={className}>
       <Label htmlFor={id}>{label}</Label>
       <InputControl
-        id={id}
-        type={type}
-        name={name}
-        value={normalizedValue}
-        onChange={onChange}
-        required={required}
         as={type === 'textarea' && 'textarea'}
-        placeholder={placeholder}
-        disabled={disabled}
+        type={type}
+        value={normalizedValue}
+        {...props}
       />
       {error && <Error>{error}</Error>}
     </InputWrapper>
@@ -66,14 +62,9 @@ export default function Input({
 
 Input.propTypes = {
   className: PropTypes.string,
-  disabled: PropTypes.bool,
   error: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-  required: PropTypes.bool,
   type: PropTypes.string,
   value: PropTypes.string
 };

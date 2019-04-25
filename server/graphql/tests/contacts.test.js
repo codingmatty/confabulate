@@ -10,6 +10,10 @@ const AllContactFields = gql`
     email
     phoneNumber
     favorite
+    notes {
+      label
+      value
+    }
     birthday {
       day
       month
@@ -100,6 +104,12 @@ const seedData = {
       email: 'paulmccartney@beatles.com',
       favorite: false,
       name: 'Paul McCartney',
+      notes: [
+        {
+          label: 'How did you meet?',
+          value: 'Lorem ipsum dolor sit amet.'
+        }
+      ],
       ownerId: user.id,
       phoneNumber: '5552345678'
     },

@@ -70,13 +70,19 @@ const InputControl = styled.input`
   margin-left: 0.5rem;
   flex: 1;
 `;
-const Error = styled.div``;
+const Error = styled.div`
+  font-weight: bold;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: ${({ theme }) => theme.color.reds[4]};
+`;
 
 export default function Input({
   error,
   id,
   label,
   name: birthdayName,
+  onBlur,
   onChange,
   required,
   value: birthdayValue
@@ -104,6 +110,7 @@ export default function Input({
             id={`${id}-month`}
             name="month"
             onChange={onBirthdayChange}
+            onBlur={onBlur}
             required={required}
             value={getValue('month')}
           >
@@ -123,6 +130,7 @@ export default function Input({
           min="1"
           name="day"
           onChange={onBirthdayChange}
+          onBlur={onBlur}
           placeholder="Day"
           required={required}
           type="number"
@@ -136,13 +144,17 @@ export default function Input({
           min="1900"
           name="year"
           onChange={onBirthdayChange}
+          onBlur={onBlur}
           placeholder="Year"
           required={required}
           type="number"
           value={getValue('year')}
         />
       </ControlsWrapper>
-      {error && <Error>{error}</Error>}
+      {error &&
+        Object.values(error).map((singleError, i) => (
+          <Error key={i}>{singleError}</Error>
+        ))}
     </BirthdayInputWrapper>
   );
 }
@@ -152,15 +164,18 @@ Input.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string,
   name: PropTypes.string,
+  onBlur: PropTypes.func,
   onChange: PropTypes.func,
+  required: PropTypes.bool,
   type: PropTypes.string,
   value: PropTypes.shape({
     day: PropTypes.number,
     month: PropTypes.number,
     year: PropTypes.number
-  }),
-  required: PropTypes.bool
+  })
 };
 Input.defaultProps = {
+  onBlur: () => {},
+  onChange: () => {},
   type: 'text'
 };

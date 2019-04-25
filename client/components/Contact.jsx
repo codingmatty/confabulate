@@ -29,6 +29,10 @@ const QUERY_CONTACT = gql`
       email
       phoneNumber
       favorite
+      notes {
+        label
+        value
+      }
     }
   }
 `;
