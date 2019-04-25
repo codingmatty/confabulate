@@ -8,7 +8,7 @@ services:
     command: npm run dev
     environment:
       - BASE_URL=http://localhost:8082
-      - MONGODB_URI=mongo_dev:27017/confabulate_development
+      - MONGO_URL=mongodb://mongo_dev:27017/confabulate_development
       - NODE_ENV=development
       - PORT=8082
     ports:
