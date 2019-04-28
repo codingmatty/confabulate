@@ -10,8 +10,6 @@ const QUERY_CONTACTS = gql`
     contacts {
       id
       name
-      email
-      phoneNumber
       favorite
     }
   }

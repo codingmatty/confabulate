@@ -7,13 +7,23 @@ Object {
     "month": null,
     "year": null,
   },
-  "email": "ringostarr@beatles.com",
+  "communicationMethods": Array [
+    Object {
+      "label": "Email",
+      "type": "email",
+      "value": "ringostarr@beatles.com",
+    },
+    Object {
+      "label": "Phone",
+      "type": "phone",
+      "value": "5553456789",
+    },
+  ],
   "events": Array [],
   "favorite": true,
   "id": "5cbe7a52a7c6dd86a4b719c3",
   "name": "Ringo Starr",
   "notes": Array [],
-  "phoneNumber": "5553456789",
 }
 `;
 
@@ -25,13 +35,23 @@ Array [
       "month": 3,
       "year": 2010,
     },
-    "email": "johnlennon@beatles.com",
+    "communicationMethods": Array [
+      Object {
+        "label": "Email",
+        "type": "email",
+        "value": "johnlennon@beatles.com",
+      },
+      Object {
+        "label": "Phone",
+        "type": "phone",
+        "value": "5551234567",
+      },
+    ],
     "events": Array [],
     "favorite": true,
     "id": "5cbe7a2a5e55d05aadfd38c1",
     "name": "John Lennon",
     "notes": Array [],
-    "phoneNumber": "5551234567",
   },
   Object {
     "birthday": Object {
@@ -39,7 +59,18 @@ Array [
       "month": 3,
       "year": null,
     },
-    "email": "paulmccartney@beatles.com",
+    "communicationMethods": Array [
+      Object {
+        "label": "Email",
+        "type": "email",
+        "value": "paulmccartney@beatles.com",
+      },
+      Object {
+        "label": "Phone",
+        "type": "phone",
+        "value": "5552345678",
+      },
+    ],
     "events": Array [
       Object {
         "id": "5cbe7a6cbcc4685e1341fce1",
@@ -54,7 +85,6 @@ Array [
         "value": "Lorem ipsum dolor sit amet.",
       },
     ],
-    "phoneNumber": "5552345678",
   },
   Object {
     "birthday": Object {
@@ -62,13 +92,23 @@ Array [
       "month": null,
       "year": null,
     },
-    "email": "ringostarr@beatles.com",
+    "communicationMethods": Array [
+      Object {
+        "label": "Email",
+        "type": "email",
+        "value": "ringostarr@beatles.com",
+      },
+      Object {
+        "label": "Phone",
+        "type": "phone",
+        "value": "5553456789",
+      },
+    ],
     "events": Array [],
     "favorite": true,
     "id": "5cbe7a52a7c6dd86a4b719c3",
     "name": "Ringo Starr",
     "notes": Array [],
-    "phoneNumber": "5553456789",
   },
 ]
 `;

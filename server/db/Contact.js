@@ -11,7 +11,21 @@ const ContactSchema = new Schema(
         year: Number
       }
     },
-    email: String,
+    communicationMethods: {
+      default: [],
+      type: [
+        {
+          label: { default: '_Other', type: String },
+          primary: Boolean,
+          type: {
+            enum: ['email', 'phone', 'social', 'address'],
+            required: true,
+            type: String
+          },
+          value: String
+        }
+      ]
+    },
     events: [Schema.Types.ObjectId],
     favorite: Boolean,
     image: String,
@@ -23,7 +37,6 @@ const ContactSchema = new Schema(
       }
     ],
     ownerId: { required: true, type: Schema.Types.ObjectId },
-    phoneNumber: String,
     source: {
       id: String,
       type: { enum: ['google'], type: String }

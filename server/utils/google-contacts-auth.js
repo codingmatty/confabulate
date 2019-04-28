@@ -37,15 +37,27 @@ function normalizeContactData({
   emailAddresses = []
 }) {
   return {
-    peopleId: resourceName.slice('people/'.length),
-    name: selectPrimary(names).displayName,
-    image: selectPrimary(photos).url,
     birthday: selectPrimary(birthdays).date && {
       ...selectPrimary(birthdays).date,
       month: selectPrimary(birthdays).date.month - 1 // moment uses month starting at 0
     },
-    phoneNumber: selectPrimary(phoneNumbers).canonicalForm,
-    email: selectPrimary(emailAddresses).value
+    communicationMethods: [
+      ...phoneNumbers.map(({ canonicalForm, metadata, type }) => ({
+        label: type,
+        primary: metadata.primary,
+        type: 'phone',
+        value: canonicalForm
+      })),
+      ...emailAddresses.map(({ metadata, type, value }) => ({
+        label: type,
+        primary: metadata.primary,
+        type: 'email',
+        value
+      }))
+    ],
+    image: selectPrimary(photos).url,
+    name: selectPrimary(names).displayName,
+    peopleId: resourceName.slice('people/'.length)
   };
 }
 

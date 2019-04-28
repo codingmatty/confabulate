@@ -26,8 +26,11 @@ const QUERY_CONTACT = gql`
         month
         year
       }
-      email
-      phoneNumber
+      communicationMethods {
+        type
+        label
+        value
+      }
       favorite
       notes {
         label
@@ -154,20 +157,11 @@ export default function Contact({ id }) {
               <ContactIcon type="cake" /> {birthdayString}
             </ContactDetail>
           )}
-          {contact.email && (
-            <ContactDetail>
-              <ContactIcon type="mail" /> {contact.email}
+          {contact.communicationMethods.map(({ type, label, value }) => (
+            <ContactDetail key={label}>
+              <ContactIcon type={type} /> {label}: {value}
             </ContactDetail>
-          )}
-          {contact.phoneNumber && (
-            <ContactDetail>
-              <ContactIcon type="phone" />{' '}
-              {contact.phoneNumber.replace(
-                /(\d{3})(\d{3})(\d{4})/,
-                '($1) $2-$3'
-              )}
-            </ContactDetail>
-          )}
+          ))}
         </ContactDetails>
       </ContactCard>
       <ContactEventList contact={contact} />

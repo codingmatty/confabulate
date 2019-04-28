@@ -12,14 +12,14 @@ exports.typeDefs = gql`
     toggleFavoriteState(id: ID!): Contact
     removeContact(id: ID!): Status
   }
+
   type Contact {
     id: ID!
     name: String
     image: String
     birthday: DateStruct!
-    email: String
-    phoneNumber: String
-    notes: [NoteStruct!]
+    communicationMethods: [CommunicationMethod!]!
+    notes: [NoteStruct!]!
     favorite: Boolean
     events: [Event]!
   }
@@ -27,25 +27,23 @@ exports.typeDefs = gql`
     label: String!
     value: String
   }
-  input NoteStructInput {
-    label: String!
-    value: String
-  }
+
   input ContactInputData {
     name: String
     image: String
     birthday: DateStructInput
-    email: String
-    phoneNumber: String
+    communicationMethods: [CommunicationMethodInput!]
     notes: [NoteStructInput!]
     favorite: Boolean
   }
+  input NoteStructInput {
+    label: String!
+    value: String
+  }
+
   input ContactQueryData {
     id: ID
     name: String
-    birthday: DateStructInput
-    email: String
-    phoneNumber: String
     favorite: Boolean
   }
 `;

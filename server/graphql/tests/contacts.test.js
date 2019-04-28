@@ -7,8 +7,11 @@ const AllContactFields = gql`
   fragment AllContactFields on Contact {
     id
     name
-    email
-    phoneNumber
+    communicationMethods {
+      label
+      type
+      value
+    }
     favorite
     notes {
       label
@@ -89,11 +92,21 @@ const seedData = {
         month: 3,
         year: 2010
       },
-      email: 'johnlennon@beatles.com',
+      communicationMethods: [
+        {
+          label: 'Email',
+          type: 'email',
+          value: 'johnlennon@beatles.com'
+        },
+        {
+          label: 'Phone',
+          type: 'phone',
+          value: '5551234567'
+        }
+      ],
       favorite: true,
       name: 'John Lennon',
-      ownerId: user.id,
-      phoneNumber: '5551234567'
+      ownerId: user.id
     },
     {
       _id: '5cbe7a4816430674b1375ac2',
@@ -101,7 +114,18 @@ const seedData = {
         day: 23,
         month: 3
       },
-      email: 'paulmccartney@beatles.com',
+      communicationMethods: [
+        {
+          label: 'Email',
+          type: 'email',
+          value: 'paulmccartney@beatles.com'
+        },
+        {
+          label: 'Phone',
+          type: 'phone',
+          value: '5552345678'
+        }
+      ],
       favorite: false,
       name: 'Paul McCartney',
       notes: [
@@ -110,16 +134,25 @@ const seedData = {
           value: 'Lorem ipsum dolor sit amet.'
         }
       ],
-      ownerId: user.id,
-      phoneNumber: '5552345678'
+      ownerId: user.id
     },
     {
       _id: '5cbe7a52a7c6dd86a4b719c3',
-      email: 'ringostarr@beatles.com',
+      communicationMethods: [
+        {
+          label: 'Email',
+          type: 'email',
+          value: 'ringostarr@beatles.com'
+        },
+        {
+          label: 'Phone',
+          type: 'phone',
+          value: '5553456789'
+        }
+      ],
       favorite: true,
       name: 'Ringo Starr',
-      ownerId: user.id,
-      phoneNumber: '5553456789'
+      ownerId: user.id
     },
     {
       // This is a dummy for a different user
@@ -217,9 +250,19 @@ describe('Contacts GraphQL', () => {
   describe('add contact', () => {
     it('can add contact', async () => {
       const inputData = {
-        email: 'test@email.com',
-        name: 'Test Test',
-        phoneNumber: '5551234567'
+        communicationMethods: [
+          {
+            label: 'Email',
+            type: 'email',
+            value: 'test@email.com'
+          },
+          {
+            label: 'Phone',
+            type: 'phone',
+            value: '5551234567'
+          }
+        ],
+        name: 'Test Test'
       };
       const { data } = await mutate({
         mutation: ADD_CONTACT,
@@ -237,7 +280,13 @@ describe('Contacts GraphQL', () => {
   describe('update contact', () => {
     it('updates specified fields', async () => {
       const updateData = {
-        email: 'test@email.com',
+        communicationMethods: [
+          {
+            label: 'Email',
+            type: 'email',
+            value: 'test@email.com'
+          }
+        ],
         favorite: true
       };
       const { data } = await mutate({

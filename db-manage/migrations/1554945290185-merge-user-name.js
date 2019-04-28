@@ -1,7 +1,7 @@
-const db = require('../../server/db');
+const db = require('../db');
 
 module.exports.up = async () => {
-  const users = await db.Users.query();
+  const users = await db.Users.model.find({});
   return Promise.all(
     users.map((user) => {
       const { profile = {} } = user;
@@ -20,7 +20,7 @@ module.exports.up = async () => {
 };
 
 module.exports.down = async () => {
-  const users = await db.Users.query();
+  const users = await db.Users.model.find({});
   return Promise.all(
     users.map((user) => {
       const { profile = {} } = user;

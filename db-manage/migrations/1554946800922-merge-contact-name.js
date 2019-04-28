@@ -1,4 +1,4 @@
-const db = require('../../server/db');
+const db = require('../db');
 
 module.exports.up = async () => {
   const contacts = await db.Contacts.model.find({}, { strict: false });

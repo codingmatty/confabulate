@@ -3,22 +3,32 @@ const DataModel = require('./DataModel');
 
 const GoogleContactSchema = new Schema(
   {
-    ownerId: { type: Schema.Types.ObjectId, required: true },
-    peopleId: { type: String, unique: true },
-    name: String,
-    image: String,
     birthday: {
+      default: {},
       type: {
         day: Number,
         month: Number,
         year: Number
-      },
-      default: {}
+      }
     },
-    email: String,
-    phoneNumber: String
+    communicationMethods: [
+      {
+        label: { default: '_Other', type: String },
+        primary: Boolean,
+        type: {
+          enum: ['email', 'phone', 'social', 'address'],
+          required: true,
+          type: String
+        },
+        value: String
+      }
+    ],
+    image: String,
+    name: String,
+    ownerId: { required: true, type: Schema.Types.ObjectId },
+    peopleId: { type: String, unique: true }
   },
-  { timestamps: true }
+  { minimize: false, timestamps: true }
 );
 GoogleContactSchema.index(
   { createdAt: 1 },

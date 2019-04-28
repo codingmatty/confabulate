@@ -1,5 +1,5 @@
 require('../server/setup-env-vars');
-require('../server/db');
+require('./db');
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;

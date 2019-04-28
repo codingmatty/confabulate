@@ -1,4 +1,4 @@
-const db = require('../../server/db');
+const db = require('../db');
 
 module.exports.up = async () => {
   return db.Events.model.updateMany(

@@ -21,14 +21,32 @@ const Common = gql`
     ERROR
     IGNORED
   }
-  type Status {
-    status: StatusEnum!
-    message: String
+  enum CommunicationMethodType {
+    email
+    phone
+    social
+    address
+  }
+
+  type CommunicationMethod {
+    type: CommunicationMethodType!
+    label: String!
+    value: String
   }
   type DateStruct {
     day: Int
     month: Int
     year: Int
+  }
+  type Status {
+    status: StatusEnum!
+    message: String
+  }
+
+  input CommunicationMethodInput {
+    type: CommunicationMethodType!
+    label: String!
+    value: String
   }
   input DateStructInput {
     day: Int

@@ -14,7 +14,7 @@ const UserSchema = new Schema(
       default: {}
     }
   },
-  { timestamps: true }
+  { minimize: false, timestamps: true }
 );
 
 class UserModal extends DataModel {
