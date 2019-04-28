@@ -24,6 +24,6 @@ process.on('uncaughtException', (error) => {
   });
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled Rejection', { promise, reason });
+process.on('unhandledRejection', (reason) => {
+  logger.error('Unhandled Rejection', { reason: reason.stack || reason });
 });
