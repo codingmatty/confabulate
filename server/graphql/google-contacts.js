@@ -13,6 +13,7 @@ exports.typeDefs = gql`
     id: ID!
     name: String
     image: String
+    isImported: Boolean
     birthday: DateStruct!
     communicationMethods: [CommunicationMethod!]!
   }
@@ -20,6 +21,7 @@ exports.typeDefs = gql`
   input GoogleContactQueryData {
     id: ID
     name: String
+    isImported: Boolean
     birthday: DateStructInput
   }
 `;

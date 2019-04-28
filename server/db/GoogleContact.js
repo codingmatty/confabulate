@@ -24,6 +24,7 @@ const GoogleContactSchema = new Schema(
       }
     ],
     image: String,
+    isImported: Boolean,
     name: String,
     ownerId: { required: true, type: Schema.Types.ObjectId },
     peopleId: { type: String, unique: true }

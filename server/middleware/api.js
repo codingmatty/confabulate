@@ -71,35 +71,20 @@ module.exports = function registerApi(db) {
             $exists: true,
             $in: googleContacts.map(({ peopleId }) => peopleId)
           }
-        },
-        {
-          email: {
-            $exists: true,
-            $in: googleContacts.map(({ email }) => email)
-          }
-        },
-        {
-          phoneNumber: {
-            $exists: true,
-            $in: googleContacts.map(({ phoneNumber }) => phoneNumber)
-          }
         }
       ]
     });
 
     // Filter google contacts from existing contacts based on email, phone, and common ID
-    const filteredContacts = googleContacts.filter(
+    googleContacts.filter(
       (contact) =>
-        !existingContacts.some(
-          ({ source = {}, email, phoneNumber }) =>
-            (source.id && contact.peopleId === source.id) ||
-            (email && contact.email === email) ||
-            (phoneNumber && contact.phoneNumber === phoneNumber)
-        )
+        (contact.isImported = existingContacts.some(
+          ({ source = {} }) => source.id && contact.peopleId === source.id
+        ))
     );
 
     // Temporarily save new google contacts
-    await db.GoogleContacts.create(user.id, filteredContacts);
+    await db.GoogleContacts.create(user.id, googleContacts);
 
     if (inline) {
       res.redirect(`${process.env.BASE_URL}/user?googleAuthCallback=true`);
