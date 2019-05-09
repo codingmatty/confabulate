@@ -59,7 +59,9 @@ export default function LoginForm() {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
-    const { user } = await firebase.auth().signInWithPopup(provider);
+    const { user } = window.matchMedia('(max-width: 500px)').matches
+      ? await firebase.auth().signInWithRedirect(provider)
+      : await firebase.auth().signInWithPopup(provider);
     registerUserWithAPI(user);
   };
 
