@@ -37,7 +37,7 @@
     "graphql": "^14.2.1",
     "handlebars": "^4.1.1",
     "isomorphic-fetch": "^2.2.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "md5-o-matic": "^0.1.1",
     "migrate": "^1.6.2",
     "mjml": "^4.4.0-beta.1",
