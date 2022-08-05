@@ -42,7 +42,7 @@
     "migrate": "^1.6.2",
     "mjml": "^4.4.0-beta.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.5.0",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "next": "^8.0.4",
     "nprogress": "^0.2.0",
