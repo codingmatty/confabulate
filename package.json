@@ -31,7 +31,7 @@
     "express": "^4.16.4",
     "express-session": "^1.16.0",
     "firebase": "^5.9.3",
-    "firebase-admin": "^7.2.0",
+    "firebase-admin": "^11.4.1",
     "flat": "^4.1.0",
     "googleapis": "^39.2.0",
     "graphql": "^14.2.1",
